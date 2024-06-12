@@ -18,6 +18,7 @@
 #' set_graphics(10, 7)
 #' }
 #'
+#' @importFrom grDevices dev.new graphics.off
 #' @export
 set_graphics <- function(width, height){
   graphics.off()
@@ -59,6 +60,7 @@ set_graphics <- function(width, height){
 #'     hgps_theme()
 #' }
 #'
+#' @importFrom ggplot2 theme_classic theme element_text element_blank element_line element_rect
 #' @export
 hgps_theme <- function(){
   theme_classic() +
