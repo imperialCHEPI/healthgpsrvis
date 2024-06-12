@@ -4,6 +4,8 @@
 # healthgpsrvis
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/imperialCHEPI/healthgpsrvis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/imperialCHEPI/healthgpsrvis/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of `healthgpsrvis` is to plot and visualise data related to
