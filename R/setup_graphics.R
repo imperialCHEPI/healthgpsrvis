@@ -1,0 +1,28 @@
+#' Set up a new plotting device
+#'
+#' This function closes all existing graphical devices and opens a new one
+#' with specified width and height dimensions.
+#'
+#' @param width Numeric value specifying the width of the new plotting device in centimeters.
+#' @param height Numeric value specifying the height of the new plotting device in centimeters.
+#'
+#' @details
+#' The `set_graphics` function first closes all open graphical devices using `graphics.off()`.
+#' It then opens a new graphical device with the given dimensions using `dev.new()`.
+#' The `unit` parameter is set to "cm" to use centimeters for the dimensions,
+#' and `noRStudioGD` is set to `TRUE` to avoid using RStudio's graphical device.
+#'
+#' @examples
+#' \dontrun{
+#' # Set up a new plotting device with width 10 cm and height 7 cm
+#' set_graphics(10, 7)
+#' }
+#'
+#' @export
+set_graphics <- function(width, height){
+  graphics.off()
+  dev.new(width = width,
+          height = height,
+          unit = "cm",
+          noRStudioGD = TRUE)
+}
