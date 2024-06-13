@@ -18,11 +18,10 @@
 #' set_graphics(10, 7)
 #' }
 #'
-#' @importFrom grDevices dev.new graphics.off
 #' @export
 set_graphics <- function(width, height){
-  graphics.off()
-  dev.new(width = width,
+  grDevices::graphics.off()
+  grDevices::dev.new(width = width,
           height = height,
           unit = "cm",
           noRStudioGD = TRUE)
@@ -60,20 +59,19 @@ set_graphics <- function(width, height){
 #'     hgps_theme()
 #' }
 #'
-#' @importFrom ggplot2 theme_classic theme element_text element_blank element_line element_rect
 #' @export
 hgps_theme <- function(){
-  theme_classic() +
-  theme(
-    plot.title = element_text(size = 15),
-    axis.title.x = element_text(size = 10),
-    axis.title.y = element_text(size = 10),
-    axis.text.x = element_text(size = 8),
-    axis.text.y = element_text(size = 8),
-    legend.text = element_text(size = 8),
-    legend.title = element_blank(),
-    panel.grid.major.x = element_line(),
-    legend.key = element_rect(fill = "transparent"),
+  ggplot2::theme_classic() +
+  ggplot2::theme(
+    plot.title = ggplot2::element_text(size = 15),
+    axis.title.x = ggplot2::element_text(size = 10),
+    axis.title.y = ggplot2::element_text(size = 10),
+    axis.text.x = ggplot2::element_text(size = 8),
+    axis.text.y = ggplot2::element_text(size = 8),
+    legend.text = ggplot2::element_text(size = 8),
+    legend.title = ggplot2::element_blank(),
+    panel.grid.major.x = ggplot2::element_line(),
+    legend.key = ggplot2::element_rect(fill = "transparent"),
     legend.position = c(.8,.9)
   )
 }
