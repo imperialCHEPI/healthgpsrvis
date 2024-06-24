@@ -108,5 +108,3 @@ suppressWarnings <- function() options(warn=-1)
 
 # To reset:
 # options(warn=0)
-
-NULL
