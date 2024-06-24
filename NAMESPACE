@@ -3,4 +3,3 @@
 export(hgps_theme)
 export(scaleFUN)
 export(set_graphics)
-export(suppressWarnings)

@@ -89,22 +89,22 @@ hgps_theme <- function(){
 #' @export
 scaleFUN <- function(x) sprintf("%.2f", x)
 
-#' Suppress warnings
-#'
-#' This function suppresses warnings. It sets the warning option to -1.
-#' Use \code{options(warn=0)} to reset the warning options to default.
-#'
-#' @examples
-#' \dontrun{
-#' # Suppress warnings
-#' suppressWarnings()
-#'
-#' # Reset warnings to default
-#' options(warn=0)
-#' }
-#'
-#' @export
-suppressWarnings <- function() options(warn=-1)
-
-# To reset:
-# options(warn=0)
+# #' Suppress warnings
+# #'
+# #' This function suppresses warnings. It sets the warning option to -1.
+# #' Use \code{options(warn=0)} to reset the warning options to default.
+# #'
+# #' @examples
+# #' \dontrun{
+# #' # Suppress warnings
+# #' suppressWarnings()
+# #'
+# #' # Reset warnings to default
+# #' options(warn=0)
+# #' }
+# #'
+# #' @export
+# suppressWarnings <- function() options(warn=-1)
+#
+# # To reset:
+# # options(warn=0)
