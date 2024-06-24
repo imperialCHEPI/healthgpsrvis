@@ -27,7 +27,6 @@ set_graphics <- function(width, height){
           noRStudioGD = TRUE)
 }
 
-
 #' Customised theme for ggplot2
 #'
 #' This function creates a customised theme for ggplot2 plots. It modifies various
@@ -76,5 +75,38 @@ hgps_theme <- function(){
   )
 }
 
+#' Format numbers to 2 decimal places
+#'
+#' This function formats a numeric vector to display numbers with 2 decimal places.
+#'
+#' @param x Numeric vector to be formatted.
+#' @return A character vector with numbers formatted to 2 decimal places.
+#'
+#' @examples
+#' x <- c(9.3475, 0.1974)
+#' scaleFUN(x)
+#'
+#' @export
+scaleFUN <- function(x) sprintf("%.2f", x)
+
+#' Suppress warnings
+#'
+#' This function suppresses warnings. It sets the warning option to -1.
+#' Use \code{options(warn=0)} to reset the warning options to default.
+#'
+#' @examples
+#' \dontrun{
+#' # Suppress warnings
+#' suppressWarnings()
+#'
+#' # Reset warnings to default
+#' options(warn=0)
+#' }
+#'
+#' @export
+suppressWarnings <- function() options(warn=-1)
+
+# To reset:
+# options(warn=0)
 
 NULL
