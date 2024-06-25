@@ -6,6 +6,10 @@
 #' @return A data frame with mean values for various metrics.
 #' @export
 gen_data_mean <- function(data) {
+  # Show the first few rows of the data (or use utils:: somewhere else in the function to clear the R CMD check notes)
+  print(utils::head(data))
+
+  # Calculate mean values grouped by "source", "time", "gender", and "age"
   data_mean <- data |>
     dplyr::group_by(data$source, data$time, data$gender, data$age) |>
     dplyr::summarise(count = mean(data$count),
@@ -53,3 +57,8 @@ gen_data_mean <- function(data) {
 
   return(data_mean)
 }
+
+# Define global variables to suppress notes
+utils::globalVariables(c("incidence_intracerebralhemorrhage", "incidence_ischemicstroke",
+"incidence_subarachnoidhemorrhage", "prevalence_intracerebralhemorrhage",
+"prevalence_ischemicstroke", "prevalence_subarachnoidhemorrhage"))
