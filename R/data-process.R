@@ -113,3 +113,45 @@ gen_data_mean_weighted <- function(data_mean) {
 
   return(data_mean_weighted)
 }
+
+#' Calculate Differences for Various Metrics
+#'
+#' This function calculates the differences between intervention and baseline values for various metrics.
+#'
+#' @param data_mean_weighted A data frame containing weighted mean values for various metrics.
+#' @return A data frame with differences between intervention and baseline values for various metrics.
+#' @export
+gen_data_mean_weighted_rf_wide <- function(data_mean_weighted) {
+  data_mean_weighted_rf <- dplyr::select(data_mean_weighted,
+                                         data_mean_weighted$source,
+                                         data_mean_weighted$timediff,
+                                         data_mean_weighted$weighted_sodium,
+                                         data_mean_weighted$weighted_carbohydarte,
+                                         data_mean_weighted$weighted_fat,
+                                         data_mean_weighted$weighted_protein,
+                                         data_mean_weighted$weighted_energyintake,
+                                         data_mean_weighted$weighted_bmi,
+                                         data_mean_weighted$weighted_height,
+                                         data_mean_weighted$weighted_weight,
+                                         data_mean_weighted$weighted_obesity)
+
+  data_mean_weighted_rf_wide <- tidyr::pivot_wider(data_mean_weighted_rf,
+                                            names_from = data_mean_weighted_rf$source,
+                                            id_cols = data_mean_weighted_rf$timediff,
+                                            values_from = c(data_mean_weighted_rf$weighted_sodium,
+                                                            data_mean_weighted_rf$weighted_carbohydarte,
+                                                            data_mean_weighted_rf$weighted_fat,
+                                                            data_mean_weighted_rf$weighted_protein,
+                                                            data_mean_weighted_rf$weighted_energyintake,
+                                                            data_mean_weighted_rf$weighted_bmi,
+                                                            data_mean_weighted_rf$weighted_height,
+                                                            data_mean_weighted_rf$weighted_weight,
+                                                            data_mean_weighted_rf$weighted_obesity))
+
+  data_mean_weighted_rf_wide$diff_sodium <- data_mean_weighted_rf_wide$weighted_sodium_intervention - data_mean_weighted_rf_wide$weighted_sodium_baseline
+  data_mean_weighted_rf_wide$diff_ei <- data_mean_weighted_rf_wide$weighted_energyintake_intervention - data_mean_weighted_rf_wide$weighted_energyintake_baseline
+  data_mean_weighted_rf_wide$diff_bmi <- data_mean_weighted_rf_wide$weighted_bmi_intervention - data_mean_weighted_rf_wide$weighted_bmi_baseline
+  data_mean_weighted_rf_wide$diff_obesity <- data_mean_weighted_rf_wide$weighted_obesity_intervention - data_mean_weighted_rf_wide$weighted_obesity_baseline
+
+  return(data_mean_weighted_rf_wide)
+}
