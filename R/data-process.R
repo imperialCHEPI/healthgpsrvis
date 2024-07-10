@@ -155,3 +155,48 @@ gen_data_mean_weighted_rf_wide <- function(data_mean_weighted) {
 
   return(data_mean_weighted_rf_wide)
 }
+
+#' Calculate Differences for Incidences
+#'
+#' This function calculates the differences between intervention and baseline values for incidences.
+#'
+#' @param data_mean_weighted A data frame containing weighted mean values for various metrics.
+#' @return A data frame with differences between intervention and baseline values for incidences.
+#' @export
+gen_data_mean_weighted_inc_wide <- function(data_mean_weighted) {
+  data_mean_weighted_inc <- dplyr::select(data_mean_weighted,
+                                          data_mean_weighted$source,
+                                          data_mean_weighted$timediff,
+                                          data_mean_weighted$totalcase_ihd,
+                                          data_mean_weighted$totalcase_diabetes,
+                                          data_mean_weighted$totalcase_stroke,
+                                          data_mean_weighted$totalcase_asthma,
+                                          #data_mean_weighted$totalcase_stomachcancer,
+                                          data_mean_weighted$totalcase_ckd)
+
+  data_mean_weighted_inc_wide <- tidyr::pivot_wider(data_mean_weighted_inc,
+                                             names_from = data_mean_weighted_inc$source,
+                                             id_cols = data_mean_weighted_inc$timediff,
+                                             values_from = c(data_mean_weighted_inc$totalcase_ihd,
+                                                             data_mean_weighted_inc$totalcase_diabetes,
+                                                             data_mean_weighted_inc$totalcase_stroke,
+                                                             data_mean_weighted_inc$totalcase_asthma,
+                                                             #data_mean_weighted_inc$totalcase_stomachcancer,
+                                                             data_mean_weighted_inc$totalcase_ckd))
+
+  data_mean_weighted_inc_wide$diff_ihd <- 100*(data_mean_weighted_inc_wide$totalcase_ihd_intervention - data_mean_weighted_inc_wide$totalcase_ihd_baseline)
+  data_mean_weighted_inc_wide$diff_diabetes <- 100*(data_mean_weighted_inc_wide$totalcase_diabetes_intervention - data_mean_weighted_inc_wide$totalcase_diabetes_baseline)
+  data_mean_weighted_inc_wide$diff_stroke <- 100*(data_mean_weighted_inc_wide$totalcase_stroke_intervention - data_mean_weighted_inc_wide$totalcase_stroke_baseline)
+  data_mean_weighted_inc_wide$diff_asthma <- 100*(data_mean_weighted_inc_wide$totalcase_asthma_intervention - data_mean_weighted_inc_wide$totalcase_asthma_baseline)
+  #data_mean_weighted_inc_wide$diff_stomachcancer <- 100*(data_mean_weighted_inc_wide$totalcase_stomachcancer_intervention - data_mean_weighted_inc_wide$totalcase_stomachcancer_baseline)
+  data_mean_weighted_inc_wide$diff_ckd <- 100*(data_mean_weighted_inc_wide$totalcase_ckd_intervention - data_mean_weighted_inc_wide$totalcase_ckd_baseline)
+
+  data_mean_weighted_inc_wide$cumdiff_ihd <- cumsum(data_mean_weighted_inc_wide$diff_ihd)
+  data_mean_weighted_inc_wide$cumdiff_diabetes <- cumsum(data_mean_weighted_inc_wide$diff_diabetes)
+  data_mean_weighted_inc_wide$cumdiff_stroke <- cumsum(data_mean_weighted_inc_wide$diff_stroke)
+  data_mean_weighted_inc_wide$cumdiff_asthma <- cumsum(data_mean_weighted_inc_wide$diff_asthma)
+  #data_mean_weighted_inc_wide$cumdiff_stomachcancer <- cumsum(data_mean_weighted_inc_wide$diff_stomachcancer)
+  data_mean_weighted_inc_wide$cumdiff_ckd <- cumsum(data_mean_weighted_inc_wide$diff_ckd)
+
+  return(data_mean_weighted_inc_wide)
+}
