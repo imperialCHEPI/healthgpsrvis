@@ -231,3 +231,46 @@ gen_data_mean_weighted_burden_wide <- function(data_mean_weighted) {
   return(data_mean_weighted_burden_wide)
 }
 
+#' Calculate Life Expectancy
+#'
+#' This function calculates life expectancy for various age and groups.
+#'
+#' @param data_mean A data frame containing mean values for various metrics.
+#' @return A data frame with life expectancy.
+#' @export
+gen_data_le <- function(data_mean) {
+  data_le <- data_mean[,c(data_mean$source,
+                          data_mean$time,
+                          data_mean$gender,
+                          data_mean$age,
+                          data_mean$count,
+                          data_mean$deaths,
+                          data_mean$migrations)]
+  data_le$timediff <- data_le$time - 2023
+  # calculate the population considering both dead and alive
+  # count is survivors, deaths = dead pop/count
+  data_le$count_both <- data_le$count*data_le$deaths+data_le$count
+  # calculate life expectancy px at each age
+  data_le <- data_le[order(data_le$source,
+                           data_le$timediff,
+                           -data_le$age),]
+  data_le <- data_le |>
+    dplyr::group_by(data_le$source,
+                    data_le$timediff) |>
+    dplyr::mutate(tx = cumsum(data_le$count),
+                  px = data_le$tx/data_le$count)
+  ## calculate period life expectancy as weighted sum of life expectancy at each age ##
+  data_ple <- data_le |>
+    dplyr::group_by(data_le$source,
+                    data_le$timediff) |>
+    dplyr::summarise(ple = stats::weighted.mean(data_le$px,data_le$count_both))
+
+  ## calculate difference btw baseline and intervention ##
+  data_ple_wide <- tidyr::pivot_wider(data_ple,
+                               names_from=data_ple$source,
+                               id_cols = data_ple$timediff,
+                               values_from = c(data_ple$ple))
+  data_ple_wide$diff <- data_ple_wide$intervention - data_ple_wide$baseline
+
+  return(data_ple_wide)
+}
