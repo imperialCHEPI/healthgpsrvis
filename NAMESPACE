@@ -2,6 +2,7 @@
 
 export(gen_data_mean)
 export(gen_data_mean_weighted)
+export(gen_data_mean_weighted_burden_wide)
 export(gen_data_mean_weighted_inc_wide)
 export(gen_data_mean_weighted_rf_wide)
 export(hgps_theme)

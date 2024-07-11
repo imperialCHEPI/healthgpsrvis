@@ -200,3 +200,34 @@ gen_data_mean_weighted_inc_wide <- function(data_mean_weighted) {
 
   return(data_mean_weighted_inc_wide)
 }
+
+#' Calculate Differences for Burden of Disease
+#'
+#' This function calculates the differences between intervention and baseline values for burden of disease.
+#'
+#' @param data_mean_weighted A data frame containing weighted mean values for various metrics.
+#' @return A data frame with differences between intervention and baseline values for burden of disease.
+#' @export
+gen_data_mean_weighted_burden_wide <- function(data_mean_weighted) {
+  data_mean_weighted_burden <- dplyr::select(data_mean_weighted,
+                                             data_mean_weighted$source,
+                                             data_mean_weighted$timediff,
+                                             data_mean_weighted$total_yll,
+                                             data_mean_weighted$total_yld,
+                                             data_mean_weighted$total_daly)
+
+  data_mean_weighted_burden_wide <- tidyr::pivot_wider(data_mean_weighted_burden,
+                                                names_from = data_mean_weighted_burden$source,
+                                                id_cols = data_mean_weighted_burden$timediff,
+                                                values_from = c(data_mean_weighted_burden$total_yll,
+                                                                data_mean_weighted_burden$total_yld,
+                                                                data_mean_weighted_burden$total_daly))
+
+  data_mean_weighted_burden_wide$diff_yll <- (data_mean_weighted_burden_wide$total_yll_intervention - data_mean_weighted_burden_wide$total_yll_baseline)/1000
+  data_mean_weighted_burden_wide$diff_yld <- (data_mean_weighted_burden_wide$total_yld_intervention - data_mean_weighted_burden_wide$total_yld_baseline)/1000
+  data_mean_weighted_burden_wide$diff_daly <- (data_mean_weighted_burden_wide$total_daly_intervention - data_mean_weighted_burden_wide$total_daly_baseline)/1000
+  data_mean_weighted_burden_wide$cumdiff_daly <- cumsum(data_mean_weighted_burden_wide$diff_daly)
+
+  return(data_mean_weighted_burden_wide)
+}
+
