@@ -2,5 +2,6 @@
 
 export(gen_data_mean)
 export(hgps_theme)
+export(riskfactors)
 export(scaleFUN)
 export(set_graphics)
