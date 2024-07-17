@@ -200,7 +200,6 @@ inc_cum <- function(inc, data_mean_weighted_inc_wide) {
 #'
 #' @param burden A character string specifying the burden of disease to plot.
 #'        Options are: "daly", "dalycum", "yld", "yll".
-
 #' @param data_mean_weighted_burden_wide A data frame containing the weighted mean values of burden.
 #' @return A ggplot object representing the specified plot.
 #' @export
@@ -241,4 +240,26 @@ burden_disease <- function(burden, data_mean_weighted_burden_wide) {
                      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
     hgps_theme
+}
+
+#' Plot of Life Expectancy under Intervention
+#'
+#' Creates a line plot showing the increase in life expectancy under intervention over time.
+#'
+#' @param diff A character string specifying the life expectancy to plot.
+#' @param data_ple_wide A data frame containing the life expectancy.
+#' @return A ggplot object representing the specified plot.
+#' @export
+life_exp <- function(diff, data_ple_wide) {
+  ggplot2::ggplot(data = data_ple_wide,
+                  ggplot2::aes(x = data_ple_wide$timediff, y = diff)) +
+    ggplot2::geom_line(color = "purple", size = 1) +
+    ggplot2::ggtitle("Increase in life expectancy under intervention") +
+    ggplot2::xlab("Year") +
+    ggplot2::ylab("Life expectancy (years)") +
+    ggplot2::scale_y_continuous(labels = scales::comma) +
+    ggplot2::scale_x_continuous(limits = c(-3, 32),
+                     breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
+                     labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+  hgps_theme
 }
