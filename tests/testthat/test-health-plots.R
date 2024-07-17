@@ -32,4 +32,28 @@ test_that("riskfactors function works correctly", {
                "Invalid risk factor. Choose from: 'bmi', 'ei', 'fat', 'obese', 'protein', 'sodium'.")
 })
 
+test_that("riskfactors_diff function works correctly", {
+  # Create sample data
+  data_mean_weighted_rf_wide <- data.frame(
+    timediff = seq(-9, 21, by = 1),
+    diff_bmi = runif(31, -3, 0),
+    diff_ei = runif(31, -200, 0),
+    diff_obesity = runif(31, -0.3, 0),
+    diff_sodium = runif(31, -700, 0)
+  )
 
+  # Test for valid input
+  plot_ei <- riskfactors_diff("ei", data_mean_weighted_rf_wide)
+  expect_s3_class(plot_ei, "ggplot")
+  expect_equal(plot_ei$labels$title, "Reduction in energy intake (kcal) under intervention")
+  expect_equal(plot_ei$labels$y, "Energy")
+
+  plot_obesity <- riskfactors_diff("obesity", data_mean_weighted_rf_wide)
+  expect_s3_class(plot_obesity, "ggplot")
+  expect_equal(plot_obesity$labels$title, "Reduction in obesity prevalence under intervention")
+  expect_equal(plot_obesity$labels$y, "Obesity")
+
+  # Test for invalid input
+  expect_error(riskfactors_diff("invalid_riskft_diff", data_mean_weighted_rf_wide),
+               "Invalid risk factor difference. Choose from: 'bmi', 'ei', 'obesity', 'sodium'.")
+})

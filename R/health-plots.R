@@ -81,14 +81,14 @@ riskfactors_diff <- function(riskft_diff, data_mean_weighted_rf_wide) {
   ggplot2::ggplot(data = data_mean_weighted_rf_wide,
                   ggplot2::aes(x = data_mean_weighted_rf_wide$timediff,
                                y = get(y_value))) +
-    ggplot2::geom_line(colour = "blue", size = 1) +
+    ggplot2::geom_line(colour = "blue", linewidth = 1) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                        breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                        labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-    hgps_theme
+    hgps_theme()
 }
 
 #' Plot of Incidence Difference
@@ -139,7 +139,7 @@ inc_diff <- function(inc, data_mean_weighted_inc_wide) {
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-    hgps_theme
+    hgps_theme()
 }
 
 #' Plot of Cumulative Incidence Difference
@@ -190,7 +190,7 @@ inc_cum <- function(inc, data_mean_weighted_inc_wide) {
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-    hgps_theme +
+    hgps_theme() +
     ggplot2::theme(plot.title = ggplot2::element_text(size = 10))
 }
 
@@ -239,7 +239,7 @@ burden_disease <- function(burden, data_mean_weighted_burden_wide) {
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-    hgps_theme
+    hgps_theme()
 }
 
 #' Plot of Life Expectancy under Intervention
@@ -261,5 +261,5 @@ life_exp <- function(diff, data_ple_wide) {
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-  hgps_theme
+  hgps_theme()
 }

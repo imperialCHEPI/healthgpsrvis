@@ -71,7 +71,7 @@ hgps_theme <- function(){
     legend.title = ggplot2::element_blank(),
     panel.grid.major.x = ggplot2::element_line(),
     legend.key = ggplot2::element_rect(fill = "transparent"),
-    legend.position = c(.8,.9)
+    legend.position.inside = c(.8,.9)
   )
 }
 
