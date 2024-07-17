@@ -12,22 +12,24 @@ test_that("riskfactors function works correctly", {
   )
 
   # Test for valid input
-  plot <- riskfactors("bmi", data_mean_weighted)
-  expect_s3_class(plot, "ggplot")
-  expect_equal(plot$labels$title, "BMI")
-  expect_equal(plot$labels$y, "BMI (weighted)")
+  plot_bmi <- riskfactors("bmi", data_mean_weighted)
+  expect_s3_class(plot_bmi, "ggplot")
+  expect_equal(plot_bmi$labels$title, "BMI")
+  expect_equal(plot_bmi$labels$y, "BMI (weighted)")
 
-  plot <- riskfactors("ei", data_mean_weighted)
-  expect_s3_class(plot, "ggplot")
-  expect_equal(plot$labels$title, "EI")
-  expect_equal(plot$labels$y, "Energy intake (weighted)")
+  plot_ei <- riskfactors("ei", data_mean_weighted)
+  expect_s3_class(plot_ei, "ggplot")
+  expect_equal(plot_ei$labels$title, "EI")
+  expect_equal(plot_ei$labels$y, "Energy intake (weighted)")
 
-  plot <- riskfactors("sodium", data_mean_weighted)
-  expect_s3_class(plot, "ggplot")
-  expect_equal(plot$labels$title, "SODIUM")
-  expect_equal(plot$labels$y, "Sodium (weighted)")
+  plot_sodium <- riskfactors("sodium", data_mean_weighted)
+  expect_s3_class(plot_sodium, "ggplot")
+  expect_equal(plot_sodium$labels$title, "SODIUM")
+  expect_equal(plot_sodium$labels$y, "Sodium (weighted)")
 
   # Test for invalid input
   expect_error(riskfactors("invalid_riskft", data_mean_weighted),
                "Invalid risk factor. Choose from: 'bmi', 'ei', 'fat', 'obese', 'protein', 'sodium'.")
 })
+
+
