@@ -57,3 +57,35 @@ test_that("riskfactors_diff function works correctly", {
   expect_error(riskfactors_diff("invalid_riskft_diff", data_mean_weighted_rf_wide),
                "Invalid risk factor difference. Choose from: 'bmi', 'ei', 'obesity', 'sodium'.")
 })
+
+test_that("inc_diff function works correctly", {
+  # Create sample data
+  data_mean_weighted_inc_wide <- data.frame(
+    timediff = seq(-9, 21, by = 1),
+    diff_asthma = runif(31, -3, 0),
+    diff_ckd = runif(31, -200, 0),
+    diff_diabetes = runif(31, -0.3, 0),
+    diff_ischemia = runif(31, -700, 0),
+    diff_stroke = runif(31, -79, 0)
+  )
+
+  # Test for valid input
+  plot_ckd <- inc_diff("ckd", data_mean_weighted_inc_wide)
+  expect_s3_class(plot_ckd, "ggplot")
+  expect_equal(plot_ckd$labels$title, "Chronic kidney disease - Reduction in incidence number")
+  expect_equal(plot_ckd$labels$y, "CKD incidence")
+
+  plot_ihd <- inc_diff("ischemia", data_mean_weighted_inc_wide)
+  expect_s3_class(plot_ihd, "ggplot")
+  expect_equal(plot_ihd$labels$title, "Ischemic heart disease - Reduction in incidence number")
+  expect_equal(plot_ihd$labels$y, "Ischemia incidence")
+
+  plot_stroke <- inc_diff("stroke", data_mean_weighted_inc_wide)
+  expect_s3_class(plot_stroke, "ggplot")
+  expect_equal(plot_stroke$labels$title, "Stroke - Reduction in incidence number")
+  expect_equal(plot_stroke$labels$y, "Stroke incidence")
+
+  # Test for invalid input
+  expect_error(inc_diff("invalid_inc", data_mean_weighted_inc_wide),
+               "Invalid incidence. Choose from: 'asthma', 'ckd', 'diabetes', 'ischemia', 'stroke'.")
+})
