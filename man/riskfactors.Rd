@@ -8,7 +8,7 @@ riskfactors(riskft, data_mean_weighted)
 }
 \arguments{
 \item{riskft}{A character string specifying the risk factor to plot.
-Options are: "sodium", "fat", "protein", "ei", "bmi", "obese".}
+Options are: "bmi", "ei", "fat", "obese", "protein", "sodium".}
 
 \item{data_mean_weighted}{A data frame with weighted mean values for various metrics.}
 }
