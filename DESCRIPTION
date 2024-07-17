@@ -19,6 +19,7 @@ Imports:
     grDevices,
     scales,
     stats,
+    tidyr,
     utils
 Suggests: 
     testthat (>= 3.0.0)
