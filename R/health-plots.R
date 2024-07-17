@@ -81,7 +81,7 @@ riskfactors_diff <- function(riskft_diff, data_mean_weighted_rf_wide) {
   ggplot2::ggplot(data = data_mean_weighted_rf_wide,
                   ggplot2::aes(x = data_mean_weighted_rf_wide$timediff,
                                y = get(y_value))) +
-    ggplot2::geom_line(color = "blue", size = 1) +
+    ggplot2::geom_line(colour = "blue", size = 1) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
@@ -131,7 +131,7 @@ inc_diff <- function(inc, data_mean_weighted_inc_wide) {
   ggplot2::ggplot(data = data_mean_weighted_inc_wide,
                   ggplot2::aes(data_mean_weighted_inc_wide$timediff,
                                y = get(y_value))) +
-    ggplot2::geom_line(color = "red", size = 1) +
+    ggplot2::geom_line(colour = "red", size = 1) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
@@ -182,7 +182,7 @@ inc_cum <- function(inc, data_mean_weighted_inc_wide) {
   ggplot2::ggplot(data = data_mean_weighted_inc_wide,
                   ggplot2::aes(data_mean_weighted_inc_wide$timediff,
                                y = get(y_value))) +
-    ggplot2::geom_line(color = "purple", size = 1) +
+    ggplot2::geom_line(colour = "purple", size = 1) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
