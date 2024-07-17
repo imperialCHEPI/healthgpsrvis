@@ -193,3 +193,52 @@ inc_cum <- function(inc, data_mean_weighted_inc_wide) {
     hgps_theme +
     ggplot2::theme(plot.title = ggplot2::element_text(size = 10))
 }
+
+#' Plot of Burden of Disease
+#'
+#' Creates a line plot showing the reduction in a specified burden of disease over time.
+#'
+#' @param burden A character string specifying the burden of disease to plot.
+#'        Options are: "daly", "dalycum", "yld", "yll".
+
+#' @param data_mean_weighted_burden_wide A data frame containing the weighted mean values of burden.
+#' @return A ggplot object representing the specified plot.
+#' @export
+burden_disease <- function(burden, data_mean_weighted_burden_wide) {
+  burdens <- c("daly", "dalycum", "yld", "yll")
+
+  if (!(burden %in% burdens)) {
+    stop("Invalid burden of disease. Choose from: 'daly', 'dalycum', 'yld', 'yll'.")
+  }
+
+  y_label <- switch(burden,
+                    daly = "DALY",
+                    dalycum = "DALY",
+                    yld = "YLD",
+                    yll = "YLL")
+
+  y_value <- switch(burden,
+                    daly = "diff_daly",
+                    dalycum = "cumdiff_daly",
+                    yld = "diff_yld",
+                    yll = "diff_yll")
+
+  plot_title <- switch(burden,
+                       daly = "Reduction in DALY",
+                       dalycum = "Cumulative reduction in DALY under intervention",
+                       yld = "Reduction in YLD",
+                       yll = "Reduction in YLL")
+
+  ggplot2::ggplot(data = data_mean_weighted_burden_wide,
+                  ggplot2::aes(x = data_mean_weighted_burden_wide$timediff,
+                               y = get(y_value))) +
+    ggplot2::geom_line(colour = "#FF1493", size = 1) +
+    ggplot2::ggtitle(plot_title) +
+    ggplot2::xlab("Year") +
+    ggplot2::ylab(y_label) +
+    ggplot2::scale_y_continuous(labels = scales::comma) +
+    ggplot2::scale_x_continuous(limits = c(-3, 32),
+                     breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
+                     labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    hgps_theme
+}
