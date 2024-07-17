@@ -79,7 +79,8 @@ riskfactors_diff <- function(riskft_diff, data_mean_weighted_rf_wide) {
                        sodium = "Reduction in sodium (mg) under intervention")
 
   ggplot2::ggplot(data = data_mean_weighted_rf_wide,
-                  ggplot2::aes(x = data_mean_weighted_rf_wide$timediff, y = get(y_value))) +
+                  ggplot2::aes(x = data_mean_weighted_rf_wide$timediff,
+                               y = get(y_value))) +
     ggplot2::geom_line(color = "blue", size = 1) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
@@ -127,16 +128,68 @@ inc_diff <- function(inc, data_mean_weighted_inc_wide) {
                        ischemia = "Ischemic heart disease - Reduction in incidence number",
                        stroke = "Stroke - Reduction in incidence number")
 
-
   ggplot2::ggplot(data = data_mean_weighted_inc_wide,
-                  ggplot2::aes(data_mean_weighted_inc_wide$timediff, y = get(y_value))) +
-  ggplot2::geom_line(color = "red", size = 1) +
-  ggplot2::ggtitle(plot_title) +
-  ggplot2::xlab("Year") +
-  ggplot2::ylab(y_label) +
-  ggplot2::scale_y_continuous(labels = scales::comma) +
-  ggplot2::scale_x_continuous(limits = c(-3, 32),
+                  ggplot2::aes(data_mean_weighted_inc_wide$timediff,
+                               y = get(y_value))) +
+    ggplot2::geom_line(color = "red", size = 1) +
+    ggplot2::ggtitle(plot_title) +
+    ggplot2::xlab("Year") +
+    ggplot2::ylab(y_label) +
+    ggplot2::scale_y_continuous(labels = scales::comma) +
+    ggplot2::scale_x_continuous(limits = c(-3, 32),
                      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-  hgps_theme
+    hgps_theme
+}
+
+#' Plot of Cumulative Incidence Difference
+#'
+#' Creates a line plot showing the cumulative reduction in a specified incidence number over time.
+#'
+#' @param inc A character string specifying the incidence to plot.
+#'        Options are: "asthma", "ckd", "diabetes", "ischemia", "stroke".
+#' @param data_mean_weighted_inc_wide A data frame containing the weighted mean values of incidences.
+#' @return A ggplot object representing the specified plot.
+#' @export
+inc_cum <- function(inc, data_mean_weighted_inc_wide) {
+  incs <- c("asthma", "ckd", "diabetes", "ischemia", "stroke")
+
+  if (!(inc %in% incs)) {
+    stop("Invalid incidence. Choose from: 'asthma', 'ckd', 'diabetes', 'ischemia', 'stroke'.")
+  }
+
+  y_label <- switch(inc,
+                    asthma = "Asthma incidence",
+                    ckd = "CKD incidence",
+                    diabetes = "Diabetes incidence",
+                    ischemia = "Ischemia incidence",
+                    stroke = "Stroke incidence")
+
+  y_value <- switch(inc,
+                    asthma = "cumdiff_asthma",
+                    ckd = "cumdiff_ckd",
+                    diabetes = "cumdiff_diabetes",
+                    ischemia = "cumdiff_ihd",
+                    stroke = "cumdiff_stroke")
+
+  plot_title <- switch(inc,
+                       asthma = "Asthma - Cumulative reduction in incidence number",
+                       ckd = "Chronic kidney disease - Cumulative reduction in incidence number",
+                       diabetes = "Diabetes - Cumulative reduction in incidence number",
+                       ischemia = "Ischemic heart disease - Cumulative reduction in incidence number",
+                       stroke = "Stroke - Cumulative reduction in incidence number")
+
+  ggplot2::ggplot(data = data_mean_weighted_inc_wide,
+                  ggplot2::aes(data_mean_weighted_inc_wide$timediff,
+                               y = get(y_value))) +
+    ggplot2::geom_line(color = "purple", size = 1) +
+    ggplot2::ggtitle(plot_title) +
+    ggplot2::xlab("Year") +
+    ggplot2::ylab(y_label) +
+    ggplot2::scale_y_continuous(labels = scales::comma) +
+    ggplot2::scale_x_continuous(limits = c(-3, 32),
+                     breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
+                     labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    hgps_theme +
+    ggplot2::theme(plot.title = ggplot2::element_text(size = 10))
 }
