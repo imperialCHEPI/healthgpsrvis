@@ -1,3 +1,4 @@
+# Testing riskfactors() function
 test_that("riskfactors function works correctly", {
   # Create sample data
   data_mean_weighted <- data.frame(
@@ -32,6 +33,7 @@ test_that("riskfactors function works correctly", {
                "Invalid risk factor. Choose from: 'bmi', 'ei', 'fat', 'obese', 'protein', 'sodium'.")
 })
 
+# Testing riskfactors_diff() function
 test_that("riskfactors_diff function works correctly", {
   # Create sample data
   data_mean_weighted_rf_wide <- data.frame(
@@ -58,6 +60,7 @@ test_that("riskfactors_diff function works correctly", {
                "Invalid risk factor difference. Choose from: 'bmi', 'ei', 'obesity', 'sodium'.")
 })
 
+# Testing inc_diff() function
 test_that("inc_diff function works correctly", {
   # Create sample data
   data_mean_weighted_inc_wide <- data.frame(
@@ -89,3 +92,37 @@ test_that("inc_diff function works correctly", {
   expect_error(inc_diff("invalid_inc", data_mean_weighted_inc_wide),
                "Invalid incidence. Choose from: 'asthma', 'ckd', 'diabetes', 'ischemia', 'stroke'.")
 })
+
+# Testing inc_cum() function
+test_that("inc_cum function works correctly", {
+  # Create sample data
+  data_mean_weighted_inc_wide <- data.frame(
+    timediff = seq(-9, 21, by = 1),
+    cumdiff_asthma = runif(31, -3, 0),
+    cumdiff_ckd = runif(31, -200, 0),
+    cumdiff_diabetes = runif(31, -0.3, 0),
+    cumdiff_ihd = runif(31, -700, 0),
+    cumdiff_stroke = runif(31, -79, 0)
+  )
+
+  # Test for valid input
+  plot_ckd <- inc_cum("ckd", data_mean_weighted_inc_wide)
+  expect_s3_class(plot_ckd, "ggplot")
+  expect_equal(plot_ckd$labels$title, "Chronic kidney disease - Cumulative reduction in incidence number")
+  expect_equal(plot_ckd$labels$y, "CKD incidence")
+
+  plot_ihd <- inc_cum("ischemia", data_mean_weighted_inc_wide)
+  expect_s3_class(plot_ihd, "ggplot")
+  expect_equal(plot_ihd$labels$title, "Ischemic heart disease - Cumulative reduction in incidence number")
+  expect_equal(plot_ihd$labels$y, "Ischemia incidence")
+
+  plot_stroke <- inc_cum("stroke", data_mean_weighted_inc_wide)
+  expect_s3_class(plot_stroke, "ggplot")
+  expect_equal(plot_stroke$labels$title, "Stroke - Cumulative reduction in incidence number")
+  expect_equal(plot_stroke$labels$y, "Stroke incidence")
+
+  # Test for invalid input
+  expect_error(inc_cum("invalid_inc_cum", data_mean_weighted_inc_wide),
+               "Invalid incidence. Choose from: 'asthma', 'ckd', 'diabetes', 'ischemia', 'stroke'.")
+})
+

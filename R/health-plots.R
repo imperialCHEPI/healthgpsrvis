@@ -182,7 +182,7 @@ inc_cum <- function(inc, data_mean_weighted_inc_wide) {
   ggplot2::ggplot(data = data_mean_weighted_inc_wide,
                   ggplot2::aes(data_mean_weighted_inc_wide$timediff,
                                y = get(y_value))) +
-    ggplot2::geom_line(colour = "purple", size = 1) +
+    ggplot2::geom_line(colour = "purple", linewidth = 1) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
