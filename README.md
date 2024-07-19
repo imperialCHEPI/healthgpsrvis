@@ -45,7 +45,12 @@ data_mean_weighted <- data.frame(
     source = rep(c("Source_1", "Source_2", "Source_3"), each = 8)
   )
 plot_bmi <- riskfactors("bmi", data_mean_weighted)
+plot_bmi
+#> Warning: Use of `data_mean_weighted$time` is discouraged.
+#> ℹ Use `time` instead.
 ```
+
+<img src="man/figures/README-example-1.png" width="100%" />
 
 What is special about using `README.Rmd` instead of just `README.md`?
 You can include R chunks like so:
