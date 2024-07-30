@@ -89,6 +89,7 @@ riskfactors_diff <- function(riskft_diff, data_mean_weighted_rf_wide) {
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                        breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                        labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::labs(alt = "A line plot showing the reduction in a specified risk factor under intervention over time") +
     hgps_theme()
 }
 
@@ -140,6 +141,7 @@ inc_diff <- function(inc, data_mean_weighted_inc_wide) {
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::labs(alt = "A line plot showing the reduction in a specified incidence number over time") +
     hgps_theme()
 }
 
@@ -191,6 +193,7 @@ inc_cum <- function(inc, data_mean_weighted_inc_wide) {
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::labs(alt = "A line plot showing the cumulative reduction in a specified incidence number over time") +
     hgps_theme() +
     ggplot2::theme(plot.title = ggplot2::element_text(size = 10))
 }
@@ -240,6 +243,7 @@ burden_disease <- function(burden, data_mean_weighted_burden_wide) {
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::labs(alt = "A line plot showing the reduction in a specified burden of disease over time") +
     hgps_theme()
 }
 
@@ -262,5 +266,6 @@ life_exp <- function(diff, data_ple_wide) {
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-  hgps_theme()
+    ggplot2::labs(alt = "A line plot showing the increase in life expectancy under intervention over time") +
+    hgps_theme()
 }
