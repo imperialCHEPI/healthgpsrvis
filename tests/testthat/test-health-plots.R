@@ -126,3 +126,49 @@ test_that("inc_cum function works correctly", {
                "Invalid incidence. Choose from: 'asthma', 'ckd', 'diabetes', 'ischemia', 'stroke'.")
 })
 
+# Testing burden_disease() function
+test_that("burden_disease function works correctly", {
+  # Create sample data
+  data_mean_weighted_burden_wide <- data.frame(
+    timediff = seq(-9, 21, by = 1),
+    diff_daly = runif(31, -3, 0),
+    cumdiff_daly = runif(31, -200, 0),
+    diff_yld = runif(31, -0.3, 0),
+    diff_yll = runif(31, -700, 0)
+  )
+
+  # Test for valid input
+  plot_daly <- burden_disease("daly", data_mean_weighted_burden_wide)
+  expect_s3_class(plot_daly, "ggplot")
+  expect_equal(plot_daly$labels$title, "Reduction in DALY")
+  expect_equal(plot_daly$labels$y, "DALY")
+
+  plot_yll <- burden_disease("yll", data_mean_weighted_burden_wide)
+  expect_s3_class(plot_yll, "ggplot")
+  expect_equal(plot_yll$labels$title, "Reduction in YLL")
+  expect_equal(plot_yll$labels$y, "YLL")
+
+  plot_dalycum <- burden_disease("dalycum", data_mean_weighted_burden_wide)
+  expect_s3_class(plot_dalycum, "ggplot")
+  expect_equal(plot_dalycum$labels$title, "Cumulative reduction in DALY under intervention")
+  expect_equal(plot_dalycum$labels$y, "DALY")
+
+  # Test for invalid input
+  expect_error(burden_disease("invalid_burden_disease", data_mean_weighted_burden_wide),
+               "Invalid burden of disease. Choose from: 'daly', 'dalycum', 'yld', 'yll'.")
+})
+
+# Testing life_exp() function
+test_that("life_exp function works correctly", {
+  # Create sample data
+  data_ple_wide <- data.frame(
+    timediff = seq(-9, 21, by = 1),
+    diff = runif(31, -3, 0)
+  )
+
+  # Test for valid input
+  plot_le <- life_exp(data_ple_wide$diff, data_ple_wide)
+  expect_s3_class(plot_le, "ggplot")
+  expect_equal(plot_le$labels$title, "Increase in life expectancy under intervention")
+})
+
