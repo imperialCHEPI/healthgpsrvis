@@ -172,3 +172,47 @@ test_that("life_exp function works correctly", {
   expect_equal(plot_le$labels$title, "Increase in life expectancy under intervention")
 })
 
+# Testing combine_plots() function
+test_that("combine_plots function works correctly", {
+  # Create sample metrics
+  metrics <- list(
+    risk_factors = c("bmi", "ei"),
+    burden_disease = c("dalycum", "yld"))
+
+  # Create sample data
+  data_mean_weighted <- data.frame(
+    time = rep(seq(2020, 2055, by = 5), 3),
+    weighted_bmi = runif(24, 25, 38),
+    weighted_energyintake = runif(24, 1700, 2750),
+    weighted_fat = runif(24, 38, 120),
+    weighted_obesity = runif(24, 0.1, 0.7),
+    weighted_protein = runif(24, 46, 210),
+    weighted_sodium = runif(24, 874, 2768),
+    source = rep(c("Source_1", "Source_2", "Source_3"), each = 8))
+
+  data_mean_weighted_burden_wide <- data.frame(
+    timediff = seq(-9, 21, by = 1),
+    diff_daly = runif(31, -3, 0),
+    cumdiff_daly = runif(31, -200, 0),
+    diff_yld = runif(31, -0.3, 0),
+    diff_yll = runif(31, -700, 0)
+  )
+
+  # Create output file
+  output_file <- tempfile(fileext = ".pdf")
+
+  # Create the combined plot
+  plot_combine <- combine_plots(metrics=metrics,
+                                data_mean_weighted = data_mean_weighted,
+                                data_mean_weighted_burden_wide = data_mean_weighted_burden_wide,
+                                output_file = output_file)
+
+  # Test that the output file is created
+  expect_true(file.exists(output_file))
+
+  # Test that the output file is not empty
+  expect_gt(file.size(output_file), 0)
+
+  # Clean up
+  unlink(output_file)
+})

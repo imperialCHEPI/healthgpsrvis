@@ -235,7 +235,7 @@ burden_disease <- function(burden, data_mean_weighted_burden_wide) {
   ggplot2::ggplot(data = data_mean_weighted_burden_wide,
                   ggplot2::aes(x = data_mean_weighted_burden_wide$timediff,
                                y = get(y_value))) +
-    ggplot2::geom_line(colour = "#FF1493", size = 1) +
+    ggplot2::geom_line(colour = "#FF1493", linewidth = 1) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
@@ -258,7 +258,7 @@ burden_disease <- function(burden, data_mean_weighted_burden_wide) {
 life_exp <- function(diff, data_ple_wide) {
   ggplot2::ggplot(data = data_ple_wide,
                   ggplot2::aes(x = data_ple_wide$timediff, y = diff)) +
-    ggplot2::geom_line(color = "purple", size = 1) +
+    ggplot2::geom_line(color = "purple", linewidth = 1) +
     ggplot2::ggtitle("Increase in life expectancy under intervention") +
     ggplot2::xlab("Year") +
     ggplot2::ylab("Life expectancy (years)") +
@@ -268,4 +268,73 @@ life_exp <- function(diff, data_ple_wide) {
                      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
     ggplot2::labs(alt = "A line plot showing the increase in life expectancy under intervention over time") +
     hgps_theme()
+}
+
+#' Combined Plot of several metrics
+#'
+#' Creates a combined plot of several metrics.
+#'
+#' @param metrics A list specifying the metrics to plot.
+#' @param data_mean_weighted A data frame with weighted mean values for various metrics.
+#' @param data_mean_weighted_rf_wide A data frame containing the weighted mean values of risk factors.
+#' @param data_mean_weighted_inc_wide A data frame containing the weighted mean values of incidences.
+#' @param data_mean_weighted_burden_wide A data frame containing the weighted mean values of burden.
+#' @param data_ple_wide A data frame containing the life expectancy.
+#' @param output_file Name of the output PDF as a string
+#' @return A combined ggplot object arranged in a grid.
+#' @export
+combine_plots <- function(metrics,
+                           data_mean_weighted = NULL,
+                           data_mean_weighted_rf_wide = NULL,
+                           data_mean_weighted_inc_wide = NULL,
+                           data_mean_weighted_burden_wide = NULL,
+                           data_ple_wide = NULL,
+                           output_file) {
+
+  plots <- list()
+
+  if (!is.null(metrics$risk_factors) && !is.null(data_mean_weighted)) {
+    for (riskft in metrics$risk_factors) {
+      plots <- c(plots, list(riskfactors(riskft, data_mean_weighted)))
+    }
+  }
+
+  if (!is.null(metrics$risk_factors_diff) && !is.null(data_mean_weighted_rf_wide)) {
+    for (riskft_diff in metrics$risk_factors_diff) {
+      plots <- c(plots, list(riskfactors_diff(riskft_diff, data_mean_weighted_rf_wide)))
+    }
+  }
+
+  if (!is.null(metrics$inc_diff) && !is.null(data_mean_weighted_inc_wide)) {
+    for (inc in metrics$inc_diff) {
+      plots <- c(plots, list(inc_diff(inc, data_mean_weighted_inc_wide)))
+    }
+  }
+
+  if (!is.null(metrics$inc_cum) && !is.null(data_mean_weighted_inc_wide)) {
+    for (inc in metrics$inc_cum) {
+      plots <- c(plots, list(inc_cum(inc, data_mean_weighted_inc_wide)))
+    }
+  }
+
+  if (!is.null(metrics$burden_disease) && !is.null(data_mean_weighted_burden_wide)) {
+    for (burden in metrics$burden_disease) {
+      plots <- c(plots, list(burden_disease(burden, data_mean_weighted_burden_wide)))
+    }
+  }
+
+  if (!is.null(metrics$life_exp) && !is.null(data_ple_wide)) {
+    for (diff in metrics$life_exp) {
+      plots <- c(plots, list(life_exp(diff, data_ple_wide)))
+    }
+  }
+
+  # Combine plots into a single PDF
+  grDevices::pdf(output_file, width = 11, height = 8.5)
+
+  for (i in seq(1, length(plots), by = 4)) {
+    gridExtra::grid.arrange(grobs = plots[i:min(i+3, length(plots))], ncol = 2)
+  }
+
+  grDevices::dev.off()
 }
