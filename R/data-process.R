@@ -51,9 +51,7 @@ gen_data_mean <- function(data) {
               above_weight = mean(data$above_weight, na.rm = TRUE),
               yll = mean(data$yll, na.rm = TRUE),
               yld = mean(data$yld, na.rm = TRUE),
-              daly = mean(data$daly, na.rm = TRUE)) |>
-    dplyr::mutate(sodium_ci_low = stats::t.test(data$sodium)$conf.int[1],
-           sodium_ci_high = stats::t.test(data$sodium)$conf.int[2])
+              daly = mean(data$daly, na.rm = TRUE))
 
   return(data_mean)
 }
@@ -108,8 +106,7 @@ gen_data_mean_weighted <- function(data_mean) {
               weighted_migrations = stats::weighted.mean(data_mean$migrations, data_mean$count),
               total_yll = sum(data_mean$yll * data_mean$count),
               total_yld = sum(data_mean$yld * data_mean$count),
-              total_daly = sum(data_mean$daly * data_mean$count)) |>
-    dplyr::mutate(timediff = data_mean$time - 2023)
+              total_daly = sum(data_mean$daly * data_mean$count))
 
   return(data_mean_weighted)
 }
