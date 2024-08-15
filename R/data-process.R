@@ -144,11 +144,11 @@ gen_data_mean_weighted_rf_wide <- function(data_mean_weighted) {
                                                             data_mean_weighted_rf$weighted_height,
                                                             data_mean_weighted_rf$weighted_weight,
                                                             data_mean_weighted_rf$weighted_obesity))
-
-  data_mean_weighted_rf_wide$diff_sodium <- data_mean_weighted_rf_wide$weighted_sodium_intervention - data_mean_weighted_rf_wide$weighted_sodium_baseline
-  data_mean_weighted_rf_wide$diff_ei <- data_mean_weighted_rf_wide$weighted_energyintake_intervention - data_mean_weighted_rf_wide$weighted_energyintake_baseline
-  data_mean_weighted_rf_wide$diff_bmi <- data_mean_weighted_rf_wide$weighted_bmi_intervention - data_mean_weighted_rf_wide$weighted_bmi_baseline
-  data_mean_weighted_rf_wide$diff_obesity <- data_mean_weighted_rf_wide$weighted_obesity_intervention - data_mean_weighted_rf_wide$weighted_obesity_baseline
+  data_mean_weighted_rf_wide <- data_mean_weighted_rf_wide |>
+    dplyr::mutate(data_mean_weighted_rf_wide$diff_sodium <- data_mean_weighted_rf_wide$weighted_sodium_intervention - data_mean_weighted_rf_wide$weighted_sodium_baseline,
+                  data_mean_weighted_rf_wide$diff_ei <- data_mean_weighted_rf_wide$weighted_energyintake_intervention - data_mean_weighted_rf_wide$weighted_energyintake_baseline,
+                  data_mean_weighted_rf_wide$diff_bmi <- data_mean_weighted_rf_wide$weighted_bmi_intervention - data_mean_weighted_rf_wide$weighted_bmi_baseline,
+                  data_mean_weighted_rf_wide$diff_obesity <- data_mean_weighted_rf_wide$weighted_obesity_intervention - data_mean_weighted_rf_wide$weighted_obesity_baseline)
 
   return(data_mean_weighted_rf_wide)
 }
