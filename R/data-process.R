@@ -74,8 +74,6 @@ gen_data_mean_weighted <- function(data_mean) {
     dplyr::summarise(weighted_income =stats::weighted.mean(data_mean$income, data_mean$count),
               weighted_sector = stats::weighted.mean(data_mean$sector, data_mean$count),
               weighted_sodium = stats::weighted.mean(data_mean$sodium, data_mean$count, na.rm = TRUE),
-              weighted_sodium_ci_low = stats::weighted.mean(data_mean$sodium_ci_low, data_mean$count, na.rm = TRUE),
-              weighted_sodium_ci_high = stats::weighted.mean(data_mean$sodium_ci_high, data_mean$count, na.rm = TRUE),
               weighted_carbohydarte = stats::weighted.mean(data_mean$carbohydrate, data_mean$count, na.rm = TRUE),
               weighted_fat = stats::weighted.mean(data_mean$fat, data_mean$count, na.rm = TRUE),
               weighted_protein = stats::weighted.mean(data_mean$protein, data_mean$count, na.rm = TRUE),
