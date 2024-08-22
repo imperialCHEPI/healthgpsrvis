@@ -121,42 +121,47 @@ gen_data_weighted <- function(data) {
 #'
 #' This function calculates the differences between intervention and baseline values for various metrics.
 #'
-#' @param data_mean_weighted A data frame containing weighted mean values for various metrics.
+#' @param data_weighted A data frame containing weighted mean values for various metrics.
 #' @return A data frame with differences between intervention and baseline values for various metrics.
 #' @export
-gen_data_mean_weighted_rf_wide <- function(data_mean_weighted) {
-  data_mean_weighted_rf <- dplyr::select(data_mean_weighted,
-                                         data_mean_weighted$source,
-                                         data_mean_weighted$timediff,
-                                         data_mean_weighted$weighted_sodium,
-                                         data_mean_weighted$weighted_carbohydarte,
-                                         data_mean_weighted$weighted_fat,
-                                         data_mean_weighted$weighted_protein,
-                                         data_mean_weighted$weighted_energyintake,
-                                         data_mean_weighted$weighted_bmi,
-                                         data_mean_weighted$weighted_height,
-                                         data_mean_weighted$weighted_weight,
-                                         data_mean_weighted$weighted_obesity)
+gen_data_weighted_rf <- function(data_weighted) {
+  data_weighted_rf <- dplyr::select(data_weighted,
+                                         data_weighted$source,
+                                         data_weighted$time,
+                                         data_weighted$simID,
+                                         data_weighted$weighted_sodium,
+                                         data_weighted$weighted_energyintake,
+                                         data_weighted$weighted_bmi,
+                                         data_weighted$weighted_obesity)
 
-  data_mean_weighted_rf_wide <- tidyr::pivot_wider(data_mean_weighted_rf,
-                                            names_from = data_mean_weighted_rf$source,
-                                            id_cols = data_mean_weighted_rf$timediff,
-                                            values_from = c(data_mean_weighted_rf$weighted_sodium,
-                                                            data_mean_weighted_rf$weighted_carbohydarte,
-                                                            data_mean_weighted_rf$weighted_fat,
-                                                            data_mean_weighted_rf$weighted_protein,
-                                                            data_mean_weighted_rf$weighted_energyintake,
-                                                            data_mean_weighted_rf$weighted_bmi,
-                                                            data_mean_weighted_rf$weighted_height,
-                                                            data_mean_weighted_rf$weighted_weight,
-                                                            data_mean_weighted_rf$weighted_obesity))
-  data_mean_weighted_rf_wide <- data_mean_weighted_rf_wide |>
-    dplyr::mutate(data_mean_weighted_rf_wide$diff_sodium <- data_mean_weighted_rf_wide$weighted_sodium_intervention - data_mean_weighted_rf_wide$weighted_sodium_baseline,
-                  data_mean_weighted_rf_wide$diff_ei <- data_mean_weighted_rf_wide$weighted_energyintake_intervention - data_mean_weighted_rf_wide$weighted_energyintake_baseline,
-                  data_mean_weighted_rf_wide$diff_bmi <- data_mean_weighted_rf_wide$weighted_bmi_intervention - data_mean_weighted_rf_wide$weighted_bmi_baseline,
-                  data_mean_weighted_rf_wide$diff_obesity <- data_mean_weighted_rf_wide$weighted_obesity_intervention - data_mean_weighted_rf_wide$weighted_obesity_baseline)
+  data_weighted_rf_wide <- tidyr::pivot_wider(data_weighted_rf,
+                                            names_from = data_weighted_rf$source,
+                                            id_cols = c(data_weighted_rf$time, data_weighted_rf$simID),
+                                            values_from = c(data_weighted_rf$weighted_sodium,
+                                                            data_weighted_rf$weighted_energyintake,
+                                                            data_weighted_rf$weighted_bmi,
+                                                            data_weighted_rf$weighted_obesity))
+  data_weighted_rf_wide <- data_weighted_rf_wide |>
+    dplyr::mutate(data_weighted_rf_wide$diff_sodium <- data_weighted_rf_wide$weighted_sodium_intervention - data_weighted_rf_wide$weighted_sodium_baseline,
+                  data_weighted_rf_wide$diff_ei <- data_weighted_rf_wide$weighted_energyintake_intervention - data_weighted_rf_wide$weighted_energyintake_baseline,
+                  data_weighted_rf_wide$diff_bmi <- data_weighted_rf_wide$weighted_bmi_intervention - data_weighted_rf_wide$weighted_bmi_baseline,
+                  data_weighted_rf_wide$diff_obesity <- data_weighted_rf_wide$weighted_obesity_intervention - data_weighted_rf_wide$weighted_obesity_baseline)
+  data_weighted_rf_wide_collapse <- data_weighted_rf_wide |>
+    dplyr::group_by(data_weighted_rf_wide$time) |>
+    dplyr::summarise(data_weighted_rf_wide$diff_sodium_mean <- mean(data_weighted_rf_wide$diff_sodium),
+                     data_weighted_rf_wide$diff_sodium_min <- min(data_weighted_rf_wide$diff_sodium),
+                     data_weighted_rf_wide$diff_sodium_max <- max(data_weighted_rf_wide$diff_sodium),
+                     data_weighted_rf_wide$diff_ei_mean <- mean(data_weighted_rf_wide$diff_ei),
+                     data_weighted_rf_wide$diff_ei_min <- min(data_weighted_rf_wide$diff_ei),
+                     data_weighted_rf_wide$diff_ei_max <- max(data_weighted_rf_wide$diff_ei),
+                     data_weighted_rf_wide$diff_bmi_mean <- mean(data_weighted_rf_wide$diff_bmi),
+                     data_weighted_rf_wide$diff_bmi_min <- min(data_weighted_rf_wide$diff_bmi),
+                     data_weighted_rf_wide$diff_bmi_max <- max(data_weighted_rf_wide$diff_bmi),
+                     data_weighted_rf_wide$diff_obesity_mean <- mean(data_weighted_rf_wide$diff_obesity),
+                     data_weighted_rf_wide$diff_obesity_min <- min(data_weighted_rf_wide$diff_obesity),
+                     data_weighted_rf_wide$diff_obesity_max <- max(data_weighted_rf_wide$diff_obesity))
 
-  return(data_mean_weighted_rf_wide)
+  return(data_weighted_rf_wide_collapse)
 }
 
 #' Calculate Differences for Incidences
