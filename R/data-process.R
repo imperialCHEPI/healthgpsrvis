@@ -65,48 +65,56 @@ utils::globalVariables(c("incidence_intracerebralhemorrhage", "incidence_ischemi
 #'
 #' This function calculates weighted mean values for various metrics over years.
 #'
-#' @param data_mean A data frame containing mean values for various metrics.
-#' @return A data frame with weighted mean values for various metrics over years.
+#' @param data A data frame containing values for various metrics.
+#' @return A data frame with weighted values for various metrics over years.
 #' @export
-gen_data_mean_weighted <- function(data_mean) {
-  data_mean_weighted <- data_mean |>
-    dplyr::group_by(data_mean$source, data_mean$time) |>
-    dplyr::summarise(weighted_income =stats::weighted.mean(data_mean$income, data_mean$count),
-              weighted_sector = stats::weighted.mean(data_mean$sector, data_mean$count),
-              weighted_sodium = stats::weighted.mean(data_mean$sodium, data_mean$count, na.rm = TRUE),
-              weighted_carbohydarte = stats::weighted.mean(data_mean$carbohydrate, data_mean$count, na.rm = TRUE),
-              weighted_fat = stats::weighted.mean(data_mean$fat, data_mean$count, na.rm = TRUE),
-              weighted_protein = stats::weighted.mean(data_mean$protein, data_mean$count, na.rm = TRUE),
-              weighted_energyintake = stats::weighted.mean(data_mean$energyintake, data_mean$count, na.rm = TRUE),
-              weighted_physicalactivity = stats::weighted.mean(data_mean$physicalactivity, data_mean$count),
-              weighted_bmi = stats::weighted.mean(data_mean$bmi, data_mean$count, na.rm = TRUE),
-              weighted_height = stats::weighted.mean(data_mean$height, data_mean$count),
-              weighted_weight = stats::weighted.mean(data_mean$weight, data_mean$count),
-              weighted_overweight = stats::weighted.mean(data_mean$over_weight, data_mean$count),
-              weighted_obesity = stats::weighted.mean(data_mean$obese_weight, data_mean$count),
-              wprev_ihd = stats::weighted.mean(data_mean$prevalence_ischemicheartdisease, data_mean$count),
-              wprev_diabetes = stats::weighted.mean(data_mean$prevalence_diabetes, data_mean$count),
-              wprev_stroke = stats::weighted.mean(data_mean$prevalence_stroke, data_mean$count),
-              wprev_asthma = stats::weighted.mean(data_mean$prevalence_asthma, data_mean$count),
-              wprev_ckd = stats::weighted.mean(data_mean$prevalence_ckd, data_mean$count),
-              prevcase_ihd = sum(data_mean$prevalence_ischemicheartdisease * data_mean$count),
-              prevcase_diabetes = sum(data_mean$prevalence_diabetes * data_mean$count),
-              prevcase_stroke = sum(data_mean$prevalence_stroke * data_mean$count),
-              prevcase_asthma = sum(data_mean$prevalence_asthma * data_mean$count),
-              prevcase_ckd = sum(data_mean$prevalence_ckd * data_mean$count),
-              totalcase_ihd = sum(data_mean$incidence_ischemicheartdisease * data_mean$count),
-              totalcase_diabetes = sum(data_mean$incidence_diabetes * data_mean$count),
-              totalcase_stroke = sum(data_mean$incidence_stroke * data_mean$count),
-              totalcase_asthma = sum(data_mean$incidence_asthma * data_mean$count),
-              totalcase_ckd = sum(data_mean$incidence_ckd * data_mean$count),
-              weighted_disabilityweight = stats::weighted.mean(data_mean$disability_weight, data_mean$count),
-              weighted_death = stats::weighted.mean(data_mean$deaths, data_mean$count),
-              weighted_migrations = stats::weighted.mean(data_mean$migrations, data_mean$count),
-              total_yll = sum(data_mean$yll * data_mean$count),
-              total_yld = sum(data_mean$yld * data_mean$count),
-              total_daly = sum(data_mean$daly * data_mean$count))
+gen_data_weighted <- function(data) {
+  data_weighted <- data |>
+    dplyr::group_by(data$source,
+                    data$time,
+                    data$simID) |>
+    dplyr::mutate(data$prevalence_stroke <- data$prevalence_intracerebralhemorrhage +
+                                           data$prevalence_ischemicstroke +
+                                           data$prevalence_subarachnoidhemorrhage,
+                  data$incidence_stroke <- data$incidence_intracerebralhemorrhage +
+                                          data$incidence_ischemicstroke +
+                                          data$incidence_subarachnoidhemorrhage) |>
+    dplyr::summarise(weighted_income = stats::weighted.mean(data$income, data$count),
+              weighted_sector = stats::weighted.mean(data$sector, data$count),
+              weighted_sodium = stats::weighted.mean(data$sodium, data$count, na.rm = TRUE),
+              weighted_carbohydarte = stats::weighted.mean(data$carbohydrate, data$count, na.rm = TRUE),
+              weighted_fat = stats::weighted.mean(data$fat, data$count, na.rm = TRUE),
+              weighted_protein = stats::weighted.mean(data$protein, data$count, na.rm = TRUE),
+              weighted_energyintake = stats::weighted.mean(data$energyintake, data$count, na.rm = TRUE),
+              weighted_physicalactivity = stats::weighted.mean(data$physicalactivity, data$count),
+              weighted_bmi = stats::weighted.mean(data$bmi, data$count, na.rm = TRUE),
+              weighted_height = stats::weighted.mean(data$height, data$count),
+              weighted_weight = stats::weighted.mean(data$weight, data$count, na.rm = TRUE),
+              weighted_overweight = stats::weighted.mean(data$over_weight, data$count),
+              weighted_obesity = stats::weighted.mean(data$obese_weight, data$count),
+              wprev_ihd = stats::weighted.mean(data$prevalence_ischemicheartdisease, data$count, na.rm = TRUE),
+              wprev_diabetes = stats::weighted.mean(data$prevalence_diabetes, data$count, na.rm = TRUE),
+              wprev_stroke = stats::weighted.mean(data$prevalence_stroke, data$count, na.rm = TRUE),
+              wprev_asthma = stats::weighted.mean(data$prevalence_asthma, data$count, na.rm = TRUE),
+              wprev_ckd = stats::weighted.mean(data$prevalence_chronickidneydisease, data$count, na.rm = TRUE),
+              prevcase_ihd = sum(data$prevalence_ischemicheartdisease * data$count, na.rm = TRUE),
+              prevcase_diabetes = sum(data$prevalence_diabetes * data$count, na.rm = TRUE),
+              prevcase_stroke = sum(data$prevalence_stroke * data$count, na.rm = TRUE),
+              prevcase_asthma = sum(data$prevalence_asthma * data$count, na.rm = TRUE),
+              prevcase_ckd = sum(data$prevalence_chronickidneydisease * data$count, na.rm = TRUE),
+              totalcase_ihd = sum(data$incidence_ischemicheartdisease * data$count, na.rm = TRUE),
+              totalcase_diabetes = sum(data$incidence_diabetes * data$count, na.rm = TRUE),
+              totalcase_stroke = sum(data$incidence_stroke * data$count, na.rm = TRUE),
+              totalcase_asthma = sum(data$incidence_asthma * data$count, na.rm = TRUE),
+              totalcase_ckd = sum(data$incidence_chronickidneydisease * data$count, na.rm = TRUE),
+              weighted_disabilityweight = stats::weighted.mean(data$disability_weight, data$count),
+              weighted_death = stats::weighted.mean(data$deaths, data$count),
+              weighted_migrations = stats::weighted.mean(data$migrations, data$count),
+              total_yll = sum(data$yll * data$count, na.rm = TRUE),
+              total_yld = sum(data$yld * data$count, na.rm = TRUE),
+              total_daly = sum(data$daly * data$count, na.rm = TRUE))
 
-  return(data_mean_weighted)
+  return(data_weighted)
 }
 
 #' Calculate Differences for Various Metrics
