@@ -231,30 +231,58 @@ gen_data_weighted_ds <- function(data_weighted) {
 #'
 #' This function calculates the differences between intervention and baseline values for burden of disease.
 #'
-#' @param data_mean_weighted A data frame containing weighted mean values for various metrics.
+#' @param data_weighted A data frame containing weighted mean values for various metrics.
 #' @return A data frame with differences between intervention and baseline values for burden of disease.
 #' @export
-gen_data_mean_weighted_burden_wide <- function(data_mean_weighted) {
-  data_mean_weighted_burden <- dplyr::select(data_mean_weighted,
-                                             data_mean_weighted$source,
-                                             data_mean_weighted$timediff,
-                                             data_mean_weighted$total_yll,
-                                             data_mean_weighted$total_yld,
-                                             data_mean_weighted$total_daly)
+gen_data_weighted_burden <- function(data_weighted) {
+  data_weighted_burden <- dplyr::select(data_weighted,
+                                             data_weighted$source,
+                                             data_weighted$time,
+                                             data_weighted$simID,
+                                             data_weighted$total_yll,
+                                             data_weighted$total_yld,
+                                             data_weighted$total_daly)
 
-  data_mean_weighted_burden_wide <- tidyr::pivot_wider(data_mean_weighted_burden,
-                                                names_from = data_mean_weighted_burden$source,
-                                                id_cols = data_mean_weighted_burden$timediff,
-                                                values_from = c(data_mean_weighted_burden$total_yll,
-                                                                data_mean_weighted_burden$total_yld,
-                                                                data_mean_weighted_burden$total_daly))
+  data_weighted_burden_wide <- tidyr::pivot_wider(data_weighted_burden,
+                                                names_from = data_weighted_burden$source,
+                                                id_cols = c(data_weighted_burden$time, data_weighted_burden$simID),
+                                                values_from = c(data_weighted_burden$total_yll,
+                                                                data_weighted_burden$total_yld,
+                                                                data_weighted_burden$total_daly))
 
-  data_mean_weighted_burden_wide$diff_yll <- (data_mean_weighted_burden_wide$total_yll_intervention - data_mean_weighted_burden_wide$total_yll_baseline)/1000
-  data_mean_weighted_burden_wide$diff_yld <- (data_mean_weighted_burden_wide$total_yld_intervention - data_mean_weighted_burden_wide$total_yld_baseline)/1000
-  data_mean_weighted_burden_wide$diff_daly <- (data_mean_weighted_burden_wide$total_daly_intervention - data_mean_weighted_burden_wide$total_daly_baseline)/1000
-  data_mean_weighted_burden_wide$cumdiff_daly <- cumsum(data_mean_weighted_burden_wide$diff_daly)
+  data_weighted_burden_wide <- data_weighted_burden_wide |>
+    dplyr::mutate(data_weighted_burden_wide$diff_yll <- (data_weighted_burden_wide$total_yll_intervention - data_weighted_burden_wide$total_yll_baseline)/1000,
+                  data_weighted_burden_wide$diff_yld <- (data_weighted_burden_wide$total_yld_intervention - data_weighted_burden_wide$total_yld_baseline)/1000,
+                  data_weighted_burden_wide$diff_daly <- (data_weighted_burden_wide$total_daly_intervention - data_weighted_burden_wide$total_daly_baseline)/1000)
 
-  return(data_mean_weighted_burden_wide)
+  data_weighted_burden_wide <- data_weighted_burden_wide |>
+    dplyr::group_by(data_weighted_burden_wide$simID) |>
+    dplyr::mutate(data_weighted_burden_wide$cumdiff_daly <- cumsum(data_weighted_burden_wide$diff_daly),
+                  data_weighted_burden_wide$cumdiff_yll <- cumsum(data_weighted_burden_wide$diff_yll),
+                  data_weighted_burden_wide$cumdiff_yld <- cumsum(data_weighted_burden_wide$diff_yld))
+
+  data_weighted_burden_wide_collapse <- data_weighted_burden_wide |>
+    dplyr::group_by(data_weighted_burden_wide$time) |>
+    dplyr::summarise(data_weighted_burden_wide$diff_daly_mean <- mean(data_weighted_burden_wide$diff_daly),
+                     data_weighted_burden_wide$diff_daly_min <- min(data_weighted_burden_wide$diff_daly),
+                     data_weighted_burden_wide$diff_daly_max <- max(data_weighted_burden_wide$diff_daly),
+                     data_weighted_burden_wide$diff_yll_mean <- mean(data_weighted_burden_wide$diff_yll),
+                     data_weighted_burden_wide$diff_yll_min <- min(data_weighted_burden_wide$diff_yll),
+                     data_weighted_burden_wide$diff_yll_max <- max(data_weighted_burden_wide$diff_yll),
+                     data_weighted_burden_wide$diff_yld_mean <- mean(data_weighted_burden_wide$diff_yld),
+                     data_weighted_burden_wide$diff_yld_min <- min(data_weighted_burden_wide$diff_yld),
+                     data_weighted_burden_wide$diff_yld_max <- max(data_weighted_burden_wide$diff_yld),
+                     data_weighted_burden_wide$cumdiff_daly_mean <- mean(data_weighted_burden_wide$cumdiff_daly),
+                     data_weighted_burden_wide$cumdiff_daly_min <- min(data_weighted_burden_wide$cumdiff_daly),
+                     data_weighted_burden_wide$cumdiff_daly_max <- max(data_weighted_burden_wide$cumdiff_daly),
+                     data_weighted_burden_wide$cumdiff_yll_mean <- mean(data_weighted_burden_wide$cumdiff_yll),
+                     data_weighted_burden_wide$cumdiff_yll_min <- min(data_weighted_burden_wide$cumdiff_yll),
+                     data_weighted_burden_wide$cumdiff_yll_max <- max(data_weighted_burden_wide$cumdiff_yll),
+                     data_weighted_burden_wide$cumdiff_yld_mean <- mean(data_weighted_burden_wide$cumdiff_yld),
+                     data_weighted_burden_wide$cumdiff_yld_min <- min(data_weighted_burden_wide$cumdiff_yld),
+                     data_weighted_burden_wide$cumdiff_yld_max <- max(data_weighted_burden_wide$cumdiff_yld))
+
+  return(data_weighted_burden_wide_collapse)
 }
 
 #' Calculate Life Expectancy
