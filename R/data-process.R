@@ -231,9 +231,12 @@ gen_data_weighted_burden <- function(data_weighted) {
 #' @export
 gen_data_weighted_burden_spline <- function(data_weighted_burden) {
 
+  ## This function is data smoothing
+  ## It is applied manually now in India project due to abnormal positive values in diff_daly or cumdiff_daly
+
   ## Only keep those 0 or negative values
 
-  ## Notes: Delete years 27,30,32-33 for ps3-low; Delete years 2028 for ps4-low
+  ## Notes for India project: Delete years 27,30,32-33 for ps3-low; Delete years 2028 for ps4-low
 
   data_weighted_burden_mean <- data_weighted_burden |>
     dplyr::filter(data_weighted_burden$cumdiff_daly_mean <= 0)
@@ -241,7 +244,7 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden) {
   data_weighted_burden_min <- data_weighted_burden |>
     dplyr::filter(data_weighted_burden$cumdiff_daly_min <= 0)
 
-  ## Notes: Delete years 29, 31 for ps2-high; Delete 37-38 for ps3-low; Delete 33-34 for ps4-middle; Delete 36-38 for ps4-low
+  ## Notes for India project: Delete years 29, 31 for ps2-high; Delete 37-38 for ps3-low; Delete 33-34 for ps4-middle; Delete 36-38 for ps4-low
 
   data_weighted_burden_max <- data_weighted_burden |>
     dplyr::filter(data_weighted_burden$cumdiff_daly_max <= 0)
