@@ -3,7 +3,6 @@
 export(burden_disease)
 export(combine_plots)
 export(gen_data_le)
-export(gen_data_mean)
 export(gen_data_weighted)
 export(gen_data_weighted_burden)
 export(gen_data_weighted_burden_spline)
