@@ -285,6 +285,54 @@ gen_data_weighted_burden <- function(data_weighted) {
   return(data_weighted_burden_wide_collapse)
 }
 
+#' Perform data smoothing
+#'
+#' This function performs data smoothing.
+#'
+#' @param data_weighted_burden A data frame containing weighted values for burden of disease.
+#' @return A data frame with spline smoothing applied for burden of disease.
+#' @export
+gen_data_weighted_burden_spline <- function(data_weighted_burden) {
+
+  ## Only keep those 0 or negative values
+
+  ## Notes: Delete years 27,30,32-33 for ps3-low; Delete years 2028 for ps4-low
+
+  data_weighted_burden_mean <- data_weighted_burden |>
+    dplyr::filter(data_weighted_burden$cumdiff_daly_mean <= 0)
+
+  data_weighted_burden_min <- data_weighted_burden |>
+    dplyr::filter(data_weighted_burden$cumdiff_daly_min <= 0)
+
+  ## Notes: Delete years 29, 31 for ps2-high; Delete 37-38 for ps3-low; Delete 33-34 for ps4-middle; Delete 36-38 for ps4-low
+
+  data_weighted_burden_max <- data_weighted_burden |>
+    dplyr::filter(data_weighted_burden$cumdiff_daly_max <= 0)
+
+  ## New data frame
+  data_weighted_burden_spline <- data.frame(time = seq(min(data_weighted_burden$time),
+                                                       max(data_weighted_burden$time),
+                                                       length.out = 34))
+
+  ## Fit spline and predict
+  spline_fit <- splines::interpSpline(data_weighted_burden_mean$time, data_weighted_burden_mean$cumdiff_daly_mean)
+  data_weighted_burden_spline$cumdiff_daly_mean <- stats::predict(spline_fit, data_weighted_burden_spline$time)$y
+
+  spline_fit_min <- splines::interpSpline(data_weighted_burden_min$time, data_weighted_burden_min$cumdiff_daly_min)
+  data_weighted_burden_spline$cumdiff_daly_min <- stats::predict(spline_fit_min, data_weighted_burden_spline$time)$y
+
+  ## Use smooth.spline for ps4-low
+  spline_fit_max <- splines::interpSpline(data_weighted_burden_max$time, data_weighted_burden_max$cumdiff_daly_max)
+  data_weighted_burden_spline$cumdiff_daly_max <- stats::predict(spline_fit_max, data_weighted_burden_spline$time)$y
+
+  ## Keep 0 values in the first two years
+  data_weighted_burden_spline$cumdiff_daly_mean <- ifelse(data_weighted_burden_spline$time<2024, 0, data_weighted_burden_spline$cumdiff_daly_mean)
+  data_weighted_burden_spline$cumdiff_daly_min <- ifelse(data_weighted_burden_spline$time<2024, 0, data_weighted_burden_spline$cumdiff_daly_min)
+  data_weighted_burden_spline$cumdiff_daly_max <- ifelse(data_weighted_burden_spline$time<2024, 0, data_weighted_burden_spline$cumdiff_daly_max)
+
+  return(data_weighted_burden_spline)
+}
+
 #' Calculate Life Expectancy
 #'
 #' This function calculates life expectancy for various age and groups.
@@ -319,7 +367,7 @@ gen_data_le <- function(data_mean) {
                     data_le$timediff) |>
     dplyr::summarise(ple = stats::weighted.mean(data_le$px,data_le$count_both))
 
-  ## calculate difference btw baseline and intervention ##
+  ## calculate difference between baseline and intervention ##
   data_ple_wide <- tidyr::pivot_wider(data_ple,
                                names_from=data_ple$source,
                                id_cols = data_ple$timediff,
