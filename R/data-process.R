@@ -1,229 +1,333 @@
-#' Generate Mean Values for Various Metrics
+#' Data Processing
 #'
-#' This function calculates mean values for various metrics grouped by source, time, gender, and age.
+#' This file contains a set of functions designed to work together for processing the data.
+#' Below is a description of how to use these functions in sequence.
 #'
-#' @param data A data frame containing the raw data.
-#' @return A data frame with mean values for various metrics.
-#' @export
-gen_data_mean <- function(data) {
-  # Show the first few rows of the data (or use utils:: somewhere else in the function to clear the R CMD check notes)
-  print(utils::head(data))
-
-  # Calculate mean values grouped by "source", "time", "gender", and "age"
-  data_mean <- data |>
-    dplyr::group_by(data$source, data$time, data$gender, data$age) |>
-    dplyr::summarise(count = mean(data$count),
-              income = mean(data$income),
-              sector = mean(data$sector),
-              carbohydrate = mean(data$carbohydrate, na.rm = TRUE),
-              fat = mean(data$fat, na.rm = TRUE),
-              protein = mean(data$protein, na.rm = TRUE),
-              sodium = mean(data$sodium, na.rm = TRUE),
-              energyintake = mean(data$energyintake, na.rm = TRUE),
-              physicalactivity = mean(data$physicalactivity, na.rm = TRUE),
-              bmi = mean(data$bmi, na.rm = TRUE),
-              height = mean(data$height, na.rm = TRUE),
-              weight = mean(data$weight, na.rm = TRUE),
-              prevalence_ischemicheartdisease = mean(data$prevalence_ischemicheartdisease, na.rm = TRUE),
-              incidence_ischemicheartdisease = mean(data$incidence_ischemicheartdisease, na.rm = TRUE),
-              prevalence_diabetes = mean(data$prevalence_diabetes, na.rm = TRUE),
-              incidence_diabetes = mean(data$incidence_diabetes, na.rm = TRUE),
-              prevalence_intracerebralhemorrhage = mean(data$prevalence_intracerebralhemorrhage, na.rm = TRUE),
-              incidence_intracerebralhemorrhage = mean(data$incidence_intracerebralhemorrhage, na.rm = TRUE),
-              prevalence_ischemicstroke = mean(data$prevalence_ischemicstroke, na.rm = TRUE),
-              incidence_ischemicstroke = mean(data$incidence_ischemicstroke, na.rm = TRUE),
-              prevalence_asthma = mean(data$prevalence_asthma, na.rm = TRUE),
-              incidence_asthma = mean(data$incidence_asthma, na.rm = TRUE),
-              #prevalence_stomachcancer = mean(data$prevalence_stomachcancer, na.rm = TRUE),
-              #incidence_stomachcancer = mean(data$incidence_stomachcancer, na.rm = TRUE),
-              prevalence_subarachnoidhemorrhage = mean(data$prevalence_subarachnoidhemorrhage, na.rm = TRUE),
-              incidence_subarachnoidhemorrhage = mean(data$incidence_subarachnoidhemorrhage, na.rm = TRUE),
-              prevalence_stroke = prevalence_intracerebralhemorrhage + prevalence_ischemicstroke + prevalence_subarachnoidhemorrhage,
-              incidence_stroke = incidence_intracerebralhemorrhage + incidence_ischemicstroke + incidence_subarachnoidhemorrhage,
-              prevalence_ckd = mean(data$prevalence_chronickidneydisease, na.rm = TRUE),
-              incidence_ckd = mean(data$incidence_chronickidneydisease, na.rm = TRUE),
-              disability_weight = mean(data$disability_weight, na.rm = TRUE),
-              deaths = mean(data$deaths, na.rm = TRUE),
-              migrations = mean(data$migrations, na.rm = TRUE),
-              normal_weight = mean(data$normal_weight, na.rm = TRUE),
-              over_weight = mean(data$over_weight, na.rm = TRUE),
-              obese_weight = mean(data$obese_weight, na.rm = TRUE),
-              above_weight = mean(data$above_weight, na.rm = TRUE),
-              yll = mean(data$yll, na.rm = TRUE),
-              yld = mean(data$yld, na.rm = TRUE),
-              daly = mean(data$daly, na.rm = TRUE))
-
-  return(data_mean)
-}
-
-# Define global variables to suppress notes
-utils::globalVariables(c("incidence_intracerebralhemorrhage", "incidence_ischemicstroke",
-"incidence_subarachnoidhemorrhage", "prevalence_intracerebralhemorrhage",
-"prevalence_ischemicstroke", "prevalence_subarachnoidhemorrhage"))
+#' ## Step-by-Step Usage
+#'
+#' 1. **Read the data**: This function reads the data from the location specified.
+#'    ```r
+#'    data <-  readRDS("data.rds")
+#'    ```
+#'
+#' 2. **`gen_data_mean`**: Calculates weighted mean values for various metrics over years.
+#'    ```r
+#'    data_weighted <- gen_data_mean(data)
+#'    ```
+#'
+#' 3. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for various metrics.
+#'    ```r
+#'    data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
+#'    ```
+#'
+#'4. **`gen_data_weighted_ds`**: Calculates the differences between intervention and baseline values for incidences.
+#'    ```r
+#'    data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
+#'    ```
+#'
+#'5. **`gen_data_weighted_burden`**: Calculates the differences between intervention and baseline values for burden of disease.
+#'    ```r
+#'    data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
+#'    ```
+#'
+#'6. **`gen_data_weighted_burden_spline`**: Performs data smoothing.
+#'    ```r
+#'    data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
+#'    ```
+#'
+#'7. **`gen_data_le`**: Calculates life expectancy for various age and groups.
+#'    ```r
+#'    data_ple_wide <- gen_data_le(data_weighted)
+#'    ```
+#'
+#' ## Examples
+#' ```r
+#' # Example of using all functions together
+#' data <- readRDS("data.rds")
+#' data_weighted <- gen_data_mean(data)
+#' data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
+#' data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
+#' data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
+#' data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
+#' data_ple_wide <- gen_data_le(data_weighted)
+#' ```
+#'
+#' @name DataProcessing
+NULL
 
 #' Generate Weighted Mean Values Over Years
 #'
 #' This function calculates weighted mean values for various metrics over years.
 #'
-#' @param data_mean A data frame containing mean values for various metrics.
-#' @return A data frame with weighted mean values for various metrics over years.
+#' @param data A data frame containing values for various metrics.
+#' @return A data frame with weighted values for various metrics over years.
 #' @export
-gen_data_mean_weighted <- function(data_mean) {
-  data_mean_weighted <- data_mean |>
-    dplyr::group_by(data_mean$source, data_mean$time) |>
-    dplyr::summarise(weighted_income =stats::weighted.mean(data_mean$income, data_mean$count),
-              weighted_sector = stats::weighted.mean(data_mean$sector, data_mean$count),
-              weighted_sodium = stats::weighted.mean(data_mean$sodium, data_mean$count, na.rm = TRUE),
-              weighted_carbohydarte = stats::weighted.mean(data_mean$carbohydrate, data_mean$count, na.rm = TRUE),
-              weighted_fat = stats::weighted.mean(data_mean$fat, data_mean$count, na.rm = TRUE),
-              weighted_protein = stats::weighted.mean(data_mean$protein, data_mean$count, na.rm = TRUE),
-              weighted_energyintake = stats::weighted.mean(data_mean$energyintake, data_mean$count, na.rm = TRUE),
-              weighted_physicalactivity = stats::weighted.mean(data_mean$physicalactivity, data_mean$count),
-              weighted_bmi = stats::weighted.mean(data_mean$bmi, data_mean$count, na.rm = TRUE),
-              weighted_height = stats::weighted.mean(data_mean$height, data_mean$count),
-              weighted_weight = stats::weighted.mean(data_mean$weight, data_mean$count),
-              weighted_overweight = stats::weighted.mean(data_mean$over_weight, data_mean$count),
-              weighted_obesity = stats::weighted.mean(data_mean$obese_weight, data_mean$count),
-              wprev_ihd = stats::weighted.mean(data_mean$prevalence_ischemicheartdisease, data_mean$count),
-              wprev_diabetes = stats::weighted.mean(data_mean$prevalence_diabetes, data_mean$count),
-              wprev_stroke = stats::weighted.mean(data_mean$prevalence_stroke, data_mean$count),
-              wprev_asthma = stats::weighted.mean(data_mean$prevalence_asthma, data_mean$count),
-              wprev_ckd = stats::weighted.mean(data_mean$prevalence_ckd, data_mean$count),
-              prevcase_ihd = sum(data_mean$prevalence_ischemicheartdisease * data_mean$count),
-              prevcase_diabetes = sum(data_mean$prevalence_diabetes * data_mean$count),
-              prevcase_stroke = sum(data_mean$prevalence_stroke * data_mean$count),
-              prevcase_asthma = sum(data_mean$prevalence_asthma * data_mean$count),
-              prevcase_ckd = sum(data_mean$prevalence_ckd * data_mean$count),
-              totalcase_ihd = sum(data_mean$incidence_ischemicheartdisease * data_mean$count),
-              totalcase_diabetes = sum(data_mean$incidence_diabetes * data_mean$count),
-              totalcase_stroke = sum(data_mean$incidence_stroke * data_mean$count),
-              totalcase_asthma = sum(data_mean$incidence_asthma * data_mean$count),
-              totalcase_ckd = sum(data_mean$incidence_ckd * data_mean$count),
-              weighted_disabilityweight = stats::weighted.mean(data_mean$disability_weight, data_mean$count),
-              weighted_death = stats::weighted.mean(data_mean$deaths, data_mean$count),
-              weighted_migrations = stats::weighted.mean(data_mean$migrations, data_mean$count),
-              total_yll = sum(data_mean$yll * data_mean$count),
-              total_yld = sum(data_mean$yld * data_mean$count),
-              total_daly = sum(data_mean$daly * data_mean$count))
+gen_data_weighted <- function(data) {
+  data_weighted <- data |>
+    dplyr::group_by(data$source,
+                    data$time,
+                    data$simID) |>
+    dplyr::mutate(data$prevalence_stroke <- data$prevalence_intracerebralhemorrhage +
+                                           data$prevalence_ischemicstroke +
+                                           data$prevalence_subarachnoidhemorrhage,
+                  data$incidence_stroke <- data$incidence_intracerebralhemorrhage +
+                                          data$incidence_ischemicstroke +
+                                          data$incidence_subarachnoidhemorrhage) |>
+    dplyr::summarise(weighted_income = stats::weighted.mean(data$income, data$count),
+              weighted_sector = stats::weighted.mean(data$sector, data$count),
+              weighted_sodium = stats::weighted.mean(data$sodium, data$count, na.rm = TRUE),
+              weighted_carbohydarte = stats::weighted.mean(data$carbohydrate, data$count, na.rm = TRUE),
+              weighted_fat = stats::weighted.mean(data$fat, data$count, na.rm = TRUE),
+              weighted_protein = stats::weighted.mean(data$protein, data$count, na.rm = TRUE),
+              weighted_energyintake = stats::weighted.mean(data$energyintake, data$count, na.rm = TRUE),
+              weighted_physicalactivity = stats::weighted.mean(data$physicalactivity, data$count),
+              weighted_bmi = stats::weighted.mean(data$bmi, data$count, na.rm = TRUE),
+              weighted_height = stats::weighted.mean(data$height, data$count),
+              weighted_weight = stats::weighted.mean(data$weight, data$count, na.rm = TRUE),
+              weighted_overweight = stats::weighted.mean(data$over_weight, data$count),
+              weighted_obesity = stats::weighted.mean(data$obese_weight, data$count),
+              wprev_ihd = stats::weighted.mean(data$prevalence_ischemicheartdisease, data$count, na.rm = TRUE),
+              wprev_diabetes = stats::weighted.mean(data$prevalence_diabetes, data$count, na.rm = TRUE),
+              wprev_stroke = stats::weighted.mean(data$prevalence_stroke, data$count, na.rm = TRUE),
+              wprev_asthma = stats::weighted.mean(data$prevalence_asthma, data$count, na.rm = TRUE),
+              wprev_ckd = stats::weighted.mean(data$prevalence_chronickidneydisease, data$count, na.rm = TRUE),
+              prevcase_ihd = sum(data$prevalence_ischemicheartdisease * data$count, na.rm = TRUE),
+              prevcase_diabetes = sum(data$prevalence_diabetes * data$count, na.rm = TRUE),
+              prevcase_stroke = sum(data$prevalence_stroke * data$count, na.rm = TRUE),
+              prevcase_asthma = sum(data$prevalence_asthma * data$count, na.rm = TRUE),
+              prevcase_ckd = sum(data$prevalence_chronickidneydisease * data$count, na.rm = TRUE),
+              totalcase_ihd = sum(data$incidence_ischemicheartdisease * data$count, na.rm = TRUE),
+              totalcase_diabetes = sum(data$incidence_diabetes * data$count, na.rm = TRUE),
+              totalcase_stroke = sum(data$incidence_stroke * data$count, na.rm = TRUE),
+              totalcase_asthma = sum(data$incidence_asthma * data$count, na.rm = TRUE),
+              totalcase_ckd = sum(data$incidence_chronickidneydisease * data$count, na.rm = TRUE),
+              weighted_disabilityweight = stats::weighted.mean(data$disability_weight, data$count),
+              weighted_death = stats::weighted.mean(data$deaths, data$count),
+              weighted_migrations = stats::weighted.mean(data$migrations, data$count),
+              total_yll = sum(data$yll * data$count, na.rm = TRUE),
+              total_yld = sum(data$yld * data$count, na.rm = TRUE),
+              total_daly = sum(data$daly * data$count, na.rm = TRUE))
 
-  return(data_mean_weighted)
+  return(data_weighted)
 }
 
 #' Calculate Differences for Various Metrics
 #'
 #' This function calculates the differences between intervention and baseline values for various metrics.
 #'
-#' @param data_mean_weighted A data frame containing weighted mean values for various metrics.
+#' @param data_weighted A data frame containing weighted mean values for various metrics.
 #' @return A data frame with differences between intervention and baseline values for various metrics.
 #' @export
-gen_data_mean_weighted_rf_wide <- function(data_mean_weighted) {
-  data_mean_weighted_rf <- dplyr::select(data_mean_weighted,
-                                         data_mean_weighted$source,
-                                         data_mean_weighted$timediff,
-                                         data_mean_weighted$weighted_sodium,
-                                         data_mean_weighted$weighted_carbohydarte,
-                                         data_mean_weighted$weighted_fat,
-                                         data_mean_weighted$weighted_protein,
-                                         data_mean_weighted$weighted_energyintake,
-                                         data_mean_weighted$weighted_bmi,
-                                         data_mean_weighted$weighted_height,
-                                         data_mean_weighted$weighted_weight,
-                                         data_mean_weighted$weighted_obesity)
+gen_data_weighted_rf <- function(data_weighted) {
+  data_weighted_rf <- dplyr::select(data_weighted,
+                                         data_weighted$source,
+                                         data_weighted$time,
+                                         data_weighted$simID,
+                                         data_weighted$weighted_sodium,
+                                         data_weighted$weighted_energyintake,
+                                         data_weighted$weighted_bmi,
+                                         data_weighted$weighted_obesity)
 
-  data_mean_weighted_rf_wide <- tidyr::pivot_wider(data_mean_weighted_rf,
-                                            names_from = data_mean_weighted_rf$source,
-                                            id_cols = data_mean_weighted_rf$timediff,
-                                            values_from = c(data_mean_weighted_rf$weighted_sodium,
-                                                            data_mean_weighted_rf$weighted_carbohydarte,
-                                                            data_mean_weighted_rf$weighted_fat,
-                                                            data_mean_weighted_rf$weighted_protein,
-                                                            data_mean_weighted_rf$weighted_energyintake,
-                                                            data_mean_weighted_rf$weighted_bmi,
-                                                            data_mean_weighted_rf$weighted_height,
-                                                            data_mean_weighted_rf$weighted_weight,
-                                                            data_mean_weighted_rf$weighted_obesity))
-  data_mean_weighted_rf_wide <- data_mean_weighted_rf_wide |>
-    dplyr::mutate(data_mean_weighted_rf_wide$diff_sodium <- data_mean_weighted_rf_wide$weighted_sodium_intervention - data_mean_weighted_rf_wide$weighted_sodium_baseline,
-                  data_mean_weighted_rf_wide$diff_ei <- data_mean_weighted_rf_wide$weighted_energyintake_intervention - data_mean_weighted_rf_wide$weighted_energyintake_baseline,
-                  data_mean_weighted_rf_wide$diff_bmi <- data_mean_weighted_rf_wide$weighted_bmi_intervention - data_mean_weighted_rf_wide$weighted_bmi_baseline,
-                  data_mean_weighted_rf_wide$diff_obesity <- data_mean_weighted_rf_wide$weighted_obesity_intervention - data_mean_weighted_rf_wide$weighted_obesity_baseline)
+  data_weighted_rf_wide <- tidyr::pivot_wider(data_weighted_rf,
+                                            names_from = data_weighted_rf$source,
+                                            id_cols = c(data_weighted_rf$time, data_weighted_rf$simID),
+                                            values_from = c(data_weighted_rf$weighted_sodium,
+                                                            data_weighted_rf$weighted_energyintake,
+                                                            data_weighted_rf$weighted_bmi,
+                                                            data_weighted_rf$weighted_obesity))
+  data_weighted_rf_wide <- data_weighted_rf_wide |>
+    dplyr::mutate(data_weighted_rf_wide$diff_sodium <- data_weighted_rf_wide$weighted_sodium_intervention - data_weighted_rf_wide$weighted_sodium_baseline,
+                  data_weighted_rf_wide$diff_ei <- data_weighted_rf_wide$weighted_energyintake_intervention - data_weighted_rf_wide$weighted_energyintake_baseline,
+                  data_weighted_rf_wide$diff_bmi <- data_weighted_rf_wide$weighted_bmi_intervention - data_weighted_rf_wide$weighted_bmi_baseline,
+                  data_weighted_rf_wide$diff_obesity <- data_weighted_rf_wide$weighted_obesity_intervention - data_weighted_rf_wide$weighted_obesity_baseline)
+  data_weighted_rf_wide_collapse <- data_weighted_rf_wide |>
+    dplyr::group_by(data_weighted_rf_wide$time) |>
+    dplyr::summarise(data_weighted_rf_wide$diff_sodium_mean <- mean(data_weighted_rf_wide$diff_sodium),
+                     data_weighted_rf_wide$diff_sodium_min <- min(data_weighted_rf_wide$diff_sodium),
+                     data_weighted_rf_wide$diff_sodium_max <- max(data_weighted_rf_wide$diff_sodium),
+                     data_weighted_rf_wide$diff_ei_mean <- mean(data_weighted_rf_wide$diff_ei),
+                     data_weighted_rf_wide$diff_ei_min <- min(data_weighted_rf_wide$diff_ei),
+                     data_weighted_rf_wide$diff_ei_max <- max(data_weighted_rf_wide$diff_ei),
+                     data_weighted_rf_wide$diff_bmi_mean <- mean(data_weighted_rf_wide$diff_bmi),
+                     data_weighted_rf_wide$diff_bmi_min <- min(data_weighted_rf_wide$diff_bmi),
+                     data_weighted_rf_wide$diff_bmi_max <- max(data_weighted_rf_wide$diff_bmi),
+                     data_weighted_rf_wide$diff_obesity_mean <- mean(data_weighted_rf_wide$diff_obesity),
+                     data_weighted_rf_wide$diff_obesity_min <- min(data_weighted_rf_wide$diff_obesity),
+                     data_weighted_rf_wide$diff_obesity_max <- max(data_weighted_rf_wide$diff_obesity))
 
-  return(data_mean_weighted_rf_wide)
+  return(data_weighted_rf_wide_collapse)
 }
 
 #' Calculate Differences for Incidences
 #'
 #' This function calculates the differences between intervention and baseline values for incidences.
 #'
-#' @param data_mean_weighted A data frame containing weighted mean values for various metrics.
+#' @param data_weighted A data frame containing weighted mean values for various metrics.
 #' @return A data frame with differences between intervention and baseline values for incidences.
 #' @export
-gen_data_mean_weighted_inc_wide <- function(data_mean_weighted) {
-  data_mean_weighted_inc <- dplyr::select(data_mean_weighted,
-                                          data_mean_weighted$source,
-                                          data_mean_weighted$timediff,
-                                          data_mean_weighted$totalcase_ihd,
-                                          data_mean_weighted$totalcase_diabetes,
-                                          data_mean_weighted$totalcase_stroke,
-                                          data_mean_weighted$totalcase_asthma,
-                                          #data_mean_weighted$totalcase_stomachcancer,
-                                          data_mean_weighted$totalcase_ckd)
+gen_data_weighted_ds <- function(data_weighted) {
+  data_weighted_ds <- dplyr::select(data_weighted,
+                                          data_weighted$source,
+                                          data_weighted$time,
+                                          data_weighted$simID,
+                                          data_weighted$totalcase_ihd,
+                                          data_weighted$totalcase_diabetes,
+                                          data_weighted$totalcase_stroke,
+                                          data_weighted$totalcase_asthma,
+                                          data_weighted$totalcase_ckd)
 
-  data_mean_weighted_inc_wide <- tidyr::pivot_wider(data_mean_weighted_inc,
-                                             names_from = data_mean_weighted_inc$source,
-                                             id_cols = data_mean_weighted_inc$timediff,
-                                             values_from = c(data_mean_weighted_inc$totalcase_ihd,
-                                                             data_mean_weighted_inc$totalcase_diabetes,
-                                                             data_mean_weighted_inc$totalcase_stroke,
-                                                             data_mean_weighted_inc$totalcase_asthma,
-                                                             #data_mean_weighted_inc$totalcase_stomachcancer,
-                                                             data_mean_weighted_inc$totalcase_ckd))
+  data_weighted_ds_wide <- tidyr::pivot_wider(data_weighted_ds,
+                                             names_from = data_weighted_ds$source,
+                                             id_cols = c(data_weighted_ds$time, data_weighted_ds$simID),
+                                             values_from = c(data_weighted_ds$totalcase_ihd,
+                                                             data_weighted_ds$totalcase_diabetes,
+                                                             data_weighted_ds$totalcase_stroke,
+                                                             data_weighted_ds$totalcase_asthma,
+                                                             data_weighted_ds$totalcase_ckd))
 
-  data_mean_weighted_inc_wide$diff_ihd <- 100*(data_mean_weighted_inc_wide$totalcase_ihd_intervention - data_mean_weighted_inc_wide$totalcase_ihd_baseline)
-  data_mean_weighted_inc_wide$diff_diabetes <- 100*(data_mean_weighted_inc_wide$totalcase_diabetes_intervention - data_mean_weighted_inc_wide$totalcase_diabetes_baseline)
-  data_mean_weighted_inc_wide$diff_stroke <- 100*(data_mean_weighted_inc_wide$totalcase_stroke_intervention - data_mean_weighted_inc_wide$totalcase_stroke_baseline)
-  data_mean_weighted_inc_wide$diff_asthma <- 100*(data_mean_weighted_inc_wide$totalcase_asthma_intervention - data_mean_weighted_inc_wide$totalcase_asthma_baseline)
-  #data_mean_weighted_inc_wide$diff_stomachcancer <- 100*(data_mean_weighted_inc_wide$totalcase_stomachcancer_intervention - data_mean_weighted_inc_wide$totalcase_stomachcancer_baseline)
-  data_mean_weighted_inc_wide$diff_ckd <- 100*(data_mean_weighted_inc_wide$totalcase_ckd_intervention - data_mean_weighted_inc_wide$totalcase_ckd_baseline)
+  data_weighted_ds_wide <- data_weighted_ds_wide |>
+    dplyr::mutate(data_weighted_ds_wide$diff_inc_ihd <- 100*(data_weighted_ds_wide$totalcase_ihd_intervention - data_weighted_ds_wide$totalcase_ihd_baseline),
+                  data_weighted_ds_wide$diff_inc_db <- 100*(data_weighted_ds_wide$totalcase_diabetes_intervention - data_weighted_ds_wide$totalcase_diabetes_baseline),
+                  data_weighted_ds_wide$diff_inc_stroke <- 100*(data_weighted_ds_wide$totalcase_stroke_intervention - data_weighted_ds_wide$totalcase_stroke_baseline),
+                  data_weighted_ds_wide$diff_inc_asthma <- 100*(data_weighted_ds_wide$totalcase_asthma_intervention - data_weighted_ds_wide$totalcase_asthma_baseline),
+                  data_weighted_ds_wide$diff_inc_ckd <- 100*(data_weighted_ds_wide$totalcase_ckd_intervention - data_weighted_ds_wide$totalcase_ckd_baseline))
 
-  data_mean_weighted_inc_wide$cumdiff_ihd <- cumsum(data_mean_weighted_inc_wide$diff_ihd)
-  data_mean_weighted_inc_wide$cumdiff_diabetes <- cumsum(data_mean_weighted_inc_wide$diff_diabetes)
-  data_mean_weighted_inc_wide$cumdiff_stroke <- cumsum(data_mean_weighted_inc_wide$diff_stroke)
-  data_mean_weighted_inc_wide$cumdiff_asthma <- cumsum(data_mean_weighted_inc_wide$diff_asthma)
-  #data_mean_weighted_inc_wide$cumdiff_stomachcancer <- cumsum(data_mean_weighted_inc_wide$diff_stomachcancer)
-  data_mean_weighted_inc_wide$cumdiff_ckd <- cumsum(data_mean_weighted_inc_wide$diff_ckd)
+  data_weighted_ds_wide <- data_weighted_ds_wide |>
+    dplyr::group_by(data_weighted_ds_wide$simID) |>
+    dplyr::mutate(data_weighted_ds_wide$cumdiff_inc_ihd <- cumsum(data_weighted_ds_wide$diff_inc_ihd),
+                  data_weighted_ds_wide$cumdiff_inc_db <- cumsum(data_weighted_ds_wide$diff_inc_db),
+                  data_weighted_ds_wide$cumdiff_inc_stroke <- cumsum(data_weighted_ds_wide$diff_inc_stroke),
+                  data_weighted_ds_wide$cumdiff_inc_asthma <- cumsum(data_weighted_ds_wide$diff_inc_asthma),
+                  data_weighted_ds_wide$cumdiff_inc_ckd <- cumsum(data_weighted_ds_wide$diff_inc_ckd))
 
-  return(data_mean_weighted_inc_wide)
+  data_weighted_ds_wide_collapse <- data_weighted_ds_wide |>
+    dplyr::group_by(data_weighted_ds_wide$time) |>
+    dplyr::summarise(data_weighted_ds_wide$diff_inc_ihd_mean <- mean(data_weighted_ds_wide$cumdiff_inc_ihd),
+                     data_weighted_ds_wide$diff_inc_ihd_min <- min(data_weighted_ds_wide$cumdiff_inc_ihd),
+                     data_weighted_ds_wide$diff_inc_ihd_max <- max(data_weighted_ds_wide$cumdiff_inc_ihd),
+                     data_weighted_ds_wide$diff_inc_db_mean <- mean(data_weighted_ds_wide$cumdiff_inc_db),
+                     data_weighted_ds_wide$diff_inc_db_min <- min(data_weighted_ds_wide$cumdiff_inc_db),
+                     data_weighted_ds_wide$diff_inc_db_max <- max(data_weighted_ds_wide$cumdiff_inc_db),
+                     data_weighted_ds_wide$diff_inc_stroke_mean <- mean(data_weighted_ds_wide$cumdiff_inc_stroke),
+                     data_weighted_ds_wide$diff_inc_stroke_min <- min(data_weighted_ds_wide$cumdiff_inc_stroke),
+                     data_weighted_ds_wide$diff_inc_stroke_max <- max(data_weighted_ds_wide$cumdiff_inc_stroke),
+                     data_weighted_ds_wide$diff_inc_asthma_mean <- mean(data_weighted_ds_wide$cumdiff_inc_asthma),
+                     data_weighted_ds_wide$diff_inc_asthma_min <- min(data_weighted_ds_wide$cumdiff_inc_asthma),
+                     data_weighted_ds_wide$diff_inc_asthma_max <- max(data_weighted_ds_wide$cumdiff_inc_asthma),
+                     data_weighted_ds_wide$diff_inc_ckd_mean <- mean(data_weighted_ds_wide$cumdiff_inc_ckd),
+                     data_weighted_ds_wide$diff_inc_ckd_min <- min(data_weighted_ds_wide$cumdiff_inc_ckd),
+                     data_weighted_ds_wide$diff_inc_ckd_max <- max(data_weighted_ds_wide$cumdiff_inc_ckd))
+
+  return(data_weighted_ds_wide_collapse)
 }
 
 #' Calculate Differences for Burden of Disease
 #'
 #' This function calculates the differences between intervention and baseline values for burden of disease.
 #'
-#' @param data_mean_weighted A data frame containing weighted mean values for various metrics.
+#' @param data_weighted A data frame containing weighted mean values for various metrics.
 #' @return A data frame with differences between intervention and baseline values for burden of disease.
 #' @export
-gen_data_mean_weighted_burden_wide <- function(data_mean_weighted) {
-  data_mean_weighted_burden <- dplyr::select(data_mean_weighted,
-                                             data_mean_weighted$source,
-                                             data_mean_weighted$timediff,
-                                             data_mean_weighted$total_yll,
-                                             data_mean_weighted$total_yld,
-                                             data_mean_weighted$total_daly)
+gen_data_weighted_burden <- function(data_weighted) {
+  data_weighted_burden <- dplyr::select(data_weighted,
+                                             data_weighted$source,
+                                             data_weighted$time,
+                                             data_weighted$simID,
+                                             data_weighted$total_yll,
+                                             data_weighted$total_yld,
+                                             data_weighted$total_daly)
 
-  data_mean_weighted_burden_wide <- tidyr::pivot_wider(data_mean_weighted_burden,
-                                                names_from = data_mean_weighted_burden$source,
-                                                id_cols = data_mean_weighted_burden$timediff,
-                                                values_from = c(data_mean_weighted_burden$total_yll,
-                                                                data_mean_weighted_burden$total_yld,
-                                                                data_mean_weighted_burden$total_daly))
+  data_weighted_burden_wide <- tidyr::pivot_wider(data_weighted_burden,
+                                                names_from = data_weighted_burden$source,
+                                                id_cols = c(data_weighted_burden$time, data_weighted_burden$simID),
+                                                values_from = c(data_weighted_burden$total_yll,
+                                                                data_weighted_burden$total_yld,
+                                                                data_weighted_burden$total_daly))
 
-  data_mean_weighted_burden_wide$diff_yll <- (data_mean_weighted_burden_wide$total_yll_intervention - data_mean_weighted_burden_wide$total_yll_baseline)/1000
-  data_mean_weighted_burden_wide$diff_yld <- (data_mean_weighted_burden_wide$total_yld_intervention - data_mean_weighted_burden_wide$total_yld_baseline)/1000
-  data_mean_weighted_burden_wide$diff_daly <- (data_mean_weighted_burden_wide$total_daly_intervention - data_mean_weighted_burden_wide$total_daly_baseline)/1000
-  data_mean_weighted_burden_wide$cumdiff_daly <- cumsum(data_mean_weighted_burden_wide$diff_daly)
+  data_weighted_burden_wide <- data_weighted_burden_wide |>
+    dplyr::mutate(data_weighted_burden_wide$diff_yll <- (data_weighted_burden_wide$total_yll_intervention - data_weighted_burden_wide$total_yll_baseline)/1000,
+                  data_weighted_burden_wide$diff_yld <- (data_weighted_burden_wide$total_yld_intervention - data_weighted_burden_wide$total_yld_baseline)/1000,
+                  data_weighted_burden_wide$diff_daly <- (data_weighted_burden_wide$total_daly_intervention - data_weighted_burden_wide$total_daly_baseline)/1000)
 
-  return(data_mean_weighted_burden_wide)
+  data_weighted_burden_wide <- data_weighted_burden_wide |>
+    dplyr::group_by(data_weighted_burden_wide$simID) |>
+    dplyr::mutate(data_weighted_burden_wide$cumdiff_daly <- cumsum(data_weighted_burden_wide$diff_daly),
+                  data_weighted_burden_wide$cumdiff_yll <- cumsum(data_weighted_burden_wide$diff_yll),
+                  data_weighted_burden_wide$cumdiff_yld <- cumsum(data_weighted_burden_wide$diff_yld))
+
+  data_weighted_burden_wide_collapse <- data_weighted_burden_wide |>
+    dplyr::group_by(data_weighted_burden_wide$time) |>
+    dplyr::summarise(data_weighted_burden_wide$diff_daly_mean <- mean(data_weighted_burden_wide$diff_daly),
+                     data_weighted_burden_wide$diff_daly_min <- min(data_weighted_burden_wide$diff_daly),
+                     data_weighted_burden_wide$diff_daly_max <- max(data_weighted_burden_wide$diff_daly),
+                     data_weighted_burden_wide$diff_yll_mean <- mean(data_weighted_burden_wide$diff_yll),
+                     data_weighted_burden_wide$diff_yll_min <- min(data_weighted_burden_wide$diff_yll),
+                     data_weighted_burden_wide$diff_yll_max <- max(data_weighted_burden_wide$diff_yll),
+                     data_weighted_burden_wide$diff_yld_mean <- mean(data_weighted_burden_wide$diff_yld),
+                     data_weighted_burden_wide$diff_yld_min <- min(data_weighted_burden_wide$diff_yld),
+                     data_weighted_burden_wide$diff_yld_max <- max(data_weighted_burden_wide$diff_yld),
+                     data_weighted_burden_wide$cumdiff_daly_mean <- mean(data_weighted_burden_wide$cumdiff_daly),
+                     data_weighted_burden_wide$cumdiff_daly_min <- min(data_weighted_burden_wide$cumdiff_daly),
+                     data_weighted_burden_wide$cumdiff_daly_max <- max(data_weighted_burden_wide$cumdiff_daly),
+                     data_weighted_burden_wide$cumdiff_yll_mean <- mean(data_weighted_burden_wide$cumdiff_yll),
+                     data_weighted_burden_wide$cumdiff_yll_min <- min(data_weighted_burden_wide$cumdiff_yll),
+                     data_weighted_burden_wide$cumdiff_yll_max <- max(data_weighted_burden_wide$cumdiff_yll),
+                     data_weighted_burden_wide$cumdiff_yld_mean <- mean(data_weighted_burden_wide$cumdiff_yld),
+                     data_weighted_burden_wide$cumdiff_yld_min <- min(data_weighted_burden_wide$cumdiff_yld),
+                     data_weighted_burden_wide$cumdiff_yld_max <- max(data_weighted_burden_wide$cumdiff_yld))
+
+  return(data_weighted_burden_wide_collapse)
+}
+
+#' Perform data smoothing
+#'
+#' This function performs data smoothing.
+#'
+#' @param data_weighted_burden A data frame containing weighted values for burden of disease.
+#' @return A data frame with spline smoothing applied for burden of disease.
+#' @export
+gen_data_weighted_burden_spline <- function(data_weighted_burden) {
+
+  ## This function is data smoothing
+  ## It is applied manually now in India project due to abnormal positive values in diff_daly or cumdiff_daly
+
+  ## Only keep those 0 or negative values
+
+  ## Notes for India project: Delete years 27,30,32-33 for ps3-low; Delete years 2028 for ps4-low
+
+  data_weighted_burden_mean <- data_weighted_burden |>
+    dplyr::filter(data_weighted_burden$cumdiff_daly_mean <= 0)
+
+  data_weighted_burden_min <- data_weighted_burden |>
+    dplyr::filter(data_weighted_burden$cumdiff_daly_min <= 0)
+
+  ## Notes for India project: Delete years 29, 31 for ps2-high; Delete 37-38 for ps3-low; Delete 33-34 for ps4-middle; Delete 36-38 for ps4-low
+
+  data_weighted_burden_max <- data_weighted_burden |>
+    dplyr::filter(data_weighted_burden$cumdiff_daly_max <= 0)
+
+  ## New data frame
+  data_weighted_burden_spline <- data.frame(time = seq(min(data_weighted_burden$time),
+                                                       max(data_weighted_burden$time),
+                                                       length.out = 34))
+
+  ## Fit spline and predict
+  spline_fit <- splines::interpSpline(data_weighted_burden_mean$time, data_weighted_burden_mean$cumdiff_daly_mean)
+  data_weighted_burden_spline$cumdiff_daly_mean <- stats::predict(spline_fit, data_weighted_burden_spline$time)$y
+
+  spline_fit_min <- splines::interpSpline(data_weighted_burden_min$time, data_weighted_burden_min$cumdiff_daly_min)
+  data_weighted_burden_spline$cumdiff_daly_min <- stats::predict(spline_fit_min, data_weighted_burden_spline$time)$y
+
+  ## Use smooth.spline for ps4-low
+  spline_fit_max <- splines::interpSpline(data_weighted_burden_max$time, data_weighted_burden_max$cumdiff_daly_max)
+  data_weighted_burden_spline$cumdiff_daly_max <- stats::predict(spline_fit_max, data_weighted_burden_spline$time)$y
+
+  ## Keep 0 values in the first two years, before policy implementation
+  data_weighted_burden_spline$cumdiff_daly_mean <- ifelse(data_weighted_burden_spline$time<2024, 0, data_weighted_burden_spline$cumdiff_daly_mean)
+  data_weighted_burden_spline$cumdiff_daly_min <- ifelse(data_weighted_burden_spline$time<2024, 0, data_weighted_burden_spline$cumdiff_daly_min)
+  data_weighted_burden_spline$cumdiff_daly_max <- ifelse(data_weighted_burden_spline$time<2024, 0, data_weighted_burden_spline$cumdiff_daly_max)
+
+  return(data_weighted_burden_spline)
 }
 
 #' Calculate Life Expectancy
@@ -260,7 +364,7 @@ gen_data_le <- function(data_mean) {
                     data_le$timediff) |>
     dplyr::summarise(ple = stats::weighted.mean(data_le$px,data_le$count_both))
 
-  ## calculate difference btw baseline and intervention ##
+  ## calculate difference between baseline and intervention ##
   data_ple_wide <- tidyr::pivot_wider(data_ple,
                                names_from=data_ple$source,
                                id_cols = data_ple$timediff,
