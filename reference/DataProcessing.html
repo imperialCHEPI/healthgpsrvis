@@ -41,33 +41,33 @@ Below is a description of how to use these functions in sequence.</p>
 
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>## Step-by-Step Usage</p>
+    <p>Step-by-Step Usage:</p>
 <p>1. **Read the data**: This function reads the data from the location specified.
-   “`r
+   “`r, eval=FALSE
    data &lt;-  readRDS("data.rds")
    “`</p>
 <p>2. **`gen_data_mean`**: Calculates weighted mean values for various metrics over years.
-   “`r
+   “`r, eval=FALSE
    data_weighted &lt;- gen_data_mean(data)
    “`</p>
 <p>3. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for risk factors.
-   “`r
+   “`r, eval=FALSE
    data_weighted_rf_wide_collapse &lt;- gen_data_weighted_rf(data_weighted)
    “`</p>
 <p>4. **`gen_data_weighted_ds`**: Calculates the differences between intervention and baseline values for incidences.
-   “`r
+   “`r, eval=FALSE
    data_weighted_ds_wide_collapse &lt;- gen_data_weighted_ds(data_weighted)
    “`</p>
 <p>5. **`gen_data_weighted_burden`**: Calculates the differences between intervention and baseline values for burden of disease.
-   “`r
+   “`r, eval=FALSE
    data_weighted_burden_wide_collapse &lt;- gen_data_weighted_burden(data_weighted)
    “`</p>
 <p>6. **`gen_data_weighted_burden_spline`**: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
-   “`r
+   “`r, eval=FALSE
    data_weighted_burden_spline &lt;- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
    “`</p>
 <p>7. **`gen_data_le`**: Calculates life expectancy for various age and groups.
-   “`r
+   “`r, eval=FALSE
    data_ple_wide &lt;- gen_data_le(data_weighted)
    “`</p>
 <p>## Examples
