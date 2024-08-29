@@ -3,7 +3,7 @@
 #' This file contains a set of functions designed to work together for processing the data.
 #' Below is a description of how to use these functions in sequence.
 #'
-#' ## Step-by-Step Usage
+#' Step-by-Step Usage:
 #'
 #' 1. **Read the data**: This function reads the data from the location specified.
 #'    ```r
