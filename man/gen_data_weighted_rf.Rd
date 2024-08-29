@@ -13,5 +13,5 @@ gen_data_weighted_rf(data_weighted)
 A data frame with differences between intervention and baseline values for various metrics.
 }
 \description{
-This function calculates the differences between intervention and baseline values for various metrics.
+This function calculates the differences between intervention and baseline values for risk factors.
 }

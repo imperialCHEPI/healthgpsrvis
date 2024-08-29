@@ -13,5 +13,5 @@ gen_data_weighted_burden_spline(data_weighted_burden)
 A data frame with spline smoothing applied for burden of disease.
 }
 \description{
-This function performs data smoothing.
+This function performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
 }
