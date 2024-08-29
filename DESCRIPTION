@@ -26,3 +26,4 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 URL: https://imperialchepi.github.io/healthgpsrvis/
+Roxygen: list(markdown = TRUE)
