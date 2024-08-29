@@ -10,47 +10,14 @@ Below is a description of how to use these functions in sequence.
 \details{
 \subsection{Step-by-Step Usage:}{
 \enumerate{
-\item \strong{Read the data}: This function reads the data from the location specified.
+\item \strong{Read the data}: This function reads the data from the location specified \code{data <-  readRDS("data.rds")}.
+\item \strong{\code{gen_data_mean}}: Calculates weighted mean values for various metrics over years \code{data_weighted <- gen_data_mean(data)}.
+\item \strong{\code{gen_data_weighted_rf}}: Calculates the differences between intervention and baseline values for risk factors \code{data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)}.
+\item \strong{\code{gen_data_weighted_ds}}: Calculates the differences between intervention and baseline values for incidences \code{data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)}.
+\item \strong{\code{gen_data_weighted_burden}}: Calculates the differences between intervention and baseline values for burden of disease \code{data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)}.
+\item \strong{\code{gen_data_weighted_burden_spline}}: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease \code{data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)}.
+\item \strong{\code{gen_data_le}}: Calculates life expectancy for various age and groups \code{data_ple_wide <- gen_data_le(data_weighted)}.
 }
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{data <-  readRDS("data.rds")
-}\if{html}{\out{</div>}}
-\enumerate{
-\item \strong{\code{gen_data_mean}}: Calculates weighted mean values for various metrics over years.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_weighted <- gen_data_mean(data)
-}\if{html}{\out{</div>}}
-\enumerate{
-\item \strong{\code{gen_data_weighted_rf}}: Calculates the differences between intervention and baseline values for risk factors.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
-}\if{html}{\out{</div>}}
-\enumerate{
-\item \strong{\code{gen_data_weighted_ds}}: Calculates the differences between intervention and baseline values for incidences.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
-}\if{html}{\out{</div>}}
-\enumerate{
-\item \strong{\code{gen_data_weighted_burden}}: Calculates the differences between intervention and baseline values for burden of disease.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
-}\if{html}{\out{</div>}}
-\enumerate{
-\item \strong{\code{gen_data_weighted_burden_spline}}: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
-}\if{html}{\out{</div>}}
-\enumerate{
-\item \strong{\code{gen_data_le}}: Calculates life expectancy for various age and groups.
-}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_ple_wide <- gen_data_le(data_weighted)
-}\if{html}{\out{</div>}}
 }
 
 \subsection{Examples}{

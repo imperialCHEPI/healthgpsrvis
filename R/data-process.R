@@ -5,40 +5,19 @@
 #'
 #' ## Step-by-Step Usage:
 #'
-#' 1. **Read the data**: This function reads the data from the location specified.
-#'    ```{r, eval=FALSE}
-#'    data <-  readRDS("data.rds")
-#'    ```
+#' 1. **Read the data**: This function reads the data from the location specified `data <-  readRDS("data.rds")`.
 #'
-#' 2. **`gen_data_mean`**: Calculates weighted mean values for various metrics over years.
-#'    ```{r, eval=FALSE}
-#'    data_weighted <- gen_data_mean(data)
-#'    ```
+#' 1. **`gen_data_mean`**: Calculates weighted mean values for various metrics over years `data_weighted <- gen_data_mean(data)`.
 #'
-#' 3. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for risk factors.
-#'    ```{r, eval=FALSE}
-#'    data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
-#'    ```
+#' 1. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for risk factors `data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)`.
 #'
-#'4. **`gen_data_weighted_ds`**: Calculates the differences between intervention and baseline values for incidences.
-#'    ```{r, eval=FALSE}
-#'    data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
-#'    ```
+#' 1. **`gen_data_weighted_ds`**: Calculates the differences between intervention and baseline values for incidences `data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)`.
 #'
-#'5. **`gen_data_weighted_burden`**: Calculates the differences between intervention and baseline values for burden of disease.
-#'    ```{r, eval=FALSE}
-#'    data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
-#'    ```
+#' 1. **`gen_data_weighted_burden`**: Calculates the differences between intervention and baseline values for burden of disease `data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)`.
 #'
-#'6. **`gen_data_weighted_burden_spline`**: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
-#'    ```{r, eval=FALSE}
-#'    data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
-#'    ```
+#' 1. **`gen_data_weighted_burden_spline`**: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease `data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)`.
 #'
-#'7. **`gen_data_le`**: Calculates life expectancy for various age and groups.
-#'    ```{r, eval=FALSE}
-#'    data_ple_wide <- gen_data_le(data_weighted)
-#'    ```
+#' 1. **`gen_data_le`**: Calculates life expectancy for various age and groups `data_ple_wide <- gen_data_le(data_weighted)`.
 #'
 #' ## Examples
 #' ```r
