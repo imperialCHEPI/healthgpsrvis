@@ -41,49 +41,38 @@ Below is a description of how to use these functions in sequence.</p>
 
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Step-by-Step Usage:</p>
-<p>1. **Read the data**: This function reads the data from the location specified.
-   “`r, eval=FALSE
-   data &lt;-  readRDS("data.rds")
-   “`</p>
-<p>2. **`gen_data_mean`**: Calculates weighted mean values for various metrics over years.
-   “`r, eval=FALSE
-   data_weighted &lt;- gen_data_mean(data)
-   “`</p>
-<p>3. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for risk factors.
-   “`r, eval=FALSE
-   data_weighted_rf_wide_collapse &lt;- gen_data_weighted_rf(data_weighted)
-   “`</p>
-<p>4. **`gen_data_weighted_ds`**: Calculates the differences between intervention and baseline values for incidences.
-   “`r, eval=FALSE
-   data_weighted_ds_wide_collapse &lt;- gen_data_weighted_ds(data_weighted)
-   “`</p>
-<p>5. **`gen_data_weighted_burden`**: Calculates the differences between intervention and baseline values for burden of disease.
-   “`r, eval=FALSE
-   data_weighted_burden_wide_collapse &lt;- gen_data_weighted_burden(data_weighted)
-   “`</p>
-<p>6. **`gen_data_weighted_burden_spline`**: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
-   “`r, eval=FALSE
-   data_weighted_burden_spline &lt;- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
-   “`</p>
-<p>7. **`gen_data_le`**: Calculates life expectancy for various age and groups.
-   “`r, eval=FALSE
-   data_ple_wide &lt;- gen_data_le(data_weighted)
-   “`</p>
-<p>## Examples
-“`r
-# Example of using all functions together
-data &lt;- readRDS("data.rds")
-data_weighted &lt;- gen_data_mean(data)
-data_weighted_rf_wide_collapse &lt;- gen_data_weighted_rf(data_weighted)
-data_weighted_ds_wide_collapse &lt;- gen_data_weighted_ds(data_weighted)
-data_weighted_burden_wide_collapse &lt;- gen_data_weighted_burden(data_weighted)
-data_weighted_burden_spline &lt;- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
-data_ple_wide &lt;- gen_data_le(data_weighted)
-“`</p>
+
+<div class="section">
+<h3 id="step-by-step-usage-">Step-by-Step Usage:<a class="anchor" aria-label="anchor" href="#step-by-step-usage-"></a></h3>
+
+<ol><li><p><strong>Read the data</strong>: This function reads the data from the location specified.</p></li>
+</ol><p></p><div class="sourceCode r"><pre><code><span><span class="va">data</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"data.rds"</span><span class="op">)</span></span></code></pre><p></p></div><ol><li><p><strong><code>gen_data_mean</code></strong>: Calculates weighted mean values for various metrics over years.</p></li>
+</ol><p></p><div class="sourceCode r"><pre><code><span><span class="va">data_weighted</span> <span class="op">&lt;-</span> <span class="fu">gen_data_mean</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre><p></p></div><ol><li><p><strong><code>gen_data_weighted_rf</code></strong>: Calculates the differences between intervention and baseline values for risk factors.</p></li>
+</ol><p></p><div class="sourceCode r"><pre><code><span><span class="va">data_weighted_rf_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_weighted_rf.html">gen_data_weighted_rf</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span></code></pre><p></p></div><ol><li><p><strong><code>gen_data_weighted_ds</code></strong>: Calculates the differences between intervention and baseline values for incidences.</p></li>
+</ol><p></p><div class="sourceCode r"><pre><code><span><span class="va">data_weighted_ds_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_weighted_ds.html">gen_data_weighted_ds</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span></code></pre><p></p></div><ol><li><p><strong><code>gen_data_weighted_burden</code></strong>: Calculates the differences between intervention and baseline values for burden of disease.</p></li>
+</ol><p></p><div class="sourceCode r"><pre><code><span><span class="va">data_weighted_burden_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_weighted_burden.html">gen_data_weighted_burden</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span></code></pre><p></p></div><ol><li><p><strong><code>gen_data_weighted_burden_spline</code></strong>: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.</p></li>
+</ol><p></p><div class="sourceCode r"><pre><code><span><span class="va">data_weighted_burden_spline</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_weighted_burden_spline.html">gen_data_weighted_burden_spline</a></span><span class="op">(</span><span class="va">data_weighted_burden_wide_collapse</span><span class="op">)</span></span></code></pre><p></p></div><ol><li><p><strong><code>gen_data_le</code></strong>: Calculates life expectancy for various age and groups.</p></li>
+</ol><p></p><div class="sourceCode r"><pre><code><span><span class="va">data_ple_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_le.html">gen_data_le</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span></code></pre><p></p></div>
+</div>
+
+<div class="section">
+<h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h3>
+
+
+<p></p><div class="sourceCode r"><pre><code><span><span class="co"># Example of using all functions together</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"data.rds"</span><span class="op">)</span></span>
+<span><span class="va">data_weighted</span> <span class="op">&lt;-</span> <span class="fu">gen_data_mean</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="va">data_weighted_rf_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_weighted_rf.html">gen_data_weighted_rf</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
+<span><span class="va">data_weighted_ds_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_weighted_ds.html">gen_data_weighted_ds</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
+<span><span class="va">data_weighted_burden_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_weighted_burden.html">gen_data_weighted_burden</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
+<span><span class="va">data_weighted_burden_spline</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_weighted_burden_spline.html">gen_data_weighted_burden_spline</a></span><span class="op">(</span><span class="va">data_weighted_burden_wide_collapse</span><span class="op">)</span></span>
+<span><span class="va">data_ple_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen_data_le.html">gen_data_le</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span></code></pre><p></p></div>
+</div>
+
     </div>
 
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
