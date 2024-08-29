@@ -20,7 +20,7 @@ Below is a description of how to use these functions in sequence.
    data_weighted <- gen_data_mean(data)
    ```
 
-3. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for various metrics.
+3. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for risk factors.
    ```r
    data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
    ```
@@ -35,7 +35,7 @@ Below is a description of how to use these functions in sequence.
    data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
    ```
 
-6. **`gen_data_weighted_burden_spline`**: Performs data smoothing.
+6. **`gen_data_weighted_burden_spline`**: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
    ```r
    data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
    ```

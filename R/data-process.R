@@ -15,7 +15,7 @@
 #'    data_weighted <- gen_data_mean(data)
 #'    ```
 #'
-#' 3. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for various metrics.
+#' 3. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for risk factors.
 #'    ```r
 #'    data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
 #'    ```
@@ -30,7 +30,7 @@
 #'    data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
 #'    ```
 #'
-#'6. **`gen_data_weighted_burden_spline`**: Performs data smoothing.
+#'6. **`gen_data_weighted_burden_spline`**: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
 #'    ```r
 #'    data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
 #'    ```
@@ -113,7 +113,7 @@ gen_data_weighted <- function(data) {
 
 #' Calculate Differences for Various Metrics
 #'
-#' This function calculates the differences between intervention and baseline values for various metrics.
+#' This function calculates the differences between intervention and baseline values for risk factors.
 #'
 #' @param data_weighted A data frame containing weighted mean values for various metrics.
 #' @return A data frame with differences between intervention and baseline values for various metrics.
@@ -281,7 +281,7 @@ gen_data_weighted_burden <- function(data_weighted) {
 
 #' Perform data smoothing
 #'
-#' This function performs data smoothing.
+#' This function performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
 #'
 #' @param data_weighted_burden A data frame containing weighted values for burden of disease.
 #' @return A data frame with spline smoothing applied for burden of disease.
