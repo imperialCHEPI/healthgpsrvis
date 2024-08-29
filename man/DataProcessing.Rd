@@ -8,40 +8,40 @@ This file contains a set of functions designed to work together for processing t
 Below is a description of how to use these functions in sequence.
 }
 \details{
-## Step-by-Step Usage
+Step-by-Step Usage:
 
 1. **Read the data**: This function reads the data from the location specified.
-   ```r
+   ```{r, eval=FALSE}
    data <-  readRDS("data.rds")
    ```
 
 2. **`gen_data_mean`**: Calculates weighted mean values for various metrics over years.
-   ```r
+   ```{r, eval=FALSE}
    data_weighted <- gen_data_mean(data)
    ```
 
 3. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for risk factors.
-   ```r
+   ```{r, eval=FALSE}
    data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
    ```
 
 4. **`gen_data_weighted_ds`**: Calculates the differences between intervention and baseline values for incidences.
-   ```r
+   ```{r, eval=FALSE}
    data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
    ```
 
 5. **`gen_data_weighted_burden`**: Calculates the differences between intervention and baseline values for burden of disease.
-   ```r
+   ```{r, eval=FALSE}
    data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
    ```
 
 6. **`gen_data_weighted_burden_spline`**: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
-   ```r
+   ```{r, eval=FALSE}
    data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
    ```
 
 7. **`gen_data_le`**: Calculates life expectancy for various age and groups.
-   ```r
+   ```{r, eval=FALSE}
    data_ple_wide <- gen_data_le(data_weighted)
    ```
 
