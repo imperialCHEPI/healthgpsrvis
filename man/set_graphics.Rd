@@ -16,10 +16,10 @@ This function closes all existing graphical devices and opens a new one
 with specified width and height dimensions.
 }
 \details{
-The `set_graphics` function first closes all open graphical devices using `graphics.off()`.
-It then opens a new graphical device with the given dimensions using `dev.new()`.
-The `unit` parameter is set to "cm" to use centimeters for the dimensions,
-and `noRStudioGD` is set to `TRUE` to avoid using RStudio's graphical device.
+The \code{set_graphics} function first closes all open graphical devices using \code{graphics.off()}.
+It then opens a new graphical device with the given dimensions using \code{dev.new()}.
+The \code{unit} parameter is set to "cm" to use centimeters for the dimensions,
+and \code{noRStudioGD} is set to \code{TRUE} to avoid using RStudio's graphical device.
 }
 \examples{
 \dontrun{

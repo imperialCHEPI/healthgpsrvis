@@ -8,46 +8,54 @@ This file contains a set of functions designed to work together for processing t
 Below is a description of how to use these functions in sequence.
 }
 \details{
-Step-by-Step Usage:
+\subsection{Step-by-Step Usage:}{
+\enumerate{
+\item \strong{Read the data}: This function reads the data from the location specified.
+}
 
-1. **Read the data**: This function reads the data from the location specified.
-   ```{r, eval=FALSE}
-   data <-  readRDS("data.rds")
-   ```
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data <-  readRDS("data.rds")
+}\if{html}{\out{</div>}}
+\enumerate{
+\item \strong{\code{gen_data_mean}}: Calculates weighted mean values for various metrics over years.
+}
 
-2. **`gen_data_mean`**: Calculates weighted mean values for various metrics over years.
-   ```{r, eval=FALSE}
-   data_weighted <- gen_data_mean(data)
-   ```
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_weighted <- gen_data_mean(data)
+}\if{html}{\out{</div>}}
+\enumerate{
+\item \strong{\code{gen_data_weighted_rf}}: Calculates the differences between intervention and baseline values for risk factors.
+}
 
-3. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for risk factors.
-   ```{r, eval=FALSE}
-   data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
-   ```
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
+}\if{html}{\out{</div>}}
+\enumerate{
+\item \strong{\code{gen_data_weighted_ds}}: Calculates the differences between intervention and baseline values for incidences.
+}
 
-4. **`gen_data_weighted_ds`**: Calculates the differences between intervention and baseline values for incidences.
-   ```{r, eval=FALSE}
-   data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
-   ```
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
+}\if{html}{\out{</div>}}
+\enumerate{
+\item \strong{\code{gen_data_weighted_burden}}: Calculates the differences between intervention and baseline values for burden of disease.
+}
 
-5. **`gen_data_weighted_burden`**: Calculates the differences between intervention and baseline values for burden of disease.
-   ```{r, eval=FALSE}
-   data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
-   ```
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
+}\if{html}{\out{</div>}}
+\enumerate{
+\item \strong{\code{gen_data_weighted_burden_spline}}: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
+}
 
-6. **`gen_data_weighted_burden_spline`**: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
-   ```{r, eval=FALSE}
-   data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
-   ```
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
+}\if{html}{\out{</div>}}
+\enumerate{
+\item \strong{\code{gen_data_le}}: Calculates life expectancy for various age and groups.
+}
 
-7. **`gen_data_le`**: Calculates life expectancy for various age and groups.
-   ```{r, eval=FALSE}
-   data_ple_wide <- gen_data_le(data_weighted)
-   ```
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_ple_wide <- gen_data_le(data_weighted)
+}\if{html}{\out{</div>}}
+}
 
-## Examples
-```r
-# Example of using all functions together
+\subsection{Examples}{
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Example of using all functions together
 data <- readRDS("data.rds")
 data_weighted <- gen_data_mean(data)
 data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
@@ -55,5 +63,6 @@ data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
 data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
 data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
 data_ple_wide <- gen_data_le(data_weighted)
-```
+}\if{html}{\out{</div>}}
+}
 }
