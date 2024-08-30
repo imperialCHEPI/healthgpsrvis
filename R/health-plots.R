@@ -51,10 +51,17 @@ riskfactors <- function(riskft, data_mean_weighted) {
 #'
 #' @param riskft_diff A character string specifying the difference in risk factor to plot.
 #'        Options are: "bmi", "ei", "obesity", "sodium".
-#' @param data_mean_weighted_rf_wide A data frame containing the weighted mean values of risk factors.
+#' @param data_weighted_rf_wide_collapse A data frame with differences between intervention and baseline values for risk factors.
+#' @param scale_y_continuous_limits A numeric vector specifying the limits of the scales for continuous y aesthetics.
+#' @param scale_y_continuous_breaks A numeric vector specifying the breaks of the scales for continuous y aesthetics.
+#' @param scale_y_continuous_labels A numeric vector specifying the labels of the scales for continuous y aesthetics.
 #' @return A ggplot object representing the specified plot.
 #' @export
-riskfactors_diff <- function(riskft_diff, data_mean_weighted_rf_wide) {
+riskfactors_diff <- function(riskft_diff,
+                             data_weighted_rf_wide_collapse,
+                             scale_y_continuous_limits = NULL,
+                             scale_y_continuous_breaks = ggplot2::waiver(),
+                             scale_y_continuous_labels = ggplot2::waiver()) {
   riskft_diffs <- c("bmi", "ei", "obesity", "sodium")
 
   if (!(riskft_diff %in% riskft_diffs)) {
@@ -68,29 +75,37 @@ riskfactors_diff <- function(riskft_diff, data_mean_weighted_rf_wide) {
                     sodium = "Sodium")
 
   y_value <- switch(riskft_diff,
-                    bmi = "diff_bmi",
-                    ei = "diff_ei",
-                    obesity = "diff_obesity",
-                    sodium = "diff_sodium")
+                    bmi = "diff_bmi_mean",
+                    ei = "diff_ei_mean",
+                    obesity = "diff_obesity_mean",
+                    sodium = "diff_sodium_mean")
 
   plot_title <- switch(riskft_diff,
-                       bmi = "Reduction in BMI under intervention",
-                       ei = "Reduction in energy intake (kcal) under intervention",
-                       obesity = "Reduction in obesity prevalence under intervention",
-                       sodium = "Reduction in sodium (mg) under intervention")
+                       bmi = "Reduction in BMI by income class",
+                       ei = "Reduction in energy intake (kcal) by income class",
+                       obesity = "Reduction in obesity prevalence by income class",
+                       sodium = "Reduction in sodium (mg) by income class")
 
-  ggplot2::ggplot(data = data_mean_weighted_rf_wide,
-                  ggplot2::aes(x = data_mean_weighted_rf_wide$timediff,
-                               y = get(y_value))) +
-    ggplot2::geom_line(colour = "blue", linewidth = 1) +
+  ggplot2::ggplot(data = data_weighted_rf_wide_collapse,
+                  ggplot2::aes(x = data_weighted_rf_wide_collapse$time,
+                               y = get(y_value),
+                               colour = data_weighted_rf_wide_collapse$income)) +
+    ggplot2::geom_line(linewidth = 1) +
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = data_weighted_rf_wide_collapse$diff_sodium_min,
+                                      ymax = data_weighted_rf_wide_collapse$diff_sodium_max),
+                         alpha = 0.2) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
     ggplot2::scale_x_continuous(limits = c(-3, 32),
                        breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                        labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::scale_y_continuous(limits = scale_y_continuous_limits,
+                       breaks = scale_y_continuous_breaks,
+                       labels = scale_y_continuous_labels) +
     ggplot2::labs(alt = "A line plot showing the reduction in a specified risk factor under intervention over time") +
-    hgps_theme()
+    hgps_theme() +
+    ggplot2::theme(legend.position = c(0.85,0.22))
 }
 
 #' Plot of Incidence Difference

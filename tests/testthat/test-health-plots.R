@@ -36,27 +36,36 @@ test_that("riskfactors function works correctly", {
 # Testing riskfactors_diff() function
 test_that("riskfactors_diff function works correctly", {
   # Create sample data
-  data_mean_weighted_rf_wide <- data.frame(
-    timediff = seq(-9, 21, by = 1),
-    diff_bmi = runif(31, -3, 0),
-    diff_ei = runif(31, -200, 0),
-    diff_obesity = runif(31, -0.3, 0),
-    diff_sodium = runif(31, -700, 0)
+  data_weighted_rf_wide_collapse <- data.frame(
+    time = seq(-9, 21, by = 1),
+    income = c(rep("low",9), rep("middle", 16), rep("high", 6)),
+    diff_bmi_mean = runif(31, -3, 0),
+    diff_bmi_max = runif(31, -5, 0),
+    diff_bmi_min = runif(31, -1, 0),
+    diff_ei_mean = runif(31, -200, 0),
+    diff_ei_max = runif(31, -300, 0),
+    diff_ei_min = runif(31, -100, 0),
+    diff_obesity_mean = runif(31, -0.3, 0),
+    diff_obesity_max = runif(31, -0.5, 0),
+    diff_obesity_min = runif(31, -0.1, 0),
+    diff_sodium_mean = runif(31, -700, 0),
+    diff_sodium_max = runif(31, -1000, 0),
+    diff_sodium_min = runif(31, -300, 0)
   )
 
   # Test for valid input
-  plot_ei <- riskfactors_diff("ei", data_mean_weighted_rf_wide)
+  plot_ei <- riskfactors_diff("ei", data_weighted_rf_wide_collapse, scale_y_continuous_limits = c(-38.3,0), scale_y_continuous_breaks = c(-38.3,-19.2,0), scale_y_continuous_labels = c(-38.3,-19.2,0))
   expect_s3_class(plot_ei, "ggplot")
-  expect_equal(plot_ei$labels$title, "Reduction in energy intake (kcal) under intervention")
+  expect_equal(plot_ei$labels$title, "Reduction in energy intake (kcal) by income class")
   expect_equal(plot_ei$labels$y, "Energy")
 
-  plot_obesity <- riskfactors_diff("obesity", data_mean_weighted_rf_wide)
+  plot_obesity <- riskfactors_diff("obesity", data_weighted_rf_wide_collapse, scale_y_continuous_limits = c(-0.0135,0), scale_y_continuous_breaks = c(-0.0135,-0.00675,0), scale_y_continuous_labels = c("-1.35%","-0.675%","0"))
   expect_s3_class(plot_obesity, "ggplot")
-  expect_equal(plot_obesity$labels$title, "Reduction in obesity prevalence under intervention")
+  expect_equal(plot_obesity$labels$title, "Reduction in obesity prevalence by income class")
   expect_equal(plot_obesity$labels$y, "Obesity")
 
   # Test for invalid input
-  expect_error(riskfactors_diff("invalid_riskft_diff", data_mean_weighted_rf_wide),
+  expect_error(riskfactors_diff("invalid_riskft_diff", data_weighted_rf_wide_collapse),
                "Invalid risk factor difference. Choose from: 'bmi', 'ei', 'obesity', 'sodium'.")
 })
 
