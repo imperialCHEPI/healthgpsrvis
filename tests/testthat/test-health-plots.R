@@ -54,6 +54,11 @@ test_that("riskfactors_diff function works correctly", {
   )
 
   # Test for valid input
+  plot_bmi <- riskfactors_diff("bmi", data_weighted_rf_wide_collapse, scale_y_continuous_limits = c(-38.3,0), scale_y_continuous_breaks = c(-38.3,-19.2,0), scale_y_continuous_labels = c(-38.3,-19.2,0))
+  expect_s3_class(plot_bmi, "ggplot")
+  expect_equal(plot_bmi$labels$title, "Reduction in BMI by income class")
+  expect_equal(plot_bmi$labels$y, "BMI")
+
   plot_ei <- riskfactors_diff("ei", data_weighted_rf_wide_collapse, scale_y_continuous_limits = c(-38.3,0), scale_y_continuous_breaks = c(-38.3,-19.2,0), scale_y_continuous_labels = c(-38.3,-19.2,0))
   expect_s3_class(plot_ei, "ggplot")
   expect_equal(plot_ei$labels$title, "Reduction in energy intake (kcal) by income class")
@@ -63,6 +68,11 @@ test_that("riskfactors_diff function works correctly", {
   expect_s3_class(plot_obesity, "ggplot")
   expect_equal(plot_obesity$labels$title, "Reduction in obesity prevalence by income class")
   expect_equal(plot_obesity$labels$y, "Obesity")
+
+  plot_sodium <- riskfactors_diff("sodium", data_weighted_rf_wide_collapse, scale_y_continuous_limits = c(-38.3,0), scale_y_continuous_breaks = c(-38.3,-19.2,0), scale_y_continuous_labels = c(-38.3,-19.2,0))
+  expect_s3_class(plot_sodium, "ggplot")
+  expect_equal(plot_sodium$labels$title, "Reduction in sodium (mg) by income class")
+  expect_equal(plot_sodium$labels$y, "Sodium")
 
   # Test for invalid input
   expect_error(riskfactors_diff("invalid_riskft_diff", data_weighted_rf_wide_collapse),
