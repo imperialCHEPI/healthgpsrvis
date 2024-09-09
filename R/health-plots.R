@@ -166,10 +166,17 @@ inc_diff <- function(inc, data_mean_weighted_inc_wide) {
 #'
 #' @param inc A character string specifying the incidence to plot.
 #'        Options are: "asthma", "ckd", "diabetes", "ischemia", "stroke".
-#' @param data_mean_weighted_inc_wide A data frame containing the weighted mean values of incidences.
+#' @param data_weighted_ds_wide_collapse A data frame with differences between intervention and baseline values for incidences.
+#' @param scale_y_continuous_limits A numeric vector specifying the limits of the scales for continuous y aesthetics.
+#' @param scale_y_continuous_breaks A numeric vector specifying the breaks of the scales for continuous y aesthetics.
+#' @param scale_y_continuous_labels A numeric vector specifying the labels of the scales for continuous y aesthetics.
 #' @return A ggplot object representing the specified plot.
 #' @export
-inc_cum <- function(inc, data_mean_weighted_inc_wide) {
+inc_cum <- function(inc,
+                    data_weighted_ds_wide_collapse,
+                    scale_y_continuous_limits = NULL,
+                    scale_y_continuous_breaks = ggplot2::waiver(),
+                    scale_y_continuous_labels = ggplot2::waiver()) {
   incs <- c("asthma", "ckd", "diabetes", "ischemia", "stroke")
 
   if (!(inc %in% incs)) {
@@ -184,33 +191,38 @@ inc_cum <- function(inc, data_mean_weighted_inc_wide) {
                     stroke = "Stroke incidence")
 
   y_value <- switch(inc,
-                    asthma = "cumdiff_asthma",
-                    ckd = "cumdiff_ckd",
-                    diabetes = "cumdiff_diabetes",
-                    ischemia = "cumdiff_ihd",
-                    stroke = "cumdiff_stroke")
+                    asthma = "diff_inc_asthma_mean",
+                    ckd = "diff_inc_ckd_mean",
+                    diabetes = "diff_inc_db_mean",
+                    ischemia = "diff_inc_ihd_mean",
+                    stroke = "diff_inc_stroke_mean")
 
   plot_title <- switch(inc,
-                       asthma = "Asthma - Cumulative reduction in incidence number",
-                       ckd = "Chronic kidney disease - Cumulative reduction in incidence number",
-                       diabetes = "Diabetes - Cumulative reduction in incidence number",
-                       ischemia = "Ischemic heart disease - Cumulative reduction in incidence number",
-                       stroke = "Stroke - Cumulative reduction in incidence number")
+                       asthma = "Asthma - Cumulative reduction by income class",
+                       ckd = "Chronic kidney disease - Cumulative reduction by income class",
+                       diabetes = "Diabetes - Cumulative reduction by income class",
+                       ischemia = "Ischemic heart disease - Cumulative reduction by income class",
+                       stroke = "Stroke - Cumulative reduction by income class")
 
-  ggplot2::ggplot(data = data_mean_weighted_inc_wide,
-                  ggplot2::aes(data_mean_weighted_inc_wide$timediff,
-                               y = get(y_value))) +
-    ggplot2::geom_line(colour = "purple", linewidth = 1) +
+  ggplot2::ggplot(data = data_weighted_ds_wide_collapse,
+                  ggplot2::aes(data_weighted_ds_wide_collapse$time,
+                               y = get(y_value),
+                               colour = data_weighted_ds_wide_collapse$income)) +
+    ggplot2::geom_line(linewidth = 1) +
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = data_weighted_ds_wide_collapse$diff_inc_asthma_min,
+                                      ymax = data_weighted_ds_wide_collapse$diff_inc_asthma_max),
+                         alpha = 0.2) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
-    ggplot2::scale_y_continuous(labels = scales::comma) +
-    ggplot2::scale_x_continuous(limits = c(-3, 32),
-                     breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
-                     labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::scale_y_continuous(limits = scale_y_continuous_limits,
+                                breaks = scale_y_continuous_breaks,
+                                labels = scale_y_continuous_labels) +
     ggplot2::labs(alt = "A line plot showing the cumulative reduction in a specified incidence number over time") +
     hgps_theme() +
-    ggplot2::theme(plot.title = ggplot2::element_text(size = 10))
+    ggplot2::theme(plot.title = ggplot2::element_text(size = 10)) +
+    ggplot2::theme(legend.position = c(0.2,0.2))
 }
 
 #' Plot of Burden of Disease
