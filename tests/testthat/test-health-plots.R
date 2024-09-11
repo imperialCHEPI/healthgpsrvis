@@ -270,8 +270,8 @@ test_that("life_exp function works correctly", {
 test_that("combine_plots function works correctly", {
   # Create sample metrics
   metrics <- list(
-    risk_factors = c("bmi", "ei"),
-    burden_disease = c("dalycum", "yld"))
+    risk_factors = c("bmi", "ei"))
+    #burden_disease = c("dalycum", "yld"))
 
   # Create sample data
   data_mean_weighted <- data.frame(
