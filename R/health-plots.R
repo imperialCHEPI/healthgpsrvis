@@ -80,6 +80,18 @@ riskfactors_diff <- function(riskft_diff,
                     obesity = "diff_obesity_mean",
                     sodium = "diff_sodium_mean")
 
+  y_min <- switch(riskft_diff,
+                  bmi = "diff_bmi_min",
+                  ei = "diff_ei_min",
+                  obesity = "diff_obesity_min",
+                  sodium = "diff_sodium_min")
+
+  y_max <- switch(riskft_diff,
+                  bmi = "diff_bmi_max",
+                  ei = "diff_ei_max",
+                  obesity = "diff_obesity_max",
+                  sodium = "diff_sodium_max")
+
   plot_title <- switch(riskft_diff,
                        bmi = "Reduction in BMI by income class",
                        ei = "Reduction in energy intake (kcal) by income class",
@@ -91,8 +103,8 @@ riskfactors_diff <- function(riskft_diff,
                                y = get(y_value),
                                colour = data_weighted_rf_wide_collapse$income)) +
     ggplot2::geom_line(linewidth = 1) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = data_weighted_rf_wide_collapse$diff_sodium_min,
-                                      ymax = data_weighted_rf_wide_collapse$diff_sodium_max),
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = y_min,
+                                      ymax = y_max),
                          alpha = 0.2) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
@@ -197,6 +209,20 @@ inc_cum <- function(inc,
                     ischemia = "diff_inc_ihd_mean",
                     stroke = "diff_inc_stroke_mean")
 
+  y_min <- switch(inc,
+                  asthma = "diff_inc_asthma_min",
+                  ckd = "diff_inc_ckd_min",
+                  diabetes = "diff_inc_db_min",
+                  ischemia = "diff_inc_ihd_min",
+                  stroke = "diff_inc_stroke_min")
+
+  y_max <- switch(inc,
+                  asthma = "diff_inc_asthma_max",
+                  ckd = "diff_inc_ckd_max",
+                  diabetes = "diff_inc_db_max",
+                  ischemia = "diff_inc_ihd_max",
+                  stroke = "diff_inc_stroke_max")
+
   plot_title <- switch(inc,
                        asthma = "Asthma - Cumulative reduction by income class",
                        ckd = "Chronic kidney disease - Cumulative reduction by income class",
@@ -209,8 +235,8 @@ inc_cum <- function(inc,
                                y = get(y_value),
                                colour = data_weighted_ds_wide_collapse$income)) +
     ggplot2::geom_line(linewidth = 1) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = data_weighted_ds_wide_collapse$diff_inc_asthma_min,
-                                      ymax = data_weighted_ds_wide_collapse$diff_inc_asthma_max),
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = y_min,
+                                      ymax = y_max),
                          alpha = 0.2) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
@@ -260,6 +286,18 @@ burden_disease <- function(burden,
                     yld = "diff_yld_mean",
                     yll = "diff_yll_mean")
 
+  y_min <- switch(burden,
+                  daly = "diff_daly_min",
+                  dalycum = "cumdiff_daly_min",
+                  yld = "diff_yld_min",
+                  yll = "diff_yll_min")
+
+  y_max <- switch(burden,
+                  daly = "diff_daly_max",
+                  dalycum = "cumdiff_daly_max",
+                  yld = "diff_yld_max",
+                  yll = "diff_yll_max")
+
   plot_title <- switch(burden,
                        daly = "Reduction in DALYs by income class",
                        dalycum = "Cumulative reduction in DALYs by income class",
@@ -271,8 +309,8 @@ burden_disease <- function(burden,
                                y = get(y_value),
                                colour = data_weighted_burden_wide_collapse$income)) +
     ggplot2::geom_line(linewidth = 1) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = data_weighted_burden_wide_collapse$diff_yll_min,
-                                      ymax = data_weighted_burden_wide_collapse$diff_yll_min),
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = y_min,
+                                      ymax = y_max),
                          alpha = 0.2) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
