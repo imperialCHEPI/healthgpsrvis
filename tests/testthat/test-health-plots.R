@@ -205,32 +205,50 @@ test_that("inc_cum function works correctly", {
 # Testing burden_disease() function
 test_that("burden_disease function works correctly", {
   # Create sample data
-  data_mean_weighted_burden_wide <- data.frame(
-    timediff = seq(-9, 21, by = 1),
-    diff_daly = runif(31, -3, 0),
-    cumdiff_daly = runif(31, -200, 0),
-    diff_yld = runif(31, -0.3, 0),
-    diff_yll = runif(31, -700, 0)
+  data_weighted_burden_wide_collapse <- data.frame(
+    time = seq(-9, 21, by = 1),
+    income = c(rep("low",9), rep("middle", 16), rep("high", 6)),
+    diff_daly_mean = runif(31, -3, 0),
+    diff_daly_max = runif(31, -5, 0),
+    diff_daly_min = runif(31, -1, 0),
+    cumdiff_daly_mean = runif(31, -200, 0),
+    cumdiff_daly_max = runif(31, -300, 0),
+    cumdiff_daly_min = runif(31, -100, 0),
+    diff_yld_mean = runif(31, -0.3, 0),
+    diff_yld_max = runif(31, -0.5, 0),
+    diff_yld_min = runif(31, -0.1, 0),
+    diff_yll_mean = runif(31, -700, 0),
+    diff_yll_max = runif(31, -1000, 0),
+    diff_yll_min = runif(31, -300, 0)
   )
 
   # Test for valid input
-  plot_daly <- burden_disease("daly", data_mean_weighted_burden_wide)
+  plot_daly <- burden_disease("daly", data_weighted_burden_wide_collapse)
   expect_s3_class(plot_daly, "ggplot")
-  expect_equal(plot_daly$labels$title, "Reduction in DALY")
-  expect_equal(plot_daly$labels$y, "DALY")
+  expect_equal(plot_daly$labels$title, "Reduction in DALYs by income class")
+  expect_equal(plot_daly$labels$y, "DALYs")
 
-  plot_yll <- burden_disease("yll", data_mean_weighted_burden_wide)
-  expect_s3_class(plot_yll, "ggplot")
-  expect_equal(plot_yll$labels$title, "Reduction in YLL")
-  expect_equal(plot_yll$labels$y, "YLL")
-
-  plot_dalycum <- burden_disease("dalycum", data_mean_weighted_burden_wide)
+  plot_dalycum <- burden_disease("dalycum",
+                                 data_weighted_burden_wide_collapse,
+                                 scale_y_continuous_limits = c(-41917000,0),
+                                 scale_y_continuous_breaks = c(-41917000,-33534000,-25150000,-16767000,-8383000,0),
+                                 scale_y_continuous_labels = scales::comma(c(-41917000,-33534000,-25150000,-16767000,-8383000,0)))
   expect_s3_class(plot_dalycum, "ggplot")
-  expect_equal(plot_dalycum$labels$title, "Cumulative reduction in DALY under intervention")
-  expect_equal(plot_dalycum$labels$y, "DALY")
+  expect_equal(plot_dalycum$labels$title, "Cumulative reduction in DALYs by income class")
+  expect_equal(plot_dalycum$labels$y, "DALYs")
+
+  plot_yld <- burden_disease("yld", data_weighted_burden_wide_collapse)
+  expect_s3_class(plot_yld, "ggplot")
+  expect_equal(plot_yld$labels$title, "Reduction in YLDs by income class")
+  expect_equal(plot_yld$labels$y, "YLDs")
+
+  plot_yll <- burden_disease("yll", data_weighted_burden_wide_collapse)
+  expect_s3_class(plot_yll, "ggplot")
+  expect_equal(plot_yll$labels$title, "Reduction in YLLs by income class")
+  expect_equal(plot_yll$labels$y, "YLLs")
 
   # Test for invalid input
-  expect_error(burden_disease("invalid_burden_disease", data_mean_weighted_burden_wide),
+  expect_error(burden_disease("invalid_burden_disease", data_weighted_burden_wide_collapse),
                "Invalid burden of disease. Choose from: 'daly', 'dalycum', 'yld', 'yll'.")
 })
 
@@ -266,12 +284,21 @@ test_that("combine_plots function works correctly", {
     weighted_sodium = runif(24, 874, 2768),
     source = rep(c("Source_1", "Source_2", "Source_3"), each = 8))
 
-  data_mean_weighted_burden_wide <- data.frame(
-    timediff = seq(-9, 21, by = 1),
-    diff_daly = runif(31, -3, 0),
-    cumdiff_daly = runif(31, -200, 0),
-    diff_yld = runif(31, -0.3, 0),
-    diff_yll = runif(31, -700, 0)
+  data_weighted_burden_wide_collapse <- data.frame(
+    time = seq(-9, 21, by = 1),
+    income = c(rep("low",9), rep("middle", 16), rep("high", 6)),
+    diff_daly_mean = runif(31, -3, 0),
+    diff_daly_max = runif(31, -5, 0),
+    diff_daly_min = runif(31, -1, 0),
+    cumdiff_daly_mean = runif(31, -200, 0),
+    cumdiff_daly_max = runif(31, -300, 0),
+    cumdiff_daly_min = runif(31, -100, 0),
+    diff_yld_mean = runif(31, -0.3, 0),
+    diff_yld_max = runif(31, -0.5, 0),
+    diff_yld_min = runif(31, -0.1, 0),
+    diff_yll_mean = runif(31, -700, 0),
+    diff_yll_max = runif(31, -1000, 0),
+    diff_yll_min = runif(31, -300, 0)
   )
 
   # Create output file
@@ -280,7 +307,7 @@ test_that("combine_plots function works correctly", {
   # Create the combined plot
   plot_combine <- combine_plots(metrics=metrics,
                                 data_mean_weighted = data_mean_weighted,
-                                data_mean_weighted_burden_wide = data_mean_weighted_burden_wide,
+                                data_weighted_burden_wide_collapse = data_weighted_burden_wide_collapse,
                                 output_file = output_file)
 
   # Test that the output file is created

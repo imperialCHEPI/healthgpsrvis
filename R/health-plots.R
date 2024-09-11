@@ -105,7 +105,7 @@ riskfactors_diff <- function(riskft_diff,
                        labels = scale_y_continuous_labels) +
     ggplot2::labs(alt = "A line plot showing the reduction in a specified risk factor under intervention over time") +
     hgps_theme() +
-    ggplot2::theme(legend.position = c(0.85,0.22))
+    ggplot2::theme(legend.position.inside = c(0.85,0.22))
 }
 
 #' Plot of Incidence Difference
@@ -222,7 +222,7 @@ inc_cum <- function(inc,
     ggplot2::labs(alt = "A line plot showing the cumulative reduction in a specified incidence number over time") +
     hgps_theme() +
     ggplot2::theme(plot.title = ggplot2::element_text(size = 10)) +
-    ggplot2::theme(legend.position = c(0.2,0.2))
+    ggplot2::theme(legend.position.inside = c(0.2,0.2))
 }
 
 #' Plot of Burden of Disease
@@ -231,10 +231,17 @@ inc_cum <- function(inc,
 #'
 #' @param burden A character string specifying the burden of disease to plot.
 #'        Options are: "daly", "dalycum", "yld", "yll".
-#' @param data_mean_weighted_burden_wide A data frame containing the weighted mean values of burden.
+#' @param data_weighted_burden_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
+#' @param scale_y_continuous_limits A numeric vector specifying the limits of the scales for continuous y aesthetics.
+#' @param scale_y_continuous_breaks A numeric vector specifying the breaks of the scales for continuous y aesthetics.
+#' @param scale_y_continuous_labels A numeric vector specifying the labels of the scales for continuous y aesthetics.
 #' @return A ggplot object representing the specified plot.
 #' @export
-burden_disease <- function(burden, data_mean_weighted_burden_wide) {
+burden_disease <- function(burden,
+                           data_weighted_burden_wide_collapse,
+                           scale_y_continuous_limits = NULL,
+                           scale_y_continuous_breaks = ggplot2::waiver(),
+                           scale_y_continuous_labels = ggplot2::waiver()) {
   burdens <- c("daly", "dalycum", "yld", "yll")
 
   if (!(burden %in% burdens)) {
@@ -242,36 +249,41 @@ burden_disease <- function(burden, data_mean_weighted_burden_wide) {
   }
 
   y_label <- switch(burden,
-                    daly = "DALY",
-                    dalycum = "DALY",
-                    yld = "YLD",
-                    yll = "YLL")
+                    daly = "DALYs",
+                    dalycum = "DALYs",
+                    yld = "YLDs",
+                    yll = "YLLs")
 
   y_value <- switch(burden,
-                    daly = "diff_daly",
-                    dalycum = "cumdiff_daly",
-                    yld = "diff_yld",
-                    yll = "diff_yll")
+                    daly = "diff_daly_mean",
+                    dalycum = "cumdiff_daly_mean",
+                    yld = "diff_yld_mean",
+                    yll = "diff_yll_mean")
 
   plot_title <- switch(burden,
-                       daly = "Reduction in DALY",
-                       dalycum = "Cumulative reduction in DALY under intervention",
-                       yld = "Reduction in YLD",
-                       yll = "Reduction in YLL")
+                       daly = "Reduction in DALYs by income class",
+                       dalycum = "Cumulative reduction in DALYs by income class",
+                       yld = "Reduction in YLDs by income class",
+                       yll = "Reduction in YLLs by income class")
 
-  ggplot2::ggplot(data = data_mean_weighted_burden_wide,
-                  ggplot2::aes(x = data_mean_weighted_burden_wide$timediff,
-                               y = get(y_value))) +
-    ggplot2::geom_line(colour = "#FF1493", linewidth = 1) +
+  ggplot2::ggplot(data = data_weighted_burden_wide_collapse,
+                  ggplot2::aes(x = data_weighted_burden_wide_collapse$time,
+                               y = get(y_value),
+                               colour = data_weighted_burden_wide_collapse$income)) +
+    ggplot2::geom_line(linewidth = 1) +
+    ggplot2::geom_ribbon(ggplot2::aes(ymin = data_weighted_burden_wide_collapse$diff_yll_min,
+                                      ymax = data_weighted_burden_wide_collapse$diff_yll_min),
+                         alpha = 0.2) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
-    ggplot2::scale_y_continuous(labels = scales::comma) +
-    ggplot2::scale_x_continuous(limits = c(-3, 32),
-                     breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
-                     labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::scale_y_continuous(limits = scale_y_continuous_limits,
+                                breaks = scale_y_continuous_breaks,
+                                labels = scale_y_continuous_labels) +
     ggplot2::labs(alt = "A line plot showing the reduction in a specified burden of disease over time") +
-    hgps_theme()
+    hgps_theme() +
+    ggplot2::theme(legend.position.inside = c(0.85,0.2))
 }
 
 #' Plot of Life Expectancy under Intervention
@@ -305,7 +317,7 @@ life_exp <- function(diff, data_ple_wide) {
 #' @param data_mean_weighted A data frame with weighted mean values for various metrics.
 #' @param data_mean_weighted_rf_wide A data frame containing the weighted mean values of risk factors.
 #' @param data_mean_weighted_inc_wide A data frame containing the weighted mean values of incidences.
-#' @param data_mean_weighted_burden_wide A data frame containing the weighted mean values of burden.
+#' @param data_weighted_burden_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
 #' @param data_ple_wide A data frame containing the life expectancy.
 #' @param output_file Name of the output PDF as a string
 #' @return A combined ggplot object arranged in a grid.
@@ -314,7 +326,7 @@ combine_plots <- function(metrics,
                            data_mean_weighted = NULL,
                            data_mean_weighted_rf_wide = NULL,
                            data_mean_weighted_inc_wide = NULL,
-                           data_mean_weighted_burden_wide = NULL,
+                           data_weighted_burden_wide_collapse = NULL,
                            data_ple_wide = NULL,
                            output_file) {
 
@@ -344,9 +356,9 @@ combine_plots <- function(metrics,
     }
   }
 
-  if (!is.null(metrics$burden_disease) && !is.null(data_mean_weighted_burden_wide)) {
+  if (!is.null(metrics$burden_disease) && !is.null(data_weighted_burden_wide_collapse)) {
     for (burden in metrics$burden_disease) {
-      plots <- c(plots, list(burden_disease(burden, data_mean_weighted_burden_wide)))
+      plots <- c(plots, list(burden_disease(burden, data_weighted_burden_wide_collapse)))
     }
   }
 
