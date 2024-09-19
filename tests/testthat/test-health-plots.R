@@ -134,21 +134,21 @@ test_that("inc_cum function works correctly", {
   data_weighted_ds_wide_collapse <- data.frame(
     time = seq(-9, 21, by = 1),
     income = c(rep("low",9), rep("middle", 16), rep("high", 6)),
-    diff_inc_asthma_mean = runif(31, -3, 0),
-    diff_inc_asthma_max = runif(31, -5, 0),
-    diff_inc_asthma_min = runif(31, -1, 0),
-    diff_inc_ckd_mean = runif(31, -200, 0),
-    diff_inc_ckd_max = runif(31, -300, 0),
-    diff_inc_ckd_min = runif(31, -100, 0),
-    diff_inc_db_mean = runif(31, -0.3, 0),
-    diff_inc_db_max = runif(31, -0.5, 0),
-    diff_inc_db_min = runif(31, -0.1, 0),
-    diff_inc_ihd_mean = runif(31, -700, 0),
-    diff_inc_ihd_max = runif(31, -1000, 0),
-    diff_inc_ihd_min = runif(31, -300, 0),
-    diff_inc_stroke_mean = runif(31, -79, 0),
-    diff_inc_stroke_max = runif(31, -100, 0),
-    diff_inc_stroke_min = runif(31, -50, 0)
+    cumdiff_inc_asthma_mean = runif(31, -3, 0),
+    cumdiff_inc_asthma_max = runif(31, -5, 0),
+    cumdiff_inc_asthma_min = runif(31, -1, 0),
+    cumdiff_inc_ckd_mean = runif(31, -200, 0),
+    cumdiff_inc_ckd_max = runif(31, -300, 0),
+    cumdiff_inc_ckd_min = runif(31, -100, 0),
+    cumdiff_inc_db_mean = runif(31, -0.3, 0),
+    cumdiff_inc_db_max = runif(31, -0.5, 0),
+    cumdiff_inc_db_min = runif(31, -0.1, 0),
+    cumdiff_inc_ihd_mean = runif(31, -700, 0),
+    cumdiff_inc_ihd_max = runif(31, -1000, 0),
+    cumdiff_inc_ihd_min = runif(31, -300, 0),
+    cumdiff_inc_stroke_mean = runif(31, -79, 0),
+    cumdiff_inc_stroke_max = runif(31, -100, 0),
+    cumdiff_inc_stroke_min = runif(31, -50, 0)
   )
 
   # Test for valid input
