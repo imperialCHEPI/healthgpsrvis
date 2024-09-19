@@ -205,7 +205,7 @@ inc_cum <- function(inc,
   y_value <- switch(inc,
                     asthma = "diff_inc_asthma_mean",
                     ckd = "diff_inc_ckd_mean",
-                    diabetes = "diff_inc_db_mean",
+                    diabetes = "cumdiff_inc_db_mean",
                     ischemia = "diff_inc_ihd_mean",
                     stroke = "diff_inc_stroke_mean")
 
