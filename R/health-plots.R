@@ -109,7 +109,7 @@ riskfactors_diff <- function(riskft_diff,
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
-    ggplot2::scale_x_continuous(limits = c(-3, 32),
+    ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055))
                        breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
                        labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
     ggplot2::scale_y_continuous(limits = scale_y_continuous_limits,
