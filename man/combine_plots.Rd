@@ -9,7 +9,7 @@ combine_plots(
   data_mean_weighted = NULL,
   data_mean_weighted_rf_wide = NULL,
   data_mean_weighted_inc_wide = NULL,
-  data_mean_weighted_burden_wide = NULL,
+  data_weighted_burden_wide_collapse = NULL,
   data_ple_wide = NULL,
   output_file
 )
@@ -23,7 +23,7 @@ combine_plots(
 
 \item{data_mean_weighted_inc_wide}{A data frame containing the weighted mean values of incidences.}
 
-\item{data_mean_weighted_burden_wide}{A data frame containing the weighted mean values of burden.}
+\item{data_weighted_burden_wide_collapse}{A data frame with differences between intervention and baseline values for burden of disease.}
 
 \item{data_ple_wide}{A data frame containing the life expectancy.}
 

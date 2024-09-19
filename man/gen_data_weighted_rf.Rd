@@ -2,7 +2,7 @@
 % Please edit documentation in R/data-process.R
 \name{gen_data_weighted_rf}
 \alias{gen_data_weighted_rf}
-\title{Calculate Differences for Various Metrics}
+\title{Calculate Differences for Risk Factors}
 \usage{
 gen_data_weighted_rf(data_weighted)
 }
@@ -10,7 +10,7 @@ gen_data_weighted_rf(data_weighted)
 \item{data_weighted}{A data frame containing weighted mean values for various metrics.}
 }
 \value{
-A data frame with differences between intervention and baseline values for various metrics.
+A data frame with differences between intervention and baseline values for risk factors.
 }
 \description{
 This function calculates the differences between intervention and baseline values for risk factors.

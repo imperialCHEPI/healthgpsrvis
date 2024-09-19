@@ -4,13 +4,25 @@
 \alias{burden_disease}
 \title{Plot of Burden of Disease}
 \usage{
-burden_disease(burden, data_mean_weighted_burden_wide)
+burden_disease(
+  burden,
+  data_weighted_burden_wide_collapse,
+  scale_y_continuous_limits = NULL,
+  scale_y_continuous_breaks = ggplot2::waiver(),
+  scale_y_continuous_labels = ggplot2::waiver()
+)
 }
 \arguments{
 \item{burden}{A character string specifying the burden of disease to plot.
 Options are: "daly", "dalycum", "yld", "yll".}
 
-\item{data_mean_weighted_burden_wide}{A data frame containing the weighted mean values of burden.}
+\item{data_weighted_burden_wide_collapse}{A data frame with differences between intervention and baseline values for burden of disease.}
+
+\item{scale_y_continuous_limits}{A numeric vector specifying the limits of the scales for continuous y aesthetics.}
+
+\item{scale_y_continuous_breaks}{A numeric vector specifying the breaks of the scales for continuous y aesthetics.}
+
+\item{scale_y_continuous_labels}{A numeric vector specifying the labels of the scales for continuous y aesthetics.}
 }
 \value{
 A ggplot object representing the specified plot.

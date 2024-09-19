@@ -90,12 +90,12 @@ gen_data_weighted <- function(data) {
   return(data_weighted)
 }
 
-#' Calculate Differences for Various Metrics
+#' Calculate Differences for Risk Factors
 #'
 #' This function calculates the differences between intervention and baseline values for risk factors.
 #'
 #' @param data_weighted A data frame containing weighted mean values for various metrics.
-#' @return A data frame with differences between intervention and baseline values for various metrics.
+#' @return A data frame with differences between intervention and baseline values for risk factors.
 #' @export
 gen_data_weighted_rf <- function(data_weighted) {
   data_weighted_rf <- dplyr::select(data_weighted,
@@ -181,21 +181,21 @@ gen_data_weighted_ds <- function(data_weighted) {
 
   data_weighted_ds_wide_collapse <- data_weighted_ds_wide |>
     dplyr::group_by(data_weighted_ds_wide$time) |>
-    dplyr::summarise(data_weighted_ds_wide$diff_inc_ihd_mean <- mean(data_weighted_ds_wide$cumdiff_inc_ihd),
-                     data_weighted_ds_wide$diff_inc_ihd_min <- min(data_weighted_ds_wide$cumdiff_inc_ihd),
-                     data_weighted_ds_wide$diff_inc_ihd_max <- max(data_weighted_ds_wide$cumdiff_inc_ihd),
-                     data_weighted_ds_wide$diff_inc_db_mean <- mean(data_weighted_ds_wide$cumdiff_inc_db),
-                     data_weighted_ds_wide$diff_inc_db_min <- min(data_weighted_ds_wide$cumdiff_inc_db),
-                     data_weighted_ds_wide$diff_inc_db_max <- max(data_weighted_ds_wide$cumdiff_inc_db),
-                     data_weighted_ds_wide$diff_inc_stroke_mean <- mean(data_weighted_ds_wide$cumdiff_inc_stroke),
-                     data_weighted_ds_wide$diff_inc_stroke_min <- min(data_weighted_ds_wide$cumdiff_inc_stroke),
-                     data_weighted_ds_wide$diff_inc_stroke_max <- max(data_weighted_ds_wide$cumdiff_inc_stroke),
-                     data_weighted_ds_wide$diff_inc_asthma_mean <- mean(data_weighted_ds_wide$cumdiff_inc_asthma),
-                     data_weighted_ds_wide$diff_inc_asthma_min <- min(data_weighted_ds_wide$cumdiff_inc_asthma),
-                     data_weighted_ds_wide$diff_inc_asthma_max <- max(data_weighted_ds_wide$cumdiff_inc_asthma),
-                     data_weighted_ds_wide$diff_inc_ckd_mean <- mean(data_weighted_ds_wide$cumdiff_inc_ckd),
-                     data_weighted_ds_wide$diff_inc_ckd_min <- min(data_weighted_ds_wide$cumdiff_inc_ckd),
-                     data_weighted_ds_wide$diff_inc_ckd_max <- max(data_weighted_ds_wide$cumdiff_inc_ckd))
+    dplyr::summarise(data_weighted_ds_wide$cumdiff_inc_ihd_mean <- mean(data_weighted_ds_wide$cumdiff_inc_ihd),
+                     data_weighted_ds_wide$cumdiff_inc_ihd_min <- min(data_weighted_ds_wide$cumdiff_inc_ihd),
+                     data_weighted_ds_wide$cumdiff_inc_ihd_max <- max(data_weighted_ds_wide$cumdiff_inc_ihd),
+                     data_weighted_ds_wide$cumdiff_inc_db_mean <- mean(data_weighted_ds_wide$cumdiff_inc_db),
+                     data_weighted_ds_wide$cumdiff_inc_db_min <- min(data_weighted_ds_wide$cumdiff_inc_db),
+                     data_weighted_ds_wide$cumdiff_inc_db_max <- max(data_weighted_ds_wide$cumdiff_inc_db),
+                     data_weighted_ds_wide$cumdiff_inc_stroke_mean <- mean(data_weighted_ds_wide$cumdiff_inc_stroke),
+                     data_weighted_ds_wide$cumdiff_inc_stroke_min <- min(data_weighted_ds_wide$cumdiff_inc_stroke),
+                     data_weighted_ds_wide$cumdiff_inc_stroke_max <- max(data_weighted_ds_wide$cumdiff_inc_stroke),
+                     data_weighted_ds_wide$cumdiff_inc_asthma_mean <- mean(data_weighted_ds_wide$cumdiff_inc_asthma),
+                     data_weighted_ds_wide$cumdiff_inc_asthma_min <- min(data_weighted_ds_wide$cumdiff_inc_asthma),
+                     data_weighted_ds_wide$cumdiff_inc_asthma_max <- max(data_weighted_ds_wide$cumdiff_inc_asthma),
+                     data_weighted_ds_wide$cumdiff_inc_ckd_mean <- mean(data_weighted_ds_wide$cumdiff_inc_ckd),
+                     data_weighted_ds_wide$cumdiff_inc_ckd_min <- min(data_weighted_ds_wide$cumdiff_inc_ckd),
+                     data_weighted_ds_wide$cumdiff_inc_ckd_max <- max(data_weighted_ds_wide$cumdiff_inc_ckd))
 
   return(data_weighted_ds_wide_collapse)
 }
