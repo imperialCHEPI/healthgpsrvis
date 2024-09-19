@@ -1,1 +1,32 @@
 default:
+  grouping_vars:
+    - simID
+    - source
+    - time
+  weight:
+    - count
+  weighted_vars:
+    - bmi
+    - carbohydrate
+    - energyintake
+    - fat
+    - protein
+    - sodium
+    - weight
+  prevalence:
+    - prevalence_asthma
+    - prevalence_chronickidneydisease
+    - prevalence_diabetes
+    - prevalence_ischemicheartdisease
+    - prevalence_stroke
+  totalcase:
+    - incidence_asthma
+    - incidence_chronickidneydisease
+    - incidence_diabetes
+    - incidence_ischemicheartdisease
+    - incidence_stroke
+  total:
+    - daly
+    - yld
+    - yll
+

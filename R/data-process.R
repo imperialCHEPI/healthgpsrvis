@@ -42,10 +42,10 @@ NULL
 #' @return A data frame with weighted values for various metrics over years.
 #' @export
 gen_data_weighted <- function(data) {
+  config <- load_config("default")
   data_weighted <- data |>
-    dplyr::group_by(data$source,
-                    data$time,
-                    data$simID) |>
+    dplyr::group_by_at(config$grouping_vars) |>
+    # replace the dplyr::mutate using config
     dplyr::mutate(data$prevalence_stroke <- data$prevalence_intracerebralhemorrhage +
                                            data$prevalence_ischemicstroke +
                                            data$prevalence_subarachnoidhemorrhage,
