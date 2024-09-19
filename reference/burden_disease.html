@@ -37,7 +37,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">burden_disease</span><span class="op">(</span><span class="va">burden</span>, <span class="va">data_mean_weighted_burden_wide</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">burden_disease</span><span class="op">(</span></span>
+<span>  <span class="va">burden</span>,</span>
+<span>  <span class="va">data_weighted_burden_wide_collapse</span>,</span>
+<span>  scale_y_continuous_limits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scale_y_continuous_breaks <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  scale_y_continuous_labels <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -49,8 +55,20 @@
 Options are: "daly", "dalycum", "yld", "yll".</p></dd>
 
 
-<dt id="arg-data-mean-weighted-burden-wide">data_mean_weighted_burden_wide<a class="anchor" aria-label="anchor" href="#arg-data-mean-weighted-burden-wide"></a></dt>
-<dd><p>A data frame containing the weighted mean values of burden.</p></dd>
+<dt id="arg-data-weighted-burden-wide-collapse">data_weighted_burden_wide_collapse<a class="anchor" aria-label="anchor" href="#arg-data-weighted-burden-wide-collapse"></a></dt>
+<dd><p>A data frame with differences between intervention and baseline values for burden of disease.</p></dd>
+
+
+<dt id="arg-scale-y-continuous-limits">scale_y_continuous_limits<a class="anchor" aria-label="anchor" href="#arg-scale-y-continuous-limits"></a></dt>
+<dd><p>A numeric vector specifying the limits of the scales for continuous y aesthetics.</p></dd>
+
+
+<dt id="arg-scale-y-continuous-breaks">scale_y_continuous_breaks<a class="anchor" aria-label="anchor" href="#arg-scale-y-continuous-breaks"></a></dt>
+<dd><p>A numeric vector specifying the breaks of the scales for continuous y aesthetics.</p></dd>
+
+
+<dt id="arg-scale-y-continuous-labels">scale_y_continuous_labels<a class="anchor" aria-label="anchor" href="#arg-scale-y-continuous-labels"></a></dt>
+<dd><p>A numeric vector specifying the labels of the scales for continuous y aesthetics.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -67,7 +85,7 @@ Options are: "daly", "dalycum", "yld", "yll".</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
