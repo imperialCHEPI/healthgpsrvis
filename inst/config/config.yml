@@ -1,5 +1,5 @@
 default:
-  grouping_vars:
+  grouping_vars:  # Variables that are used to group the data
     - simID
     - source
     - time
@@ -8,23 +8,30 @@ default:
   weighted_vars:
     - bmi
     - carbohydrate
+    - death
+    - disabilityweight
     - energyintake
+    - height
+    - income
     - fat
+    - migrations
+    - obesity
+    - overweight
+    - physicalactivity
     - protein
+    - sector
     - sodium
     - weight
   prevalence:
-    - prevalence_asthma
-    - prevalence_chronickidneydisease
-    - prevalence_diabetes
-    - prevalence_ischemicheartdisease
-    - prevalence_stroke
-  totalcase:
-    - incidence_asthma
-    - incidence_chronickidneydisease
-    - incidence_diabetes
-    - incidence_ischemicheartdisease
-    - incidence_stroke
+    - asthma
+    - ckd
+    - diabetes
+    - ihd
+    - stroke
+  stroke:
+    - intracerebralhemorrhage
+    - ischemicstroke
+    - subarachnoidhemorrhage
   total:
     - daly
     - yld

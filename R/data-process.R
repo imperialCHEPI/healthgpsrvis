@@ -51,42 +51,42 @@ gen_data_weighted <- function(data) {
                                            data$prevalence_subarachnoidhemorrhage,
                   data$incidence_stroke <- data$incidence_intracerebralhemorrhage +
                                           data$incidence_ischemicstroke +
-                                          data$incidence_subarachnoidhemorrhage) |>
-    dplyr::summarise(weighted_income = stats::weighted.mean(data$income, data$count),
-              weighted_sector = stats::weighted.mean(data$sector, data$count),
-              weighted_sodium = stats::weighted.mean(data$sodium, data$count, na.rm = TRUE),
-              weighted_carbohydarte = stats::weighted.mean(data$carbohydrate, data$count, na.rm = TRUE),
-              weighted_fat = stats::weighted.mean(data$fat, data$count, na.rm = TRUE),
-              weighted_protein = stats::weighted.mean(data$protein, data$count, na.rm = TRUE),
-              weighted_energyintake = stats::weighted.mean(data$energyintake, data$count, na.rm = TRUE),
-              weighted_physicalactivity = stats::weighted.mean(data$physicalactivity, data$count),
-              weighted_bmi = stats::weighted.mean(data$bmi, data$count, na.rm = TRUE),
-              weighted_height = stats::weighted.mean(data$height, data$count),
-              weighted_weight = stats::weighted.mean(data$weight, data$count, na.rm = TRUE),
-              weighted_overweight = stats::weighted.mean(data$over_weight, data$count),
-              weighted_obesity = stats::weighted.mean(data$obese_weight, data$count),
-              wprev_ihd = stats::weighted.mean(data$prevalence_ischemicheartdisease, data$count, na.rm = TRUE),
-              wprev_diabetes = stats::weighted.mean(data$prevalence_diabetes, data$count, na.rm = TRUE),
-              wprev_stroke = stats::weighted.mean(data$prevalence_stroke, data$count, na.rm = TRUE),
-              wprev_asthma = stats::weighted.mean(data$prevalence_asthma, data$count, na.rm = TRUE),
-              wprev_ckd = stats::weighted.mean(data$prevalence_chronickidneydisease, data$count, na.rm = TRUE),
-              prevcase_ihd = sum(data$prevalence_ischemicheartdisease * data$count, na.rm = TRUE),
-              prevcase_diabetes = sum(data$prevalence_diabetes * data$count, na.rm = TRUE),
-              prevcase_stroke = sum(data$prevalence_stroke * data$count, na.rm = TRUE),
-              prevcase_asthma = sum(data$prevalence_asthma * data$count, na.rm = TRUE),
-              prevcase_ckd = sum(data$prevalence_chronickidneydisease * data$count, na.rm = TRUE),
-              totalcase_ihd = sum(data$incidence_ischemicheartdisease * data$count, na.rm = TRUE),
-              totalcase_diabetes = sum(data$incidence_diabetes * data$count, na.rm = TRUE),
-              totalcase_stroke = sum(data$incidence_stroke * data$count, na.rm = TRUE),
-              totalcase_asthma = sum(data$incidence_asthma * data$count, na.rm = TRUE),
-              totalcase_ckd = sum(data$incidence_chronickidneydisease * data$count, na.rm = TRUE),
-              weighted_disabilityweight = stats::weighted.mean(data$disability_weight, data$count),
-              weighted_death = stats::weighted.mean(data$deaths, data$count),
-              weighted_migrations = stats::weighted.mean(data$migrations, data$count),
-              total_yll = sum(data$yll * data$count, na.rm = TRUE),
-              total_yld = sum(data$yld * data$count, na.rm = TRUE),
-              total_daly = sum(data$daly * data$count, na.rm = TRUE))
+                                          data$incidence_subarachnoidhemorrhage)
 
+    weighted_mean <- purrr::map(config$weighted_vars, function(value){
+      stats::weighted.mean(data[[value]], data$count, na.rm = TRUE)
+    })
+
+    names(weighted_mean) <- paste0("weighted_", config$weighted_vars)
+
+    prevalence_mean <- purrr::map(paste0("prevalence_", config$prevalence), function(value){
+      stats::weighted.mean(data[[value]], data$count, na.rm = TRUE)
+    })
+
+    names(prevalence_mean) <- paste0("wprev_", config$prevalence)
+
+    prevalence_sum <- purrr::map(paste0("prevalence_", config$prevalence), function(value){
+      sum(data[[value]] * data$count, na.rm = TRUE)
+    })
+
+    names(prevalence_sum) <- paste0("prevcase_", config$prevalence)
+
+    totalcase_sum <- purrr::map(paste0("incidence_", config$prevalence), function(value){
+      sum(data[[value]] * data$count, na.rm = TRUE)
+    })
+
+    names(totalcase_sum) <- paste0("totalcase_", config$prevalence)
+
+    total_sum <- purrr::map(config$total, function(value){
+      sum(data[[value]] * data$count, na.rm = TRUE)
+    })
+
+    data_weighted <- dplyr::summarise(
+      !!!weighted_mean,
+      !!!prevalence_mean,
+      !!!prevalence_sum,
+      !!!totalcase_sum
+    )
   return(data_weighted)
 }
 

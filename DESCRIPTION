@@ -19,6 +19,7 @@ Imports:
     ggplot2,
     grDevices,
     gridExtra,
+    purrr,
     scales,
     splines,
     stats,
