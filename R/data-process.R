@@ -55,25 +55,21 @@ gen_data_weighted <- function(data) {
     weighted_mean <- purrr::map(config$weighted_vars, function(value){
       stats::weighted.mean(data_weighted[[value]], data_weighted$count, na.rm = TRUE)
     })
-
     names(weighted_mean) <- paste0("weighted_", config$weighted_vars)
 
     prevalence_mean <- purrr::map(paste0("prevalence_", config$prevalence), function(value){
       stats::weighted.mean(data_weighted[[value]], data_weighted$count, na.rm = TRUE)
     })
-
     names(prevalence_mean) <- paste0("wprev_", config$prevalence)
 
     prevalence_sum <- purrr::map(paste0("prevalence_", config$prevalence), function(value){
       sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
     })
-
     names(prevalence_sum) <- paste0("prevcase_", config$prevalence)
 
     totalcase_sum <- purrr::map(paste0("incidence_", config$prevalence), function(value){
       sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
     })
-
     names(totalcase_sum) <- paste0("totalcase_", config$prevalence)
 
     total_sum <- purrr::map(config$total, function(value){
