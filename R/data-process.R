@@ -43,42 +43,41 @@ NULL
 #' @export
 gen_data_weighted <- function(data) {
   config <- load_config("default")
-  data_weighted <- data |>
-    dplyr::group_by_at(config$grouping_vars) |>
-    # replace the dplyr::mutate using config
-    dplyr::mutate(data$prevalence_stroke <- data$prevalence_intracerebralhemorrhage +
-                                           data$prevalence_ischemicstroke +
-                                           data$prevalence_subarachnoidhemorrhage,
-                  data$incidence_stroke <- data$incidence_intracerebralhemorrhage +
-                                          data$incidence_ischemicstroke +
-                                          data$incidence_subarachnoidhemorrhage)
+  data_weighted <- dplyr::group_by_at(data, config$grouping_vars)
+  data_weighted <- data_weighted |>
+    dplyr::mutate(data_weighted$prevalence_stroke <- data_weighted$prevalence_intracerebralhemorrhage +
+                                           data_weighted$prevalence_ischemicstroke +
+                                           data_weighted$prevalence_subarachnoidhemorrhage,
+                  data_weighted$incidence_stroke <- data_weighted$incidence_intracerebralhemorrhage +
+                                          data_weighted$incidence_ischemicstroke +
+                                          data_weighted$incidence_subarachnoidhemorrhage)
 
     weighted_mean <- purrr::map(config$weighted_vars, function(value){
-      stats::weighted.mean(data[[value]], data$count, na.rm = TRUE)
+      stats::weighted.mean(data_weighted[[value]], data_weighted$count, na.rm = TRUE)
     })
 
     names(weighted_mean) <- paste0("weighted_", config$weighted_vars)
 
     prevalence_mean <- purrr::map(paste0("prevalence_", config$prevalence), function(value){
-      stats::weighted.mean(data[[value]], data$count, na.rm = TRUE)
+      stats::weighted.mean(data_weighted[[value]], data_weighted$count, na.rm = TRUE)
     })
 
     names(prevalence_mean) <- paste0("wprev_", config$prevalence)
 
     prevalence_sum <- purrr::map(paste0("prevalence_", config$prevalence), function(value){
-      sum(data[[value]] * data$count, na.rm = TRUE)
+      sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
     })
 
     names(prevalence_sum) <- paste0("prevcase_", config$prevalence)
 
     totalcase_sum <- purrr::map(paste0("incidence_", config$prevalence), function(value){
-      sum(data[[value]] * data$count, na.rm = TRUE)
+      sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
     })
 
     names(totalcase_sum) <- paste0("totalcase_", config$prevalence)
 
     total_sum <- purrr::map(config$total, function(value){
-      sum(data[[value]] * data$count, na.rm = TRUE)
+      sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
     })
 
     data_weighted <- dplyr::summarise(
