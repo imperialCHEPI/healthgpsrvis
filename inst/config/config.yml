@@ -3,9 +3,9 @@ default:
     - simID
     - source
     - time
-  weight:
+  weight:  # Population size of each group is used as weight
     - count
-  weighted_vars:
+  weighted_vars:  # List of risk factors to calculate population weighted mean
     - bmi
     - carbohydrate
     - death
