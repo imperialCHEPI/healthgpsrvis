@@ -57,24 +57,25 @@ gen_data_weighted <- function(data) {
     })
     names(weighted_mean) <- paste0("weighted_", config$weighted_vars)
 
-    prevalence_mean <- purrr::map(paste0("prevalence_", config$prevalence), function(value){
+    prevalence_mean <- purrr::map(paste0("prevalence_", config$disease), function(value){
       stats::weighted.mean(data_weighted[[value]], data_weighted$count, na.rm = TRUE)
     })
-    names(prevalence_mean) <- paste0("wprev_", config$prevalence)
+    names(prevalence_mean) <- paste0("wprev_", config$disease)
 
-    prevalence_sum <- purrr::map(paste0("prevalence_", config$prevalence), function(value){
+    prevalence_sum <- purrr::map(paste0("prevalence_", config$disease), function(value){
       sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
     })
-    names(prevalence_sum) <- paste0("prevcase_", config$prevalence)
+    names(prevalence_sum) <- paste0("prevcase_", config$disease)
 
-    totalcase_sum <- purrr::map(paste0("incidence_", config$prevalence), function(value){
+    totalcase_sum <- purrr::map(paste0("incidence_", config$disease), function(value){
       sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
     })
-    names(totalcase_sum) <- paste0("totalcase_", config$prevalence)
+    names(totalcase_sum) <- paste0("totalcase_", config$disease)
 
-    total_sum <- purrr::map(config$total, function(value){
+    total_sum <- purrr::map(config$burden, function(value){
       sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
     })
+    names(total_sum) <- paste0("total_", config$burden)
 
     data_weighted <- dplyr::summarise(
       !!!weighted_mean,
@@ -93,22 +94,17 @@ gen_data_weighted <- function(data) {
 #' @return A data frame with differences between intervention and baseline values for various metrics.
 #' @export
 gen_data_weighted_rf <- function(data_weighted) {
-  data_weighted_rf <- dplyr::select(data_weighted,
-                                         data_weighted$source,
-                                         data_weighted$time,
-                                         data_weighted$simID,
-                                         data_weighted$weighted_sodium,
-                                         data_weighted$weighted_energyintake,
-                                         data_weighted$weighted_bmi,
-                                         data_weighted$weighted_obesity)
+  config <- load_config("default")
+  data_Weighted_rf <- dplyr::select(data_weighted,
+                                    config$names_from,
+                                    config$id_cols,
+                                    config$weighted_rf)
 
   data_weighted_rf_wide <- tidyr::pivot_wider(data_weighted_rf,
-                                            names_from = data_weighted_rf$source,
-                                            id_cols = c(data_weighted_rf$time, data_weighted_rf$simID),
-                                            values_from = c(data_weighted_rf$weighted_sodium,
-                                                            data_weighted_rf$weighted_energyintake,
-                                                            data_weighted_rf$weighted_bmi,
-                                                            data_weighted_rf$weighted_obesity))
+                                            names_from = config$names_from,
+                                            id_cols = config$id_cols,
+                                            values_from = config$weighted_rf)
+
   data_weighted_rf_wide <- data_weighted_rf_wide |>
     dplyr::mutate(data_weighted_rf_wide$diff_sodium <- data_weighted_rf_wide$weighted_sodium_intervention - data_weighted_rf_wide$weighted_sodium_baseline,
                   data_weighted_rf_wide$diff_ei <- data_weighted_rf_wide$weighted_energyintake_intervention - data_weighted_rf_wide$weighted_energyintake_baseline,
