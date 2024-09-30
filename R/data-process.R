@@ -42,51 +42,47 @@ NULL
 #' @return A data frame with weighted values for various metrics over years.
 #' @export
 gen_data_weighted <- function(data) {
-  data_weighted <- data |>
-    dplyr::group_by(data$source,
-                    data$time,
-                    data$simID) |>
-    dplyr::mutate(data$prevalence_stroke <- data$prevalence_intracerebralhemorrhage +
-                                           data$prevalence_ischemicstroke +
-                                           data$prevalence_subarachnoidhemorrhage,
-                  data$incidence_stroke <- data$incidence_intracerebralhemorrhage +
-                                          data$incidence_ischemicstroke +
-                                          data$incidence_subarachnoidhemorrhage) |>
-    dplyr::summarise(weighted_income = stats::weighted.mean(data$income, data$count),
-              weighted_sector = stats::weighted.mean(data$sector, data$count),
-              weighted_sodium = stats::weighted.mean(data$sodium, data$count, na.rm = TRUE),
-              weighted_carbohydarte = stats::weighted.mean(data$carbohydrate, data$count, na.rm = TRUE),
-              weighted_fat = stats::weighted.mean(data$fat, data$count, na.rm = TRUE),
-              weighted_protein = stats::weighted.mean(data$protein, data$count, na.rm = TRUE),
-              weighted_energyintake = stats::weighted.mean(data$energyintake, data$count, na.rm = TRUE),
-              weighted_physicalactivity = stats::weighted.mean(data$physicalactivity, data$count),
-              weighted_bmi = stats::weighted.mean(data$bmi, data$count, na.rm = TRUE),
-              weighted_height = stats::weighted.mean(data$height, data$count),
-              weighted_weight = stats::weighted.mean(data$weight, data$count, na.rm = TRUE),
-              weighted_overweight = stats::weighted.mean(data$over_weight, data$count),
-              weighted_obesity = stats::weighted.mean(data$obese_weight, data$count),
-              wprev_ihd = stats::weighted.mean(data$prevalence_ischemicheartdisease, data$count, na.rm = TRUE),
-              wprev_diabetes = stats::weighted.mean(data$prevalence_diabetes, data$count, na.rm = TRUE),
-              wprev_stroke = stats::weighted.mean(data$prevalence_stroke, data$count, na.rm = TRUE),
-              wprev_asthma = stats::weighted.mean(data$prevalence_asthma, data$count, na.rm = TRUE),
-              wprev_ckd = stats::weighted.mean(data$prevalence_chronickidneydisease, data$count, na.rm = TRUE),
-              prevcase_ihd = sum(data$prevalence_ischemicheartdisease * data$count, na.rm = TRUE),
-              prevcase_diabetes = sum(data$prevalence_diabetes * data$count, na.rm = TRUE),
-              prevcase_stroke = sum(data$prevalence_stroke * data$count, na.rm = TRUE),
-              prevcase_asthma = sum(data$prevalence_asthma * data$count, na.rm = TRUE),
-              prevcase_ckd = sum(data$prevalence_chronickidneydisease * data$count, na.rm = TRUE),
-              totalcase_ihd = sum(data$incidence_ischemicheartdisease * data$count, na.rm = TRUE),
-              totalcase_diabetes = sum(data$incidence_diabetes * data$count, na.rm = TRUE),
-              totalcase_stroke = sum(data$incidence_stroke * data$count, na.rm = TRUE),
-              totalcase_asthma = sum(data$incidence_asthma * data$count, na.rm = TRUE),
-              totalcase_ckd = sum(data$incidence_chronickidneydisease * data$count, na.rm = TRUE),
-              weighted_disabilityweight = stats::weighted.mean(data$disability_weight, data$count),
-              weighted_death = stats::weighted.mean(data$deaths, data$count),
-              weighted_migrations = stats::weighted.mean(data$migrations, data$count),
-              total_yll = sum(data$yll * data$count, na.rm = TRUE),
-              total_yld = sum(data$yld * data$count, na.rm = TRUE),
-              total_daly = sum(data$daly * data$count, na.rm = TRUE))
+  config <- load_config("default")
+  data_weighted <- dplyr::group_by_at(data, config$grouping_vars)
+  data_weighted <- data_weighted |>
+    dplyr::mutate(data_weighted$prevalence_stroke <- data_weighted$prevalence_intracerebralhemorrhage +
+                                           data_weighted$prevalence_ischemicstroke +
+                                           data_weighted$prevalence_subarachnoidhemorrhage,
+                  data_weighted$incidence_stroke <- data_weighted$incidence_intracerebralhemorrhage +
+                                          data_weighted$incidence_ischemicstroke +
+                                          data_weighted$incidence_subarachnoidhemorrhage)
 
+    weighted_mean <- purrr::map(config$weighted_vars, function(value){
+      stats::weighted.mean(data_weighted[[value]], data_weighted$count, na.rm = TRUE)
+    })
+    names(weighted_mean) <- paste0("weighted_", config$weighted_vars)
+
+    prevalence_mean <- purrr::map(paste0("prevalence_", config$disease), function(value){
+      stats::weighted.mean(data_weighted[[value]], data_weighted$count, na.rm = TRUE)
+    })
+    names(prevalence_mean) <- paste0("wprev_", config$disease)
+
+    prevalence_sum <- purrr::map(paste0("prevalence_", config$disease), function(value){
+      sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
+    })
+    names(prevalence_sum) <- paste0("prevcase_", config$disease)
+
+    totalcase_sum <- purrr::map(paste0("incidence_", config$disease), function(value){
+      sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
+    })
+    names(totalcase_sum) <- paste0("totalcase_", config$disease)
+
+    total_sum <- purrr::map(config$burden, function(value){
+      sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
+    })
+    names(total_sum) <- paste0("total_", config$burden)
+
+    data_weighted <- dplyr::summarise(
+      !!!weighted_mean,
+      !!!prevalence_mean,
+      !!!prevalence_sum,
+      !!!totalcase_sum
+    )
   return(data_weighted)
 }
 
@@ -98,22 +94,17 @@ gen_data_weighted <- function(data) {
 #' @return A data frame with differences between intervention and baseline values for risk factors.
 #' @export
 gen_data_weighted_rf <- function(data_weighted) {
-  data_weighted_rf <- dplyr::select(data_weighted,
-                                         data_weighted$source,
-                                         data_weighted$time,
-                                         data_weighted$simID,
-                                         data_weighted$weighted_sodium,
-                                         data_weighted$weighted_energyintake,
-                                         data_weighted$weighted_bmi,
-                                         data_weighted$weighted_obesity)
+  config <- load_config("default")
+  data_Weighted_rf <- dplyr::select(data_weighted,
+                                    config$names_from,
+                                    config$id_cols,
+                                    config$weighted_rf)
 
   data_weighted_rf_wide <- tidyr::pivot_wider(data_weighted_rf,
-                                            names_from = data_weighted_rf$source,
-                                            id_cols = c(data_weighted_rf$time, data_weighted_rf$simID),
-                                            values_from = c(data_weighted_rf$weighted_sodium,
-                                                            data_weighted_rf$weighted_energyintake,
-                                                            data_weighted_rf$weighted_bmi,
-                                                            data_weighted_rf$weighted_obesity))
+                                            names_from = config$names_from,
+                                            id_cols = config$id_cols,
+                                            values_from = config$weighted_rf)
+
   data_weighted_rf_wide <- data_weighted_rf_wide |>
     dplyr::mutate(data_weighted_rf_wide$diff_sodium <- data_weighted_rf_wide$weighted_sodium_intervention - data_weighted_rf_wide$weighted_sodium_baseline,
                   data_weighted_rf_wide$diff_ei <- data_weighted_rf_wide$weighted_energyintake_intervention - data_weighted_rf_wide$weighted_energyintake_baseline,

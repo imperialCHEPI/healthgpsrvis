@@ -1,0 +1,49 @@
+default:
+  grouping_vars:  # Variables that are used to group the data
+    - simID
+    - source
+    - time
+  names_from:
+    - source
+  id_cols:
+    - simID
+    - time
+  weight: # Population size of each group is used as weight
+    - count
+  weighted_rf:
+    - weighted_bmi
+    - weighted_energyintake
+    - weighted_obesity
+    - weighted_sodium
+  weighted_vars:  # List of risk factors to calculate population weighted mean
+    - bmi
+    - carbohydrate
+    - death
+    - disabilityweight
+    - energyintake
+    - height
+    - income
+    - fat
+    - migrations
+    - obesity
+    - overweight
+    - physicalactivity
+    - protein
+    - sector
+    - sodium
+    - weight
+  disease:  # List of disease to calculate the total prevalence number or incidence number in the population
+    - asthma
+    - ckd
+    - diabetes
+    - ihd
+    - stroke
+  stroke:
+    - intracerebralhemorrhage
+    - ischemicstroke
+    - subarachnoidhemorrhage
+  burden:  # List of disease burden measures
+    - daly
+    - yld
+    - yll
+
