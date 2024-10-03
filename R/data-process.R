@@ -105,6 +105,12 @@ gen_data_weighted_rf <- function(data_weighted) {
                                             id_cols = config$id_cols,
                                             values_from = config$weighted_rf)
 
+  diff_names <- paste0("diff_", config$rf)
+  intervention_names <- paste0("weighted_", config$rf, "_intervention")
+  baseline_names <- paste0("weighted_", config$rf, "_baseline")
+
+  data_weighted_rf_wide <- data_weighted_rf_wide |>
+    dplyr::mutate(config$diff_names <- config$intervention_names - config$baseline_names)
   data_weighted_rf_wide <- data_weighted_rf_wide |>
     dplyr::mutate(data_weighted_rf_wide$diff_sodium <- data_weighted_rf_wide$weighted_sodium_intervention - data_weighted_rf_wide$weighted_sodium_baseline,
                   data_weighted_rf_wide$diff_ei <- data_weighted_rf_wide$weighted_energyintake_intervention - data_weighted_rf_wide$weighted_energyintake_baseline,

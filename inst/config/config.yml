@@ -10,6 +10,11 @@ default:
     - time
   weight: # Population size of each group is used as weight
     - count
+  rf:
+   - bmi
+   - ei
+   - obesity
+   - sodium
   weighted_rf:
     - weighted_bmi
     - weighted_energyintake
