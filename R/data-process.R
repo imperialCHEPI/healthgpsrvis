@@ -83,6 +83,7 @@ gen_data_weighted <- function(data) {
       !!!prevalence_sum,
       !!!totalcase_sum
     )
+
   return(data_weighted)
 }
 
@@ -115,10 +116,11 @@ gen_data_weighted_rf <- function(data_weighted) {
 
   data_weighted_rf_wide_collapse <- data_weighted_rf_wide |>
     dplyr::group_by(config$group) |>
-    dplyr::summarise(dplyr::across(config$summary_columns,
+    dplyr::summarise(dplyr::across(config$summary_columns_rf,
                    list(mean = ~mean(.),
                         min = ~min(.),
                         max = ~max(.))))
+
   return(data_weighted_rf_wide_collapse)
 }
 
@@ -130,57 +132,39 @@ gen_data_weighted_rf <- function(data_weighted) {
 #' @return A data frame with differences between intervention and baseline values for incidences.
 #' @export
 gen_data_weighted_ds <- function(data_weighted) {
+  config <- load_config("default")
   data_weighted_ds <- dplyr::select(data_weighted,
-                                          data_weighted$source,
-                                          data_weighted$time,
-                                          data_weighted$simID,
-                                          data_weighted$totalcase_ihd,
-                                          data_weighted$totalcase_diabetes,
-                                          data_weighted$totalcase_stroke,
-                                          data_weighted$totalcase_asthma,
-                                          data_weighted$totalcase_ckd)
+                                    config$names_from,
+                                    config$id_cols,
+                                    config$weighted_ds)
 
   data_weighted_ds_wide <- tidyr::pivot_wider(data_weighted_ds,
-                                             names_from = data_weighted_ds$source,
-                                             id_cols = c(data_weighted_ds$time, data_weighted_ds$simID),
-                                             values_from = c(data_weighted_ds$totalcase_ihd,
-                                                             data_weighted_ds$totalcase_diabetes,
-                                                             data_weighted_ds$totalcase_stroke,
-                                                             data_weighted_ds$totalcase_asthma,
-                                                             data_weighted_ds$totalcase_ckd))
+                                             names_from = config$names_from,
+                                             id_cols = config$id_cols,
+                                             values_from = config$weighted_ds)
 
-  data_weighted_ds_wide <- data_weighted_ds_wide |>
-    dplyr::mutate(data_weighted_ds_wide$diff_inc_ihd <- 100*(data_weighted_ds_wide$totalcase_ihd_intervention - data_weighted_ds_wide$totalcase_ihd_baseline),
-                  data_weighted_ds_wide$diff_inc_db <- 100*(data_weighted_ds_wide$totalcase_diabetes_intervention - data_weighted_ds_wide$totalcase_diabetes_baseline),
-                  data_weighted_ds_wide$diff_inc_stroke <- 100*(data_weighted_ds_wide$totalcase_stroke_intervention - data_weighted_ds_wide$totalcase_stroke_baseline),
-                  data_weighted_ds_wide$diff_inc_asthma <- 100*(data_weighted_ds_wide$totalcase_asthma_intervention - data_weighted_ds_wide$totalcase_asthma_baseline),
-                  data_weighted_ds_wide$diff_inc_ckd <- 100*(data_weighted_ds_wide$totalcase_ckd_intervention - data_weighted_ds_wide$totalcase_ckd_baseline))
+  for (disease in config$disease) {
+    intervention <- paste0("totalcase_", disease, "_intervention")
+    baseline <- paste0("totalcase_", disease, "_baseline")
+    diff <- paste0("diff_inc", disease)
+    data_weighted_ds_wide <- data_weighted_ds_wide |>
+      dplyr::mutate(data_weighted_ds_wide[[diff]] <- 100*(data_weighted_ds_wide[[intervention]] - data_weighted_ds_wide[[baseline]]))
+  }
 
-  data_weighted_ds_wide <- data_weighted_ds_wide |>
-    dplyr::group_by(data_weighted_ds_wide$simID) |>
-    dplyr::mutate(data_weighted_ds_wide$cumdiff_inc_ihd <- cumsum(data_weighted_ds_wide$diff_inc_ihd),
-                  data_weighted_ds_wide$cumdiff_inc_db <- cumsum(data_weighted_ds_wide$diff_inc_db),
-                  data_weighted_ds_wide$cumdiff_inc_stroke <- cumsum(data_weighted_ds_wide$diff_inc_stroke),
-                  data_weighted_ds_wide$cumdiff_inc_asthma <- cumsum(data_weighted_ds_wide$diff_inc_asthma),
-                  data_weighted_ds_wide$cumdiff_inc_ckd <- cumsum(data_weighted_ds_wide$diff_inc_ckd))
+  for (ds in config$summary_columns_ds) {
+    data_weighted_ds_wide <- data_weighted_ds_wide |>
+      dplyr::group_by(config$group_ds) |>
+      dplyr::mutate(data_weighted_ds_wide[[paste0("cum", ds)]] <- cumsum(data_weighted_ds_wide[[ds]])) |>
+      dplyr::ungroup()
+  }
 
   data_weighted_ds_wide_collapse <- data_weighted_ds_wide |>
-    dplyr::group_by(data_weighted_ds_wide$time) |>
-    dplyr::summarise(data_weighted_ds_wide$diff_inc_ihd_mean <- mean(data_weighted_ds_wide$cumdiff_inc_ihd),
-                     data_weighted_ds_wide$diff_inc_ihd_min <- min(data_weighted_ds_wide$cumdiff_inc_ihd),
-                     data_weighted_ds_wide$diff_inc_ihd_max <- max(data_weighted_ds_wide$cumdiff_inc_ihd),
-                     data_weighted_ds_wide$diff_inc_db_mean <- mean(data_weighted_ds_wide$cumdiff_inc_db),
-                     data_weighted_ds_wide$diff_inc_db_min <- min(data_weighted_ds_wide$cumdiff_inc_db),
-                     data_weighted_ds_wide$diff_inc_db_max <- max(data_weighted_ds_wide$cumdiff_inc_db),
-                     data_weighted_ds_wide$diff_inc_stroke_mean <- mean(data_weighted_ds_wide$cumdiff_inc_stroke),
-                     data_weighted_ds_wide$diff_inc_stroke_min <- min(data_weighted_ds_wide$cumdiff_inc_stroke),
-                     data_weighted_ds_wide$diff_inc_stroke_max <- max(data_weighted_ds_wide$cumdiff_inc_stroke),
-                     data_weighted_ds_wide$diff_inc_asthma_mean <- mean(data_weighted_ds_wide$cumdiff_inc_asthma),
-                     data_weighted_ds_wide$diff_inc_asthma_min <- min(data_weighted_ds_wide$cumdiff_inc_asthma),
-                     data_weighted_ds_wide$diff_inc_asthma_max <- max(data_weighted_ds_wide$cumdiff_inc_asthma),
-                     data_weighted_ds_wide$diff_inc_ckd_mean <- mean(data_weighted_ds_wide$cumdiff_inc_ckd),
-                     data_weighted_ds_wide$diff_inc_ckd_min <- min(data_weighted_ds_wide$cumdiff_inc_ckd),
-                     data_weighted_ds_wide$diff_inc_ckd_max <- max(data_weighted_ds_wide$cumdiff_inc_ckd))
+    dplyr::group_by(config$group) |>
+    dplyr::summarise(dplyr::across(config$summary_columns_ds,
+                                   list(mean = ~mean(.),
+                                        min = ~min(.),
+                                        max = ~max(.)),
+                                   .names = "{substr(col, 4, nchar(col))}_{.fn}"))
 
   return(data_weighted_ds_wide_collapse)
 }

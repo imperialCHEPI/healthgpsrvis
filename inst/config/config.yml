@@ -5,11 +5,19 @@ default:
     - time
   group:
     - time
-  summary_columns:  # Variables that are used to calculate the summary statistics
+  group_ds:
+    - simID
+  summary_columns_rf:  # Variables that are used to calculate the summary statistics
     - diff_bmi
     - diff_ei
     - diff_obesity
     - diff_sodium
+  summary_columns_ds:  # Variables that are used to calculate the summary statistics
+    - diff_inc_asthma
+    - diff_inc_ckd
+    - diff_inc_diabetes
+    - diff_inc_ihd
+    - diff_inc_stroke
   names_from:
     - source
   id_cols:
@@ -27,6 +35,12 @@ default:
     - weighted_energyintake
     - weighted_obesity
     - weighted_sodium
+  weighted_ds:
+    - totalcase_asthma
+    - totalcase_ckd
+    - totalcase_diabetes
+    - totalcase_ihd
+    - totalcase_stroke
   weighted_vars:  # List of risk factors to calculate population weighted mean
     - bmi
     - carbohydrate
