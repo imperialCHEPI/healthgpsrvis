@@ -5,7 +5,7 @@ default:
     - time
   group:
     - time
-  group_ds:
+  group_ds:  # used in gen_data_weighted_ds as well as gen_data_weighted_burden
     - simID
   summary_columns_rf:  # Variables that are used to calculate the summary statistics
     - diff_bmi
@@ -18,6 +18,23 @@ default:
     - diff_inc_diabetes
     - diff_inc_ihd
     - diff_inc_stroke
+  summary_columns_ds_cum:  # Variables that are used to calculate the summary statistics
+    - cumdiff_inc_asthma
+    - cumdiff_inc_ckd
+    - cumdiff_inc_db
+    - cumdiff_inc_ihd
+    - cumdiff_inc_stroke
+  summary_columns_burden:  # Variables that are used to calculate the summary statistics
+    - diff_daly
+    - diff_yld
+    - diff_yll
+   summary_columns_burden_cum:  # Variables that are used to calculate the summary statistics
+    - cumdiff_daly
+    - cumdiff_yld
+    - cumdiff_yll
+    - diff_daly
+    - diff_yld
+    - diff_yll
   names_from:
     - source
   id_cols:
@@ -41,6 +58,10 @@ default:
     - totalcase_diabetes
     - totalcase_ihd
     - totalcase_stroke
+  weighted_burden:
+    - total_daly
+    - total_yld
+    - total_yll
   weighted_vars:  # List of risk factors to calculate population weighted mean
     - bmi
     - carbohydrate
@@ -61,7 +82,7 @@ default:
   disease:  # List of disease to calculate the total prevalence number or incidence number in the population
     - asthma
     - ckd
-    - diabetes
+    - diabetes # at some places used db, check
     - ihd
     - stroke
   stroke:
