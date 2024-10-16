@@ -105,32 +105,20 @@ gen_data_weighted_rf <- function(data_weighted) {
                                             id_cols = config$id_cols,
                                             values_from = config$weighted_rf)
 
-  diff_names <- paste0("diff_", config$rf)
-  intervention_names <- paste0("weighted_", config$rf, "_intervention")
-  baseline_names <- paste0("weighted_", config$rf, "_baseline")
+  for (rf in config$rf) {
+    intervention <- paste0("weighted_", rf, "_intervention")
+    baseline <- paste0("weighted_", rf, "_baseline") # use ei in place of energyintake everywhere
+    diff <- paste0("diff_", rf)
+    data_weighted_rf_wide <- data_weighted_rf_wide |>
+      dplyr::mutate(!!diff := !!sym(intervention) - !!sym(baseline))
+  }
 
-  data_weighted_rf_wide <- data_weighted_rf_wide |>
-    dplyr::mutate(config$diff_names <- config$intervention_names - config$baseline_names)
-  data_weighted_rf_wide <- data_weighted_rf_wide |>
-    dplyr::mutate(data_weighted_rf_wide$diff_sodium <- data_weighted_rf_wide$weighted_sodium_intervention - data_weighted_rf_wide$weighted_sodium_baseline,
-                  data_weighted_rf_wide$diff_ei <- data_weighted_rf_wide$weighted_energyintake_intervention - data_weighted_rf_wide$weighted_energyintake_baseline,
-                  data_weighted_rf_wide$diff_bmi <- data_weighted_rf_wide$weighted_bmi_intervention - data_weighted_rf_wide$weighted_bmi_baseline,
-                  data_weighted_rf_wide$diff_obesity <- data_weighted_rf_wide$weighted_obesity_intervention - data_weighted_rf_wide$weighted_obesity_baseline)
   data_weighted_rf_wide_collapse <- data_weighted_rf_wide |>
-    dplyr::group_by(data_weighted_rf_wide$time) |>
-    dplyr::summarise(data_weighted_rf_wide$diff_sodium_mean <- mean(data_weighted_rf_wide$diff_sodium),
-                     data_weighted_rf_wide$diff_sodium_min <- min(data_weighted_rf_wide$diff_sodium),
-                     data_weighted_rf_wide$diff_sodium_max <- max(data_weighted_rf_wide$diff_sodium),
-                     data_weighted_rf_wide$diff_ei_mean <- mean(data_weighted_rf_wide$diff_ei),
-                     data_weighted_rf_wide$diff_ei_min <- min(data_weighted_rf_wide$diff_ei),
-                     data_weighted_rf_wide$diff_ei_max <- max(data_weighted_rf_wide$diff_ei),
-                     data_weighted_rf_wide$diff_bmi_mean <- mean(data_weighted_rf_wide$diff_bmi),
-                     data_weighted_rf_wide$diff_bmi_min <- min(data_weighted_rf_wide$diff_bmi),
-                     data_weighted_rf_wide$diff_bmi_max <- max(data_weighted_rf_wide$diff_bmi),
-                     data_weighted_rf_wide$diff_obesity_mean <- mean(data_weighted_rf_wide$diff_obesity),
-                     data_weighted_rf_wide$diff_obesity_min <- min(data_weighted_rf_wide$diff_obesity),
-                     data_weighted_rf_wide$diff_obesity_max <- max(data_weighted_rf_wide$diff_obesity))
-
+    dplyr::group_by(config$group) |>
+    dplyr::summarise(across(all_of(config$summary_columns),
+                   list(mean = ~mean(.),
+                        min = ~min(.),
+                        max = ~max(.))))
   return(data_weighted_rf_wide_collapse)
 }
 

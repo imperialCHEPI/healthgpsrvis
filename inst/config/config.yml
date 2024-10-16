@@ -3,6 +3,13 @@ default:
     - simID
     - source
     - time
+  group:
+    - time
+  summary_columns:  # Variables that are used to calculate the summary statistics
+    - diff_bmi
+    - diff_ei
+    - diff_obesity
+    - diff_sodium
   names_from:
     - source
   id_cols:
