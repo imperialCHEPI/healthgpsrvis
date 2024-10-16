@@ -95,7 +95,7 @@ gen_data_weighted <- function(data) {
 #' @export
 gen_data_weighted_rf <- function(data_weighted) {
   config <- load_config("default")
-  data_Weighted_rf <- dplyr::select(data_weighted,
+  data_weighted_rf <- dplyr::select(data_weighted,
                                     config$names_from,
                                     config$id_cols,
                                     config$weighted_rf)
@@ -110,12 +110,12 @@ gen_data_weighted_rf <- function(data_weighted) {
     baseline <- paste0("weighted_", rf, "_baseline") # use ei in place of energyintake everywhere
     diff <- paste0("diff_", rf)
     data_weighted_rf_wide <- data_weighted_rf_wide |>
-      dplyr::mutate(!!diff := !!sym(intervention) - !!sym(baseline))
+      dplyr::mutate(data_weighted_rf_wide[[diff]] <- data_weighted_rf_wide[[intervention]] - data_weighted_rf_wide[[baseline]])
   }
 
   data_weighted_rf_wide_collapse <- data_weighted_rf_wide |>
     dplyr::group_by(config$group) |>
-    dplyr::summarise(across(all_of(config$summary_columns),
+    dplyr::summarise(dplyr::across(config$summary_columns,
                    list(mean = ~mean(.),
                         min = ~min(.),
                         max = ~max(.))))
