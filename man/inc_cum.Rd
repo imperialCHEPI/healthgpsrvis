@@ -4,13 +4,25 @@
 \alias{inc_cum}
 \title{Plot of Cumulative Incidence Difference}
 \usage{
-inc_cum(inc, data_mean_weighted_inc_wide)
+inc_cum(
+  inc,
+  data_weighted_ds_wide_collapse,
+  scale_y_continuous_limits = NULL,
+  scale_y_continuous_breaks = ggplot2::waiver(),
+  scale_y_continuous_labels = ggplot2::waiver()
+)
 }
 \arguments{
 \item{inc}{A character string specifying the incidence to plot.
 Options are: "asthma", "ckd", "diabetes", "ischemia", "stroke".}
 
-\item{data_mean_weighted_inc_wide}{A data frame containing the weighted mean values of incidences.}
+\item{data_weighted_ds_wide_collapse}{A data frame with differences between intervention and baseline values for incidences.}
+
+\item{scale_y_continuous_limits}{A numeric vector specifying the limits of the scales for continuous y aesthetics.}
+
+\item{scale_y_continuous_breaks}{A numeric vector specifying the breaks of the scales for continuous y aesthetics.}
+
+\item{scale_y_continuous_labels}{A numeric vector specifying the labels of the scales for continuous y aesthetics.}
 }
 \value{
 A ggplot object representing the specified plot.

@@ -87,12 +87,12 @@ gen_data_weighted <- function(data) {
   return(data_weighted)
 }
 
-#' Calculate Differences for Various Metrics
+#' Calculate Differences for Risk Factors
 #'
 #' This function calculates the differences between intervention and baseline values for risk factors.
 #'
 #' @param data_weighted A data frame containing weighted mean values for various metrics.
-#' @return A data frame with differences between intervention and baseline values for various metrics.
+#' @return A data frame with differences between intervention and baseline values for risk factors.
 #' @export
 gen_data_weighted_rf <- function(data_weighted) {
   config <- load_config("default")
