@@ -2,11 +2,11 @@ Package: healthgpsrvis
 Type: Package
 Title: Visualisation Functions for Health-GPS
 Version: 0.1.0
-Author: person(given = "Saranjeet Kaur",
-           family = "Bhogal",
+Author: person(given = "Imperial College London RSE Team",
+           family = "",
            role = c("aut", "ctb"),
-           email = "s.bhogal@imperial.ac.uk")
-Maintainer: Saranjeet Kaur <s.bhogal@imperial.ac.uk>
+           email = "ict-rse-team@imperial.ac.uk")
+Maintainer: Imperial College London RSE Team <ict-rse-team@imperial.ac.uk>
 Description: A collection of functions for visualising data from the
     Health-GPS project.
 License: MIT + file LICENSE
