@@ -1,8 +1,44 @@
 default:
+# For the gen_data_weighted() function
   grouping_vars:  # Variables that are used to group the data
-    - simID
     - source
     - time
+    - simID
+  weight: # Population size of each group is used as weight
+    - count
+  weighted_vars:  # List of risk factors to calculate population weighted mean
+    - income
+    - sector
+    - sodium
+    - carbohydrate
+    - fat
+    - protein
+    - energyintake
+    - physicalactivity
+    - bmi
+    - height
+    - weight
+    - over_weight
+    - obese_weight
+    - disability_weight
+    - deaths
+    - migrations
+  prevalence_disease:  # List of disease to calculate the total prevalence number in the population
+    - prevalence_ischemicheartdisease # ihd at places
+    - prevalence_diabetes # at some places used db, check
+    - prevalence_stroke
+    - prevalence_asthma
+    - prevalence_chronickidneydisease # ckd at places
+  incidence_disease:  # List of disease to calculate the total incidence number in the population
+    - incidence_ischemicheartdisease # ihd at places
+    - incidence_diabetes # at some places used db, check
+    - incidence_stroke
+    - incidence_asthma
+    - incidence_chronickidneydisease # ckd at places
+  burden:  # List of disease burden measures
+    - yll
+    - yld
+    - daly
   group:
     - time
   group_ds:  # used in gen_data_weighted_ds as well as gen_data_weighted_burden
@@ -28,7 +64,7 @@ default:
     - diff_daly
     - diff_yld
     - diff_yll
-   summary_columns_burden_cum:  # Variables that are used to calculate the summary statistics
+  summary_columns_burden_cum:  # Variables that are used to calculate the summary statistics
     - cumdiff_daly
     - cumdiff_yld
     - cumdiff_yll
@@ -40,8 +76,6 @@ default:
   id_cols:
     - simID
     - time
-  weight: # Population size of each group is used as weight
-    - count
   rf:
    - bmi
    - ei
@@ -62,23 +96,6 @@ default:
     - total_daly
     - total_yld
     - total_yll
-  weighted_vars:  # List of risk factors to calculate population weighted mean
-    - bmi
-    - carbohydrate
-    - death
-    - disabilityweight
-    - energyintake
-    - height
-    - income
-    - fat
-    - migrations
-    - obesity
-    - overweight
-    - physicalactivity
-    - protein
-    - sector
-    - sodium
-    - weight
   disease:  # List of disease to calculate the total prevalence number or incidence number in the population
     - asthma
     - ckd
@@ -89,8 +106,3 @@ default:
     - intracerebralhemorrhage
     - ischemicstroke
     - subarachnoidhemorrhage
-  burden:  # List of disease burden measures
-    - daly
-    - yld
-    - yll
-

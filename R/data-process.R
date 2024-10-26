@@ -43,49 +43,65 @@ NULL
 #' @export
 gen_data_weighted <- function(data) {
   config <- load_config("default")
-  data_weighted <- dplyr::group_by_at(data, config$grouping_vars)
+  colnames(data) <- gsub("^mean_", "", colnames(data)) # Clean the column names by removing 'mean_'
+  weight_column <- rlang::sym(config$weight)
+  data_weighted <- data |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(config$grouping_vars))) |>
+    dplyr::mutate(prevalence_stroke = prevalence_intracerebralhemorrhage +
+                    prevalence_ischemicstroke +
+                    prevalence_subarachnoidhemorrhage,
+                  incidence_stroke = incidence_intracerebralhemorrhage +
+                    incidence_ischemicstroke +
+                    incidence_subarachnoidhemorrhage) |>
+    dplyr::summarise(
+      dplyr::across(
+        dplyr::all_of(config$weighted_vars),
+        ~ weighted.mean(.x, !!weight_column, na.rm = TRUE),
+        .names = "weighted_{.col}"
+      ),
+
+      dplyr::across(
+        dplyr::all_of(config$prevalence_disease),
+        ~ weighted.mean(.x, !!weight_column, na.rm = TRUE),
+        .names = "wprev_{stringr::str_sub(.col, 12)}"
+      ),
+
+      dplyr::across(
+        dplyr::all_of(config$prevalence_disease),
+        ~ sum(.x * !!weight_column, na.rm = TRUE),
+        .names = "prevcase_{stringr::str_sub(.col, 12)}"
+      ),
+
+      dplyr::across(
+        dplyr::all_of(config$incidence_disease),
+        ~ sum(.x * !!weight_column, na.rm = TRUE),
+        .names = "totalcase_{stringr::str_sub(.col, 11)}"
+      ),
+
+      dplyr::across(
+        dplyr::all_of(config$burden),
+        ~ sum(.x * !!weight_column, na.rm = TRUE),
+        .names = "total_{.col}"
+      ))
+
   data_weighted <- data_weighted |>
-    dplyr::mutate(data_weighted$prevalence_stroke <- data_weighted$prevalence_intracerebralhemorrhage +
-                                           data_weighted$prevalence_ischemicstroke +
-                                           data_weighted$prevalence_subarachnoidhemorrhage,
-                  data_weighted$incidence_stroke <- data_weighted$incidence_intracerebralhemorrhage +
-                                          data_weighted$incidence_ischemicstroke +
-                                          data_weighted$incidence_subarachnoidhemorrhage)
-
-    weighted_mean <- purrr::map(config$weighted_vars, function(value){
-      stats::weighted.mean(data_weighted[[value]], data_weighted$count, na.rm = TRUE)
-    })
-    names(weighted_mean) <- paste0("weighted_", config$weighted_vars)
-
-    prevalence_mean <- purrr::map(paste0("prevalence_", config$disease), function(value){
-      stats::weighted.mean(data_weighted[[value]], data_weighted$count, na.rm = TRUE)
-    })
-    names(prevalence_mean) <- paste0("wprev_", config$disease)
-
-    prevalence_sum <- purrr::map(paste0("prevalence_", config$disease), function(value){
-      sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
-    })
-    names(prevalence_sum) <- paste0("prevcase_", config$disease)
-
-    totalcase_sum <- purrr::map(paste0("incidence_", config$disease), function(value){
-      sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
-    })
-    names(totalcase_sum) <- paste0("totalcase_", config$disease)
-
-    total_sum <- purrr::map(config$burden, function(value){
-      sum(data_weighted[[value]] * data_weighted$count, na.rm = TRUE)
-    })
-    names(total_sum) <- paste0("total_", config$burden)
-
-    data_weighted <- dplyr::summarise(
-      !!!weighted_mean,
-      !!!prevalence_mean,
-      !!!prevalence_sum,
-      !!!totalcase_sum
+    dplyr::rename_with(
+      ~ stringr::str_replace_all(.x, c("deaths" = "death",
+                                       "disability_weight" = "disabilityweight",
+                                       "obese_weight" = "obesity",
+                                       "over_weight" = "overweight",
+                                       "ischemicheartdisease" = "ihd",
+                                       "chronickidneydisease" = "ckd")),
+      dplyr::matches("^(weighted_|wprev_|prevcase_|totalcase_)")
     )
 
   return(data_weighted)
 }
+
+# Define global variables to suppress notes
+utils::globalVariables(c("incidence_intracerebralhemorrhage", "incidence_ischemicstroke",
+                         "incidence_subarachnoidhemorrhage", "prevalence_intracerebralhemorrhage",
+                         "prevalence_ischemicstroke", "prevalence_subarachnoidhemorrhage"))
 
 #' Calculate Differences for Risk Factors
 #'
