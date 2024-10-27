@@ -47,61 +47,57 @@ gen_data_weighted <- function(data) {
   weight_column <- rlang::sym(config$weight)
   data_weighted <- data |>
     dplyr::group_by(dplyr::across(dplyr::all_of(config$grouping_vars))) |>
-    dplyr::mutate(prevalence_stroke = prevalence_intracerebralhemorrhage +
-                    prevalence_ischemicstroke +
-                    prevalence_subarachnoidhemorrhage,
-                  incidence_stroke = incidence_intracerebralhemorrhage +
-                    incidence_ischemicstroke +
-                    incidence_subarachnoidhemorrhage) |>
+    dplyr::mutate(
+      prevalence_stroke = prevalence_intracerebralhemorrhage +
+        prevalence_ischemicstroke +
+        prevalence_subarachnoidhemorrhage,
+      incidence_stroke = incidence_intracerebralhemorrhage +
+        incidence_ischemicstroke +
+        incidence_subarachnoidhemorrhage
+    ) |>
     dplyr::summarise(
       dplyr::across(
         dplyr::all_of(config$weighted_vars),
         ~ weighted.mean(.x, !!weight_column, na.rm = TRUE),
         .names = "weighted_{.col}"
       ),
-
       dplyr::across(
         dplyr::all_of(config$prevalence_disease),
         ~ weighted.mean(.x, !!weight_column, na.rm = TRUE),
         .names = "wprev_{stringr::str_sub(.col, 12)}"
       ),
-
       dplyr::across(
         dplyr::all_of(config$prevalence_disease),
         ~ sum(.x * !!weight_column, na.rm = TRUE),
         .names = "prevcase_{stringr::str_sub(.col, 12)}"
       ),
-
       dplyr::across(
         dplyr::all_of(config$incidence_disease),
         ~ sum(.x * !!weight_column, na.rm = TRUE),
         .names = "totalcase_{stringr::str_sub(.col, 11)}"
       ),
-
       dplyr::across(
         dplyr::all_of(config$burden),
         ~ sum(.x * !!weight_column, na.rm = TRUE),
         .names = "total_{.col}"
-      ))
+      )
+    )
 
   data_weighted <- data_weighted |>
     dplyr::rename_with(
-      ~ stringr::str_replace_all(.x, c("deaths" = "death",
-                                       "disability_weight" = "disabilityweight",
-                                       "obese_weight" = "obesity",
-                                       "over_weight" = "overweight",
-                                       "ischemicheartdisease" = "ihd",
-                                       "chronickidneydisease" = "ckd")),
+      ~ stringr::str_replace_all(.x, c(
+        "deaths" = "death",
+        "disability_weight" = "disabilityweight",
+        "obese_weight" = "obesity",
+        "over_weight" = "overweight",
+        "ischemicheartdisease" = "ihd",
+        "chronickidneydisease" = "ckd"
+      )),
       dplyr::matches("^(weighted_|wprev_|prevcase_|totalcase_)")
     )
 
   return(data_weighted)
 }
-
-# Define global variables to suppress notes
-utils::globalVariables(c("incidence_intracerebralhemorrhage", "incidence_ischemicstroke",
-                         "incidence_subarachnoidhemorrhage", "prevalence_intracerebralhemorrhage",
-                         "prevalence_ischemicstroke", "prevalence_subarachnoidhemorrhage"))
 
 #' Calculate Differences for Risk Factors
 #'
@@ -112,30 +108,44 @@ utils::globalVariables(c("incidence_intracerebralhemorrhage", "incidence_ischemi
 #' @export
 gen_data_weighted_rf <- function(data_weighted) {
   config <- load_config("default")
-  data_weighted_rf <- dplyr::select(data_weighted,
-                                    config$names_from,
-                                    config$id_cols,
-                                    config$weighted_rf)
+  data_weighted_rf <- dplyr::select(
+    data_weighted,
+    config$names_from,
+    config$id_cols,
+    config$weighted_rf
+  )
 
   data_weighted_rf_wide <- tidyr::pivot_wider(data_weighted_rf,
-                                            names_from = config$names_from,
-                                            id_cols = config$id_cols,
-                                            values_from = config$weighted_rf)
+    names_from = config$names_from,
+    id_cols = config$id_cols,
+    values_from = config$weighted_rf
+  )
 
-  for (rf in config$rf) {
-    intervention <- paste0("weighted_", rf, "_intervention")
-    baseline <- paste0("weighted_", rf, "_baseline") # use ei in place of energyintake everywhere
-    diff <- paste0("diff_", rf)
-    data_weighted_rf_wide <- data_weighted_rf_wide |>
-      dplyr::mutate(data_weighted_rf_wide[[diff]] <- data_weighted_rf_wide[[intervention]] - data_weighted_rf_wide[[baseline]])
-  }
+  data_weighted_rf_wide <- data_weighted_rf_wide |>
+    dplyr::mutate(
+      !!!stats::setNames(
+        lapply(config$rf, function(rf) {
+          data_weighted_rf_wide[[paste0("weighted_", rf, "_intervention")]] - data_weighted_rf_wide[[paste0("weighted_", rf, "_baseline")]]
+        }),
+        paste0("diff_", config$rf)
+      )
+    ) |>
+    dplyr::rename(diff_ei = diff_energyintake)
 
   data_weighted_rf_wide_collapse <- data_weighted_rf_wide |>
-    dplyr::group_by(config$group) |>
-    dplyr::summarise(dplyr::across(config$summary_columns_rf,
-                   list(mean = ~mean(.),
-                        min = ~min(.),
-                        max = ~max(.))))
+    dplyr::group_by(dplyr::across(dplyr::all_of(config$group))) |>
+    dplyr::summarise(
+      dplyr::across(
+        dplyr::all_of(config$summary_columns_rf),
+        list(
+          mean = ~ mean(.x, na.rm = TRUE),
+          min = ~ min(.x, na.rm = TRUE),
+          max = ~ max(.x, na.rm = TRUE)
+        ),
+        .names = "{.col}_{.fn}"
+      ),
+      .groups = "drop"
+    )
 
   return(data_weighted_rf_wide_collapse)
 }
@@ -149,22 +159,25 @@ gen_data_weighted_rf <- function(data_weighted) {
 #' @export
 gen_data_weighted_ds <- function(data_weighted) {
   config <- load_config("default")
-  data_weighted_ds <- dplyr::select(data_weighted,
-                                    config$names_from,
-                                    config$id_cols,
-                                    config$weighted_ds)
+  data_weighted_ds <- dplyr::select(
+    data_weighted,
+    config$names_from,
+    config$id_cols,
+    config$weighted_ds
+  )
 
   data_weighted_ds_wide <- tidyr::pivot_wider(data_weighted_ds,
-                                             names_from = config$names_from,
-                                             id_cols = config$id_cols,
-                                             values_from = config$weighted_ds)
+    names_from = config$names_from,
+    id_cols = config$id_cols,
+    values_from = config$weighted_ds
+  )
 
   for (disease in config$disease) {
     intervention <- paste0("totalcase_", disease, "_intervention")
     baseline <- paste0("totalcase_", disease, "_baseline")
     diff <- paste0("diff_inc", disease)
     data_weighted_ds_wide <- data_weighted_ds_wide |>
-      dplyr::mutate(data_weighted_ds_wide[[diff]] <- 100*(data_weighted_ds_wide[[intervention]] - data_weighted_ds_wide[[baseline]]))
+      dplyr::mutate(data_weighted_ds_wide[[diff]] <- 100 * (data_weighted_ds_wide[[intervention]] - data_weighted_ds_wide[[baseline]]))
   }
 
   for (ds in config$summary_columns_ds) {
@@ -176,10 +189,14 @@ gen_data_weighted_ds <- function(data_weighted) {
 
   data_weighted_ds_wide_collapse <- data_weighted_ds_wide |>
     dplyr::group_by(config$group) |>
-    dplyr::summarise(dplyr::across(config$summary_columns_ds_cum,
-                                   list(mean = ~mean(.),
-                                        min = ~min(.),
-                                        max = ~max(.))))
+    dplyr::summarise(dplyr::across(
+      config$summary_columns_ds_cum,
+      list(
+        mean = ~ mean(.),
+        min = ~ min(.),
+        max = ~ max(.)
+      )
+    ))
 
   return(data_weighted_ds_wide_collapse)
 }
@@ -193,22 +210,25 @@ gen_data_weighted_ds <- function(data_weighted) {
 #' @export
 gen_data_weighted_burden <- function(data_weighted) {
   config <- load_config("default")
-  data_weighted_burden <- dplyr::select(data_weighted,
-                                        config$names_from,
-                                        config$id_cols,
-                                        config$weighted_burden)
+  data_weighted_burden <- dplyr::select(
+    data_weighted,
+    config$names_from,
+    config$id_cols,
+    config$weighted_burden
+  )
 
   data_weighted_burden_wide <- tidyr::pivot_wider(data_weighted_burden,
-                                                names_from = config$names_from,
-                                                id_cols = config$id_cols,
-                                                values_from = config$weighted_burden)
+    names_from = config$names_from,
+    id_cols = config$id_cols,
+    values_from = config$weighted_burden
+  )
 
   for (burden in config$burden) {
     intervention <- paste0("total_", burden, "_intervention")
     baseline <- paste0("total_", burden, "_baseline")
     diff <- paste0("diff_", burden)
     data_weighted_burden_wide <- data_weighted_burden_wide |>
-      dplyr::mutate(data_weighted_burden_wide[[diff]] <- (data_weighted_burden_wide[[intervention]] - data_weighted_burden_wide[[baseline]])/1000)
+      dplyr::mutate(data_weighted_burden_wide[[diff]] <- (data_weighted_burden_wide[[intervention]] - data_weighted_burden_wide[[baseline]]) / 1000)
   }
 
   for (burden in config$summary_columns_burden) {
@@ -220,10 +240,14 @@ gen_data_weighted_burden <- function(data_weighted) {
 
   data_weighted_burden_wide_collapse <- data_weighted_burden_wide |>
     dplyr::group_by(config$group) |>
-    dplyr::summarise(dplyr::across(config$summary_columns_burden_cum,
-                                   list(mean = ~mean(.),
-                                        min = ~min(.),
-                                        max = ~max(.))))
+    dplyr::summarise(dplyr::across(
+      config$summary_columns_burden_cum,
+      list(
+        mean = ~ mean(.),
+        min = ~ min(.),
+        max = ~ max(.)
+      )
+    ))
 
   return(data_weighted_burden_wide_collapse)
 }
@@ -236,7 +260,6 @@ gen_data_weighted_burden <- function(data_weighted) {
 #' @return A data frame with spline smoothing applied for burden of disease.
 #' @export
 gen_data_weighted_burden_spline <- function(data_weighted_burden) {
-
   ## This function is data smoothing
   ## It is applied manually now in India project due to abnormal positive values in diff_daly or cumdiff_daly
 
@@ -257,8 +280,9 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden) {
 
   ## New data frame
   data_weighted_burden_spline <- data.frame(time = seq(min(data_weighted_burden$time),
-                                                       max(data_weighted_burden$time),
-                                                       length.out = 34))
+    max(data_weighted_burden$time),
+    length.out = 34
+  ))
 
   ## Fit spline and predict
   spline_fit <- splines::interpSpline(data_weighted_burden_mean$time, data_weighted_burden_mean$cumdiff_daly_mean)
@@ -272,9 +296,9 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden) {
   data_weighted_burden_spline$cumdiff_daly_max <- stats::predict(spline_fit_max, data_weighted_burden_spline$time)$y
 
   ## Keep 0 values in the first two years, before policy implementation
-  data_weighted_burden_spline$cumdiff_daly_mean <- ifelse(data_weighted_burden_spline$time<2024, 0, data_weighted_burden_spline$cumdiff_daly_mean)
-  data_weighted_burden_spline$cumdiff_daly_min <- ifelse(data_weighted_burden_spline$time<2024, 0, data_weighted_burden_spline$cumdiff_daly_min)
-  data_weighted_burden_spline$cumdiff_daly_max <- ifelse(data_weighted_burden_spline$time<2024, 0, data_weighted_burden_spline$cumdiff_daly_max)
+  data_weighted_burden_spline$cumdiff_daly_mean <- ifelse(data_weighted_burden_spline$time < 2024, 0, data_weighted_burden_spline$cumdiff_daly_mean)
+  data_weighted_burden_spline$cumdiff_daly_min <- ifelse(data_weighted_burden_spline$time < 2024, 0, data_weighted_burden_spline$cumdiff_daly_min)
+  data_weighted_burden_spline$cumdiff_daly_max <- ifelse(data_weighted_burden_spline$time < 2024, 0, data_weighted_burden_spline$cumdiff_daly_max)
 
   return(data_weighted_burden_spline)
 }
@@ -287,38 +311,57 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden) {
 #' @return A data frame with life expectancy.
 #' @export
 gen_data_le <- function(data_mean) {
-  data_le <- data_mean[,c(data_mean$source,
-                          data_mean$time,
-                          data_mean$gender,
-                          data_mean$age,
-                          data_mean$count,
-                          data_mean$deaths,
-                          data_mean$migrations)]
+  data_le <- data_mean[, c(
+    data_mean$source,
+    data_mean$time,
+    data_mean$gender,
+    data_mean$age,
+    data_mean$count,
+    data_mean$deaths,
+    data_mean$migrations
+  )]
   data_le$timediff <- data_le$time - 2023
   # calculate the population considering both dead and alive
   # count is survivors, deaths = dead pop/count
-  data_le$count_both <- data_le$count*data_le$deaths+data_le$count
+  data_le$count_both <- data_le$count * data_le$deaths + data_le$count
   # calculate life expectancy px at each age
-  data_le <- data_le[order(data_le$source,
-                           data_le$timediff,
-                           -data_le$age),]
+  data_le <- data_le[order(
+    data_le$source,
+    data_le$timediff,
+    -data_le$age
+  ), ]
   data_le <- data_le |>
-    dplyr::group_by(data_le$source,
-                    data_le$timediff) |>
-    dplyr::mutate(tx = cumsum(data_le$count),
-                  px = data_le$tx/data_le$count)
+    dplyr::group_by(
+      data_le$source,
+      data_le$timediff
+    ) |>
+    dplyr::mutate(
+      tx = cumsum(data_le$count),
+      px = data_le$tx / data_le$count
+    )
   ## calculate period life expectancy as weighted sum of life expectancy at each age ##
   data_ple <- data_le |>
-    dplyr::group_by(data_le$source,
-                    data_le$timediff) |>
-    dplyr::summarise(ple = stats::weighted.mean(data_le$px,data_le$count_both))
+    dplyr::group_by(
+      data_le$source,
+      data_le$timediff
+    ) |>
+    dplyr::summarise(ple = stats::weighted.mean(data_le$px, data_le$count_both))
 
   ## calculate difference between baseline and intervention ##
   data_ple_wide <- tidyr::pivot_wider(data_ple,
-                               names_from=data_ple$source,
-                               id_cols = data_ple$timediff,
-                               values_from = c(data_ple$ple))
+    names_from = data_ple$source,
+    id_cols = data_ple$timediff,
+    values_from = c(data_ple$ple)
+  )
   data_ple_wide$diff <- data_ple_wide$intervention - data_ple_wide$baseline
 
   return(data_ple_wide)
 }
+
+# Define global variables to suppress notes
+utils::globalVariables(c(
+  "incidence_intracerebralhemorrhage", "incidence_ischemicstroke",
+  "incidence_subarachnoidhemorrhage", "prevalence_intracerebralhemorrhage",
+  "prevalence_ischemicstroke", "prevalence_subarachnoidhemorrhage",
+  "diff_energyintake"
+))
