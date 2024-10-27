@@ -3,12 +3,16 @@
 #' This function closes all existing graphical devices and opens a new one
 #' with specified width and height dimensions.
 #'
-#' @param width Numeric value specifying the width of the new plotting device in centimeters.
-#' @param height Numeric value specifying the height of the new plotting device in centimeters.
+#' @param width Numeric value specifying the width of the new plotting device
+#' in centimeters.
+#' @param height Numeric value specifying the height of the new plotting device
+#' in centimeters.
 #'
 #' @details
-#' The `set_graphics` function first closes all open graphical devices using `graphics.off()`.
-#' It then opens a new graphical device with the given dimensions using `dev.new()`.
+#' The `set_graphics` function first closes all open graphical devices
+#' using `graphics.off()`.
+#' It then opens a new graphical device with the given dimensions using
+#' `dev.new()`.
 #' The `unit` parameter is set to "cm" to use centimeters for the dimensions,
 #' and `noRStudioGD` is set to `TRUE` to avoid using RStudio's graphical device.
 #'
@@ -31,25 +35,33 @@ set_graphics <- function(width, height) {
 
 #' Customised theme for ggplot2
 #'
-#' This function creates a customised theme for ggplot2 plots. It modifies various
+#' This function creates a customised theme for ggplot2 plots. It modifies
+#' various
 #' elements of the default `theme_classic()` to provide a specific style.
 #'
-#' @return A ggplot2 theme object with customised settings for plot title, axis titles,
-#' axis text, legend text, legend title, major grid lines, legend key background, and legend position.
+#' @return A ggplot2 theme object with customised settings for plot title,
+#' axis titles,
+#' axis text, legend text, legend title, major grid lines, legend key
+#' background, and legend position.
 #'
 #' @details
-#' The `hgps_theme` function modifies the following elements of the classic theme:
+#' The `hgps_theme` function modifies the following elements of the classic
+#' theme:
 #' \itemize{
 #'   \item `plot.title`: Sets the font size of the plot title (default is 15).
-#'   \item `axis.title.x`: Sets the font size of the x-axis title (default is 10).
-#'   \item `axis.title.y`: Sets the font size of the y-axis title (default is 10).
+#'   \item `axis.title.x`: Sets the font size of the x-axis title
+#'   (default is 10).
+#'   \item `axis.title.y`: Sets the font size of the y-axis title
+#'   (default is 10).
 #'   \item `axis.text.x`: Sets the font size of the x-axis text (default is 8).
 #'   \item `axis.text.y`: Sets the font size of the y-axis text (default is 8).
 #'   \item `legend.text`: Sets the font size of the legend text (default is 8).
 #'   \item `legend.title`: Removes the legend title.
 #'   \item `panel.grid.major.x`: Adds major grid lines on the x-axis.
-#'   \item `legend.key`: Sets the legend key background (default is "transparent").
-#'   \item `legend.position`: Positions the legend (default coordinates are (0.8, 0.9)).
+#'   \item `legend.key`: Sets the legend key background
+#'   (default is "transparent").
+#'   \item `legend.position`: Positions the legend (default
+#'   coordinates are (0.8, 0.9)).
 #' }
 #'
 #' @examples
@@ -79,7 +91,8 @@ hgps_theme <- function() {
 
 #' Format numbers to 2 decimal places
 #'
-#' This function formats a numeric vector to display numbers with 2 decimal places.
+#' This function formats a numeric vector to display numbers with 2 decimal
+#' places.
 #'
 #' @param x Numeric vector to be formatted.
 #' @return A character vector with numbers formatted to 2 decimal places.
