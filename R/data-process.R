@@ -167,36 +167,47 @@ gen_data_weighted_ds <- function(data_weighted) {
   )
 
   data_weighted_ds_wide <- tidyr::pivot_wider(data_weighted_ds,
-    names_from = config$names_from,
-    id_cols = config$id_cols,
-    values_from = config$weighted_ds
+                                              names_from = config$names_from,
+                                              id_cols = config$id_cols,
+                                              values_from = config$weighted_ds
   )
 
-  for (disease in config$disease) {
-    intervention <- paste0("totalcase_", disease, "_intervention")
-    baseline <- paste0("totalcase_", disease, "_baseline")
-    diff <- paste0("diff_inc", disease)
-    data_weighted_ds_wide <- data_weighted_ds_wide |>
-      dplyr::mutate(data_weighted_ds_wide[[diff]] <- 100 * (data_weighted_ds_wide[[intervention]] - data_weighted_ds_wide[[baseline]]))
-  }
+  data_weighted_ds_wide <- data_weighted_ds_wide |>
+    dplyr::mutate(
+      !!!stats::setNames(
+        lapply(config$disease, function(ds) {
+          100 * (data_weighted_ds_wide[[paste0("totalcase_", ds, "_intervention")]] - data_weighted_ds_wide[[paste0("totalcase_", ds, "_baseline")]])
+        }),
+        paste0("diff_inc_", config$disease)
+      )
+    ) |>
+    dplyr::rename(diff_inc_db = diff_inc_diabetes)
 
-  for (ds in config$summary_columns_ds) {
-    data_weighted_ds_wide <- data_weighted_ds_wide |>
-      dplyr::group_by(config$group_ds) |>
-      dplyr::mutate(data_weighted_ds_wide[[paste0("cum", ds)]] <- cumsum(data_weighted_ds_wide[[ds]])) |>
-      dplyr::ungroup()
-  }
+  data_weighted_ds_wide <- data_weighted_ds_wide |>
+    dplyr::group_by(
+      dplyr::across(
+        dplyr::all_of(config$group_ds))) |>
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::all_of(config$summary_columns_ds),
+        cumsum,
+        .names = "cum{.col}"
+        ))
 
   data_weighted_ds_wide_collapse <- data_weighted_ds_wide |>
-    dplyr::group_by(config$group) |>
-    dplyr::summarise(dplyr::across(
-      config$summary_columns_ds_cum,
-      list(
-        mean = ~ mean(.),
-        min = ~ min(.),
-        max = ~ max(.)
-      )
-    ))
+    dplyr::group_by(
+      dplyr::across(
+        dplyr::all_of(config$group))) |>
+    dplyr::summarise(
+      dplyr::across(
+        dplyr::all_of(config$summary_columns_ds_cum),
+        list(mean = ~ mean(.x, na.rm = TRUE),
+             min = ~ min(.x, na.rm = TRUE),
+             max = ~ max(.x, na.rm = TRUE)),
+        .names = "{stringr::str_sub(.col, 4)}_{.fn}"
+      ),
+      .groups = "drop"
+    )
 
   return(data_weighted_ds_wide_collapse)
 }
@@ -363,5 +374,5 @@ utils::globalVariables(c(
   "incidence_intracerebralhemorrhage", "incidence_ischemicstroke",
   "incidence_subarachnoidhemorrhage", "prevalence_intracerebralhemorrhage",
   "prevalence_ischemicstroke", "prevalence_subarachnoidhemorrhage",
-  "diff_energyintake"
+  "diff_energyintake", "diff_inc_diabetes"
 ))

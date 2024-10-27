@@ -62,20 +62,33 @@ default:
     - diff_ei
     - diff_bmi
     - diff_obesity
+  # For the gen_data_weighted_ds() function
+  weighted_ds:
+    - totalcase_ihd
+    - totalcase_diabetes
+    - totalcase_stroke
+    - totalcase_asthma
+    - totalcase_ckd
+  disease:  # List of disease to calculate the total prevalence number or incidence number in the population
+    - ihd
+    - diabetes # at some places used db, check
+    - stroke
+    - asthma
+    - ckd
   group_ds:  # used in gen_data_weighted_ds as well as gen_data_weighted_burden
     - simID
   summary_columns_ds:  # Variables that are used to calculate the summary statistics
+    - diff_inc_ihd
+    - diff_inc_db
+    - diff_inc_stroke
     - diff_inc_asthma
     - diff_inc_ckd
-    - diff_inc_diabetes
-    - diff_inc_ihd
-    - diff_inc_stroke
   summary_columns_ds_cum:  # Variables that are used to calculate the summary statistics
+    - cumdiff_inc_ihd
+    - cumdiff_inc_db
+    - cumdiff_inc_stroke
     - cumdiff_inc_asthma
     - cumdiff_inc_ckd
-    - cumdiff_inc_db
-    - cumdiff_inc_ihd
-    - cumdiff_inc_stroke
   summary_columns_burden:  # Variables that are used to calculate the summary statistics
     - diff_daly
     - diff_yld
@@ -87,22 +100,10 @@ default:
     - diff_daly
     - diff_yld
     - diff_yll
-  weighted_ds:
-    - totalcase_asthma
-    - totalcase_ckd
-    - totalcase_diabetes
-    - totalcase_ihd
-    - totalcase_stroke
   weighted_burden:
     - total_daly
     - total_yld
     - total_yll
-  disease:  # List of disease to calculate the total prevalence number or incidence number in the population
-    - asthma
-    - ckd
-    - diabetes # at some places used db, check
-    - ihd
-    - stroke
   stroke:
     - intracerebralhemorrhage
     - ischemicstroke
