@@ -33,8 +33,8 @@ The \code{hgps_theme} function modifies the following elements of the classic th
 \dontrun{
 library(ggplot2)
 ggplot(mtcars, aes(x = wt, y = mpg)) +
-    geom_point() +
-    hgps_theme()
+  geom_point() +
+  hgps_theme()
 }
 
 }
