@@ -35,14 +35,10 @@ default:
     - incidence_stroke
     - incidence_asthma
     - incidence_chronickidneydisease # ckd at places
-  burden:  # List of disease burden measures
-    - yll
-    - yld
-    - daly
   # For the gen_data_weighted_rf() function
-  names_from:
+  names_from: # Also used in gen_data_weighted_burden
     - source
-  id_cols:
+  id_cols: # Also used in gen_data_weighted_burdens
     - time
     - simID
   weighted_rf:
@@ -56,7 +52,7 @@ default:
     - bmi
     - obesity
   group:
-    - time
+    - time # Also used in gen_data_weighted_burden
   summary_columns_rf:  # Variables that are used to calculate the summary statistics
     - diff_sodium
     - diff_ei
@@ -75,7 +71,7 @@ default:
     - stroke
     - asthma
     - ckd
-  group_ds:  # used in gen_data_weighted_ds as well as gen_data_weighted_burden
+  group_ds:  # Also used in gen_data_weighted_burden
     - simID
   summary_columns_ds:  # Variables that are used to calculate the summary statistics
     - diff_inc_ihd
@@ -89,21 +85,26 @@ default:
     - cumdiff_inc_stroke
     - cumdiff_inc_asthma
     - cumdiff_inc_ckd
+  # For the gen_data_weighted_burden() function
+  weighted_burden:
+    - total_yll
+    - total_yld
+    - total_daly
+  burden:  # List of disease burden measures
+    - yll
+    - yld
+    - daly
   summary_columns_burden:  # Variables that are used to calculate the summary statistics
     - diff_daly
-    - diff_yld
     - diff_yll
+    - diff_yld
   summary_columns_burden_cum:  # Variables that are used to calculate the summary statistics
-    - cumdiff_daly
-    - cumdiff_yld
-    - cumdiff_yll
     - diff_daly
-    - diff_yld
     - diff_yll
-  weighted_burden:
-    - total_daly
-    - total_yld
-    - total_yll
+    - diff_yld
+    - cumdiff_daly
+    - cumdiff_yll
+    - cumdiff_yld
   stroke:
     - intracerebralhemorrhage
     - ischemicstroke

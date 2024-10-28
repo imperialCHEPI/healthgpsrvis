@@ -114,3 +114,33 @@ test_that("Columns in the generated dataframe", {
 })
 
 # Testing gen_data_weighted_burden() function
+test_that("Columns in the generated dataframe", {
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
+
+  # Generate the weighted data for the risk factors (using 'bd' instead of
+  # 'burden' to keep lintr happy)
+  data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+
+  # Check if the data has the expected number of columns
+  expect_equal(ncol(data_weighted_bd_wide_collapse), 19)
+
+  # Check if the data has the expected column names
+  expect_equal(
+    colnames(data_weighted_bd_wide_collapse),
+    c(
+      "time", "diff_daly_mean", "diff_daly_min", "diff_daly_max",
+      "diff_yll_mean", "diff_yll_min", "diff_yll_max", "diff_yld_mean",
+      "diff_yld_min", "diff_yld_max", "cumdiff_daly_mean", "cumdiff_daly_min",
+      "cumdiff_daly_max", "cumdiff_yll_mean", "cumdiff_yll_min",
+      "cumdiff_yll_max", "cumdiff_yld_mean", "cumdiff_yld_min",
+      "cumdiff_yld_max"
+    )
+  )
+})

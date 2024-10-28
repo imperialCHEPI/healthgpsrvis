@@ -167,9 +167,9 @@ gen_data_weighted_ds <- function(data_weighted) {
   )
 
   data_weighted_ds_wide <- tidyr::pivot_wider(data_weighted_ds,
-                                              names_from = config$names_from,
-                                              id_cols = config$id_cols,
-                                              values_from = config$weighted_ds
+    names_from = config$names_from,
+    id_cols = config$id_cols,
+    values_from = config$weighted_ds
   )
 
   data_weighted_ds_wide <- data_weighted_ds_wide |>
@@ -186,24 +186,31 @@ gen_data_weighted_ds <- function(data_weighted) {
   data_weighted_ds_wide <- data_weighted_ds_wide |>
     dplyr::group_by(
       dplyr::across(
-        dplyr::all_of(config$group_ds))) |>
+        dplyr::all_of(config$group_ds)
+      )
+    ) |>
     dplyr::mutate(
       dplyr::across(
         dplyr::all_of(config$summary_columns_ds),
         cumsum,
         .names = "cum{.col}"
-        ))
+      )
+    )
 
   data_weighted_ds_wide_collapse <- data_weighted_ds_wide |>
     dplyr::group_by(
       dplyr::across(
-        dplyr::all_of(config$group))) |>
+        dplyr::all_of(config$group)
+      )
+    ) |>
     dplyr::summarise(
       dplyr::across(
         dplyr::all_of(config$summary_columns_ds_cum),
-        list(mean = ~ mean(.x, na.rm = TRUE),
-             min = ~ min(.x, na.rm = TRUE),
-             max = ~ max(.x, na.rm = TRUE)),
+        list(
+          mean = ~ mean(.x, na.rm = TRUE),
+          min = ~ min(.x, na.rm = TRUE),
+          max = ~ max(.x, na.rm = TRUE)
+        ),
         .names = "{stringr::str_sub(.col, 4)}_{.fn}"
       ),
       .groups = "drop"
@@ -221,6 +228,7 @@ gen_data_weighted_ds <- function(data_weighted) {
 #' @export
 gen_data_weighted_burden <- function(data_weighted) {
   config <- load_config("default")
+
   data_weighted_burden <- dplyr::select(
     data_weighted,
     config$names_from,
@@ -234,31 +242,48 @@ gen_data_weighted_burden <- function(data_weighted) {
     values_from = config$weighted_burden
   )
 
-  for (burden in config$burden) {
-    intervention <- paste0("total_", burden, "_intervention")
-    baseline <- paste0("total_", burden, "_baseline")
-    diff <- paste0("diff_", burden)
-    data_weighted_burden_wide <- data_weighted_burden_wide |>
-      dplyr::mutate(data_weighted_burden_wide[[diff]] <- (data_weighted_burden_wide[[intervention]] - data_weighted_burden_wide[[baseline]]) / 1000)
-  }
+  data_weighted_burden_wide <- data_weighted_burden_wide |>
+    dplyr::mutate(
+      !!!stats::setNames(
+        lapply(config$burden, function(value) {
+          (data_weighted_burden_wide[[paste0("total_", value, "_intervention")]] - data_weighted_burden_wide[[paste0("total_", value, "_baseline")]]) / 1000
+        }),
+        paste0("diff_", config$burden)
+      )
+    )
 
-  for (burden in config$summary_columns_burden) {
-    data_weighted_burden_wide <- data_weighted_burden_wide |>
-      dplyr::group_by(config$group_ds) |>
-      dplyr::mutate(data_weighted_burden_wide[[paste0("cum", burden)]] <- cumsum(data_weighted_burden_wide[[burden]])) |>
-      dplyr::ungroup()
-  }
+  data_weighted_burden_wide <- data_weighted_burden_wide |>
+    dplyr::group_by(
+      dplyr::across(
+        dplyr::all_of(config$group_ds)
+      )
+    ) |>
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::all_of(config$summary_columns_burden),
+        cumsum,
+        .names = "cum{.col}"
+      )
+    )
 
   data_weighted_burden_wide_collapse <- data_weighted_burden_wide |>
-    dplyr::group_by(config$group) |>
-    dplyr::summarise(dplyr::across(
-      config$summary_columns_burden_cum,
-      list(
-        mean = ~ mean(.),
-        min = ~ min(.),
-        max = ~ max(.)
+    dplyr::group_by(
+      dplyr::across(
+        dplyr::all_of(config$group)
       )
-    ))
+    ) |>
+    dplyr::summarise(
+      dplyr::across(
+        dplyr::all_of(config$summary_columns_burden_cum),
+        list(
+          mean = ~ mean(.x, na.rm = TRUE),
+          min = ~ min(.x, na.rm = TRUE),
+          max = ~ max(.x, na.rm = TRUE)
+        ),
+        .names = "{.col}_{.fn}"
+      ),
+      .groups = "drop"
+    )
 
   return(data_weighted_burden_wide_collapse)
 }
