@@ -4,10 +4,10 @@
 \alias{gen_data_weighted_burden_spline}
 \title{Perform data smoothing}
 \usage{
-gen_data_weighted_burden_spline(data_weighted_burden)
+gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
 }
 \arguments{
-\item{data_weighted_burden}{A data frame containing weighted values for burden of disease.}
+\item{data_weighted_burden_wide_collapse}{A data frame containing weighted values for burden of disease.}
 }
 \value{
 A data frame with spline smoothing applied for burden of disease.

@@ -15,25 +15,31 @@ riskfactors <- function(riskft, data_mean_weighted) {
   }
 
   y_label <- switch(riskft,
-                    bmi = "BMI (weighted)",
-                    ei = "Energy intake (weighted)",
-                    fat = "Fat (weighted)",
-                    obese = "Obesity (weighted)",
-                    protein = "Protein (weighted)",
-                    sodium = "Sodium (weighted)")
+    bmi = "BMI (weighted)",
+    ei = "Energy intake (weighted)",
+    fat = "Fat (weighted)",
+    obese = "Obesity (weighted)",
+    protein = "Protein (weighted)",
+    sodium = "Sodium (weighted)"
+  )
 
   y_value <- switch(riskft,
-                    bmi = "weighted_bmi",
-                    ei = "weighted_energyintake",
-                    fat = "weighted_fat",
-                    obese = "weighted_obesity",
-                    protein = "weighted_protein",
-                    sodium = "weighted_sodium")
+    bmi = "weighted_bmi",
+    ei = "weighted_energyintake",
+    fat = "weighted_fat",
+    obese = "weighted_obesity",
+    protein = "weighted_protein",
+    sodium = "weighted_sodium"
+  )
 
-  ggplot2::ggplot(data = data_mean_weighted,
-                  ggplot2::aes(x = data_mean_weighted$time,
-                               y = get(y_value),
-                               group = source)) +
+  ggplot2::ggplot(
+    data = data_mean_weighted,
+    ggplot2::aes(
+      x = data_mean_weighted$time,
+      y = get(y_value),
+      group = source
+    )
+  ) +
     ggplot2::geom_line(ggplot2::aes(col = source), linewidth = 1) +
     ggplot2::ggtitle(toupper(riskft)) +
     ggplot2::xlab("Year") +
@@ -69,53 +75,68 @@ riskfactors_diff <- function(riskft_diff,
   }
 
   y_label <- switch(riskft_diff,
-                    bmi = "BMI",
-                    ei = "Energy",
-                    obesity = "Obesity",
-                    sodium = "Sodium")
+    bmi = "BMI",
+    ei = "Energy",
+    obesity = "Obesity",
+    sodium = "Sodium"
+  )
 
   y_value <- switch(riskft_diff,
-                    bmi = "diff_bmi_mean",
-                    ei = "diff_ei_mean",
-                    obesity = "diff_obesity_mean",
-                    sodium = "diff_sodium_mean")
+    bmi = "diff_bmi_mean",
+    ei = "diff_ei_mean",
+    obesity = "diff_obesity_mean",
+    sodium = "diff_sodium_mean"
+  )
 
   y_min <- switch(riskft_diff,
-                  bmi = "diff_bmi_min",
-                  ei = "diff_ei_min",
-                  obesity = "diff_obesity_min",
-                  sodium = "diff_sodium_min")
+    bmi = "diff_bmi_min",
+    ei = "diff_ei_min",
+    obesity = "diff_obesity_min",
+    sodium = "diff_sodium_min"
+  )
 
   y_max <- switch(riskft_diff,
-                  bmi = "diff_bmi_max",
-                  ei = "diff_ei_max",
-                  obesity = "diff_obesity_max",
-                  sodium = "diff_sodium_max")
+    bmi = "diff_bmi_max",
+    ei = "diff_ei_max",
+    obesity = "diff_obesity_max",
+    sodium = "diff_sodium_max"
+  )
 
   plot_title <- switch(riskft_diff,
-                       bmi = "Reduction in BMI by income class",
-                       ei = "Reduction in energy intake (kcal) by income class",
-                       obesity = "Reduction in obesity prevalence by income class",
-                       sodium = "Reduction in sodium (mg) by income class")
+    bmi = "Reduction in BMI by income class",
+    ei = "Reduction in energy intake (kcal) by income class",
+    obesity = "Reduction in obesity prevalence by income class",
+    sodium = "Reduction in sodium (mg) by income class"
+  )
 
-  ggplot2::ggplot(data = data_weighted_rf_wide_collapse,
-                  ggplot2::aes(x = data_weighted_rf_wide_collapse$time,
-                               y = get(y_value),
-                               colour = data_weighted_rf_wide_collapse$income)) +
+  ggplot2::ggplot(
+    data = data_weighted_rf_wide_collapse,
+    ggplot2::aes(
+      x = data_weighted_rf_wide_collapse$time,
+      y = get(y_value),
+      colour = data_weighted_rf_wide_collapse$income
+    )
+  ) +
     ggplot2::geom_line(linewidth = 1) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = y_min,
-                                      ymax = y_max),
-                         alpha = 0.2) +
+    ggplot2::geom_ribbon(
+      ggplot2::aes(
+        ymin = y_min,
+        ymax = y_max
+      ),
+      alpha = 0.2
+    ) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
     ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-    ggplot2::scale_y_continuous(limits = scale_y_continuous_limits,
-                       breaks = scale_y_continuous_breaks,
-                       labels = scale_y_continuous_labels) +
+    ggplot2::scale_y_continuous(
+      limits = scale_y_continuous_limits,
+      breaks = scale_y_continuous_breaks,
+      labels = scale_y_continuous_labels
+    ) +
     ggplot2::labs(alt = "A line plot showing the reduction in a specified risk factor under intervention over time") +
     hgps_theme() +
-    ggplot2::theme(legend.position.inside = c(0.85,0.22))
+    ggplot2::theme(legend.position.inside = c(0.85, 0.22))
 }
 
 #' Plot of Incidence Difference
@@ -135,37 +156,45 @@ inc_diff <- function(inc, data_mean_weighted_inc_wide) {
   }
 
   y_label <- switch(inc,
-                    asthma = "Asthma incidence",
-                    ckd = "CKD incidence",
-                    diabetes = "Diabetes incidence",
-                    ischemia = "Ischemia incidence",
-                    stroke = "Stroke incidence")
+    asthma = "Asthma incidence",
+    ckd = "CKD incidence",
+    diabetes = "Diabetes incidence",
+    ischemia = "Ischemia incidence",
+    stroke = "Stroke incidence"
+  )
 
   y_value <- switch(inc,
-                    asthma = "diff_asthma",
-                    ckd = "diff_ckd",
-                    diabetes = "diff_diabetes",
-                    ischemia = "diff_ihd",
-                    stroke = "diff_stroke")
+    asthma = "diff_asthma",
+    ckd = "diff_ckd",
+    diabetes = "diff_diabetes",
+    ischemia = "diff_ihd",
+    stroke = "diff_stroke"
+  )
 
   plot_title <- switch(inc,
-                       asthma = "Asthma - Reduction in incidence number",
-                       ckd = "Chronic kidney disease - Reduction in incidence number",
-                       diabetes = "Diabetes - Reduction in incidence number",
-                       ischemia = "Ischemic heart disease - Reduction in incidence number",
-                       stroke = "Stroke - Reduction in incidence number")
+    asthma = "Asthma - Reduction in incidence number",
+    ckd = "Chronic kidney disease - Reduction in incidence number",
+    diabetes = "Diabetes - Reduction in incidence number",
+    ischemia = "Ischemic heart disease - Reduction in incidence number",
+    stroke = "Stroke - Reduction in incidence number"
+  )
 
-  ggplot2::ggplot(data = data_mean_weighted_inc_wide,
-                  ggplot2::aes(data_mean_weighted_inc_wide$timediff,
-                               y = get(y_value))) +
+  ggplot2::ggplot(
+    data = data_mean_weighted_inc_wide,
+    ggplot2::aes(data_mean_weighted_inc_wide$timediff,
+      y = get(y_value)
+    )
+  ) +
     ggplot2::geom_line(colour = "red", linewidth = 1) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
     ggplot2::scale_y_continuous(labels = scales::comma) +
-    ggplot2::scale_x_continuous(limits = c(-3, 32),
-                     breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
-                     labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::scale_x_continuous(
+      limits = c(-3, 32),
+      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
+      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)
+    ) +
     ggplot2::labs(alt = "A line plot showing the reduction in a specified incidence number over time") +
     hgps_theme()
 }
@@ -194,59 +223,73 @@ inc_cum <- function(inc,
   }
 
   y_label <- switch(inc,
-                    asthma = "Asthma incidence",
-                    ckd = "CKD incidence",
-                    diabetes = "Diabetes incidence",
-                    ischemia = "Ischemia incidence",
-                    stroke = "Stroke incidence")
+    asthma = "Asthma incidence",
+    ckd = "CKD incidence",
+    diabetes = "Diabetes incidence",
+    ischemia = "Ischemia incidence",
+    stroke = "Stroke incidence"
+  )
 
   y_value <- switch(inc,
-                    asthma = "cumdiff_inc_asthma_mean",
-                    ckd = "cumdiff_inc_ckd_mean",
-                    diabetes = "cumdiff_inc_db_mean",
-                    ischemia = "cumdiff_inc_ihd_mean",
-                    stroke = "cumdiff_inc_stroke_mean")
+    asthma = "cumdiff_inc_asthma_mean",
+    ckd = "cumdiff_inc_ckd_mean",
+    diabetes = "cumdiff_inc_db_mean",
+    ischemia = "cumdiff_inc_ihd_mean",
+    stroke = "cumdiff_inc_stroke_mean"
+  )
 
   y_min <- switch(inc,
-                  asthma = "cumdiff_inc_asthma_min",
-                  ckd = "cumdiff_inc_ckd_min",
-                  diabetes = "cumdiff_inc_db_min",
-                  ischemia = "cumdiff_inc_ihd_min",
-                  stroke = "cumdiff_inc_stroke_min")
+    asthma = "cumdiff_inc_asthma_min",
+    ckd = "cumdiff_inc_ckd_min",
+    diabetes = "cumdiff_inc_db_min",
+    ischemia = "cumdiff_inc_ihd_min",
+    stroke = "cumdiff_inc_stroke_min"
+  )
 
   y_max <- switch(inc,
-                  asthma = "cumdiff_inc_asthma_max",
-                  ckd = "cumdiff_inc_ckd_max",
-                  diabetes = "cumdiff_inc_db_max",
-                  ischemia = "cumdiff_inc_ihd_max",
-                  stroke = "cumdiff_inc_stroke_max")
+    asthma = "cumdiff_inc_asthma_max",
+    ckd = "cumdiff_inc_ckd_max",
+    diabetes = "cumdiff_inc_db_max",
+    ischemia = "cumdiff_inc_ihd_max",
+    stroke = "cumdiff_inc_stroke_max"
+  )
 
   plot_title <- switch(inc,
-                       asthma = "Asthma - Cumulative reduction by income class",
-                       ckd = "Chronic kidney disease - Cumulative reduction by income class",
-                       diabetes = "Diabetes - Cumulative reduction by income class",
-                       ischemia = "Ischemic heart disease - Cumulative reduction by income class",
-                       stroke = "Stroke - Cumulative reduction by income class")
+    asthma = "Asthma - Cumulative reduction by income class",
+    ckd = "Chronic kidney disease - Cumulative reduction by income class",
+    diabetes = "Diabetes - Cumulative reduction by income class",
+    ischemia = "Ischemic heart disease - Cumulative reduction by income class",
+    stroke = "Stroke - Cumulative reduction by income class"
+  )
 
-  ggplot2::ggplot(data = data_weighted_ds_wide_collapse,
-                  ggplot2::aes(data_weighted_ds_wide_collapse$time,
-                               y = get(y_value),
-                               colour = data_weighted_ds_wide_collapse$income)) +
+  ggplot2::ggplot(
+    data = data_weighted_ds_wide_collapse,
+    ggplot2::aes(data_weighted_ds_wide_collapse$time,
+      y = get(y_value),
+      colour = data_weighted_ds_wide_collapse$income
+    )
+  ) +
     ggplot2::geom_line(linewidth = 1) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = y_min,
-                                      ymax = y_max),
-                         alpha = 0.2) +
+    ggplot2::geom_ribbon(
+      ggplot2::aes(
+        ymin = y_min,
+        ymax = y_max
+      ),
+      alpha = 0.2
+    ) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
     ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-    ggplot2::scale_y_continuous(limits = scale_y_continuous_limits,
-                                breaks = scale_y_continuous_breaks,
-                                labels = scale_y_continuous_labels) +
+    ggplot2::scale_y_continuous(
+      limits = scale_y_continuous_limits,
+      breaks = scale_y_continuous_breaks,
+      labels = scale_y_continuous_labels
+    ) +
     ggplot2::labs(alt = "A line plot showing the cumulative reduction in a specified incidence number over time") +
     hgps_theme() +
     ggplot2::theme(plot.title = ggplot2::element_text(size = 10)) +
-    ggplot2::theme(legend.position.inside = c(0.2,0.2))
+    ggplot2::theme(legend.position.inside = c(0.2, 0.2))
 }
 
 #' Plot of Burden of Disease
@@ -273,53 +316,68 @@ burden_disease <- function(burden,
   }
 
   y_label <- switch(burden,
-                    daly = "DALYs",
-                    dalycum = "DALYs",
-                    yld = "YLDs",
-                    yll = "YLLs")
+    daly = "DALYs",
+    dalycum = "DALYs",
+    yld = "YLDs",
+    yll = "YLLs"
+  )
 
   y_value <- switch(burden,
-                    daly = "diff_daly_mean",
-                    dalycum = "cumdiff_daly_mean",
-                    yld = "diff_yld_mean",
-                    yll = "diff_yll_mean")
+    daly = "diff_daly_mean",
+    dalycum = "cumdiff_daly_mean",
+    yld = "diff_yld_mean",
+    yll = "diff_yll_mean"
+  )
 
   y_min <- switch(burden,
-                  daly = "diff_daly_min",
-                  dalycum = "cumdiff_daly_min",
-                  yld = "diff_yld_min",
-                  yll = "diff_yll_min")
+    daly = "diff_daly_min",
+    dalycum = "cumdiff_daly_min",
+    yld = "diff_yld_min",
+    yll = "diff_yll_min"
+  )
 
   y_max <- switch(burden,
-                  daly = "diff_daly_max",
-                  dalycum = "cumdiff_daly_max",
-                  yld = "diff_yld_max",
-                  yll = "diff_yll_max")
+    daly = "diff_daly_max",
+    dalycum = "cumdiff_daly_max",
+    yld = "diff_yld_max",
+    yll = "diff_yll_max"
+  )
 
   plot_title <- switch(burden,
-                       daly = "Reduction in DALYs by income class",
-                       dalycum = "Cumulative reduction in DALYs by income class",
-                       yld = "Reduction in YLDs by income class",
-                       yll = "Reduction in YLLs by income class")
+    daly = "Reduction in DALYs by income class",
+    dalycum = "Cumulative reduction in DALYs by income class",
+    yld = "Reduction in YLDs by income class",
+    yll = "Reduction in YLLs by income class"
+  )
 
-  ggplot2::ggplot(data = data_weighted_burden_wide_collapse,
-                  ggplot2::aes(x = data_weighted_burden_wide_collapse$time,
-                               y = get(y_value),
-                               colour = data_weighted_burden_wide_collapse$income)) +
+  ggplot2::ggplot(
+    data = data_weighted_burden_wide_collapse,
+    ggplot2::aes(
+      x = data_weighted_burden_wide_collapse$time,
+      y = get(y_value),
+      colour = data_weighted_burden_wide_collapse$income
+    )
+  ) +
     ggplot2::geom_line(linewidth = 1) +
-    ggplot2::geom_ribbon(ggplot2::aes(ymin = y_min,
-                                      ymax = y_max),
-                         alpha = 0.2) +
+    ggplot2::geom_ribbon(
+      ggplot2::aes(
+        ymin = y_min,
+        ymax = y_max
+      ),
+      alpha = 0.2
+    ) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
     ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-    ggplot2::scale_y_continuous(limits = scale_y_continuous_limits,
-                                breaks = scale_y_continuous_breaks,
-                                labels = scale_y_continuous_labels) +
+    ggplot2::scale_y_continuous(
+      limits = scale_y_continuous_limits,
+      breaks = scale_y_continuous_breaks,
+      labels = scale_y_continuous_labels
+    ) +
     ggplot2::labs(alt = "A line plot showing the reduction in a specified burden of disease over time") +
     hgps_theme() +
-    ggplot2::theme(legend.position.inside = c(0.85,0.2))
+    ggplot2::theme(legend.position.inside = c(0.85, 0.2))
 }
 
 #' Plot of Life Expectancy under Intervention
@@ -331,16 +389,20 @@ burden_disease <- function(burden,
 #' @return A ggplot object representing the specified plot.
 #' @export
 life_exp <- function(diff, data_ple_wide) {
-  ggplot2::ggplot(data = data_ple_wide,
-                  ggplot2::aes(x = data_ple_wide$timediff, y = diff)) +
+  ggplot2::ggplot(
+    data = data_ple_wide,
+    ggplot2::aes(x = data_ple_wide$timediff, y = diff)
+  ) +
     ggplot2::geom_line(color = "purple", linewidth = 1) +
     ggplot2::ggtitle("Increase in life expectancy under intervention") +
     ggplot2::xlab("Year") +
     ggplot2::ylab("Life expectancy (years)") +
     ggplot2::scale_y_continuous(labels = scales::comma) +
-    ggplot2::scale_x_continuous(limits = c(-3, 32),
-                     breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
-                     labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::scale_x_continuous(
+      limits = c(-3, 32),
+      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
+      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)
+    ) +
     ggplot2::labs(alt = "A line plot showing the increase in life expectancy under intervention over time") +
     hgps_theme()
 }
@@ -359,13 +421,12 @@ life_exp <- function(diff, data_ple_wide) {
 #' @return A combined ggplot object arranged in a grid.
 #' @export
 combine_plots <- function(metrics,
-                           data_mean_weighted = NULL,
-                           data_mean_weighted_rf_wide = NULL,
-                           data_mean_weighted_inc_wide = NULL,
-                           data_weighted_burden_wide_collapse = NULL,
-                           data_ple_wide = NULL,
-                           output_file) {
-
+                          data_mean_weighted = NULL,
+                          data_mean_weighted_rf_wide = NULL,
+                          data_mean_weighted_inc_wide = NULL,
+                          data_weighted_burden_wide_collapse = NULL,
+                          data_ple_wide = NULL,
+                          output_file) {
   plots <- list()
 
   if (!is.null(metrics$risk_factors) && !is.null(data_mean_weighted)) {
@@ -408,7 +469,7 @@ combine_plots <- function(metrics,
   grDevices::pdf(output_file, width = 11, height = 8.5)
 
   for (i in seq(1, length(plots), by = 4)) {
-    gridExtra::grid.arrange(grobs = plots[i:min(i+3, length(plots))], ncol = 2)
+    gridExtra::grid.arrange(grobs = plots[i:min(i + 3, length(plots))], ncol = 2)
   }
 
   grDevices::dev.off()

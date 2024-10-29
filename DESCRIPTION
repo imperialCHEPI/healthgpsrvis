@@ -19,10 +19,11 @@ Imports:
     ggplot2,
     grDevices,
     gridExtra,
-    purrr,
+    rlang,
     scales,
     splines,
     stats,
+    stringr,
     tidyr
 Suggests: 
     testthat (>= 3.0.0)

@@ -19,12 +19,14 @@
 #' }
 #'
 #' @export
-set_graphics <- function(width, height){
+set_graphics <- function(width, height) {
   grDevices::graphics.off()
-  grDevices::dev.new(width = width,
-          height = height,
-          unit = "cm",
-          noRStudioGD = TRUE)
+  grDevices::dev.new(
+    width = width,
+    height = height,
+    unit = "cm",
+    noRStudioGD = TRUE
+  )
 }
 
 #' Customised theme for ggplot2
@@ -54,25 +56,25 @@ set_graphics <- function(width, height){
 #' \dontrun{
 #' library(ggplot2)
 #' ggplot(mtcars, aes(x = wt, y = mpg)) +
-#'     geom_point() +
-#'     hgps_theme()
+#'   geom_point() +
+#'   hgps_theme()
 #' }
 #'
 #' @export
-hgps_theme <- function(){
+hgps_theme <- function() {
   ggplot2::theme_classic() +
-  ggplot2::theme(
-    plot.title = ggplot2::element_text(size = 15),
-    axis.title.x = ggplot2::element_text(size = 10),
-    axis.title.y = ggplot2::element_text(size = 10),
-    axis.text.x = ggplot2::element_text(size = 8),
-    axis.text.y = ggplot2::element_text(size = 8),
-    legend.text = ggplot2::element_text(size = 8),
-    legend.title = ggplot2::element_blank(),
-    panel.grid.major.x = ggplot2::element_line(),
-    legend.key = ggplot2::element_rect(fill = "transparent"),
-    legend.position.inside = c(.8,.9)
-  )
+    ggplot2::theme(
+      plot.title = ggplot2::element_text(size = 15),
+      axis.title.x = ggplot2::element_text(size = 10),
+      axis.title.y = ggplot2::element_text(size = 10),
+      axis.text.x = ggplot2::element_text(size = 8),
+      axis.text.y = ggplot2::element_text(size = 8),
+      legend.text = ggplot2::element_text(size = 8),
+      legend.title = ggplot2::element_blank(),
+      panel.grid.major.x = ggplot2::element_line(),
+      legend.key = ggplot2::element_rect(fill = "transparent"),
+      legend.position.inside = c(.8, .9)
+    )
 }
 
 #' Format numbers to 2 decimal places
