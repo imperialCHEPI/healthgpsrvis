@@ -292,10 +292,16 @@ gen_data_weighted_burden <- function(data_weighted) {
 #'
 #' This function performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
 #'
-#' @param data_weighted_burden A data frame containing weighted values for burden of disease.
+#' @param data_weighted_burden_wide_collapse A data frame containing weighted values for burden of disease.
 #' @return A data frame with spline smoothing applied for burden of disease.
 #' @export
-gen_data_weighted_burden_spline <- function(data_weighted_burden) {
+gen_data_weighted_burden_spline <- function(data_weighted_burden_wide_collapse) {
+  config <- load_config("default")
+  config_file_path <- system.file("config", "config.yml", package = "healthgpsrvis")
+  burden_spline <- config::get(value = "burden_spline",
+                               file = config_file_path,
+                               use_parent = FALSE)
+
   ## This function is data smoothing
   ## It is applied manually now in India project due to abnormal positive values in diff_daly or cumdiff_daly
 
@@ -303,38 +309,57 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden) {
 
   ## Notes for India project: Delete years 27,30,32-33 for ps3-low; Delete years 2028 for ps4-low
 
-  data_weighted_burden_mean <- data_weighted_burden |>
-    dplyr::filter(data_weighted_burden$cumdiff_daly_mean <= 0)
+  data_weighted_burden_mean <- data_weighted_burden_wide_collapse |>
+    dplyr::filter(!!rlang::sym(burden_spline[[1]]$burden_mean) <= 0)
 
-  data_weighted_burden_min <- data_weighted_burden |>
-    dplyr::filter(data_weighted_burden$cumdiff_daly_min <= 0)
+  data_weighted_burden_min <- data_weighted_burden_wide_collapse |>
+    dplyr::filter(!!rlang::sym(burden_spline[[2]]$burden_min) <= 0)
 
   ## Notes for India project: Delete years 29, 31 for ps2-high; Delete 37-38 for ps3-low; Delete 33-34 for ps4-middle; Delete 36-38 for ps4-low
 
-  data_weighted_burden_max <- data_weighted_burden |>
-    dplyr::filter(data_weighted_burden$cumdiff_daly_max <= 0)
+  data_weighted_burden_max <- data_weighted_burden_wide_collapse |>
+    dplyr::filter(!!rlang::sym(burden_spline[[3]]$burden_max) <= 0)
 
   ## New data frame
-  data_weighted_burden_spline <- data.frame(time = seq(min(data_weighted_burden$time),
-    max(data_weighted_burden$time),
+  data_weighted_burden_spline <- data.frame(time = seq(
+    min(data_weighted_burden_wide_collapse[config$group]),
+    max(data_weighted_burden_wide_collapse[config$group]),
     length.out = 34
   ))
 
   ## Fit spline and predict
-  spline_fit <- splines::interpSpline(data_weighted_burden_mean$time, data_weighted_burden_mean$cumdiff_daly_mean)
-  data_weighted_burden_spline$cumdiff_daly_mean <- stats::predict(spline_fit, data_weighted_burden_spline$time)$y
+  spline_fit_mean <- splines::interpSpline(
+    as.numeric(unlist(data_weighted_burden_mean[config$group])),
+    as.numeric(unlist(data_weighted_burden_mean[burden_spline[[1]]$burden_mean])))
+  data_weighted_burden_spline[burden_spline[[1]]$burden_mean] <- stats::predict(
+    spline_fit_mean,
+    as.numeric(unlist(data_weighted_burden_spline[config$group])))$y
 
-  spline_fit_min <- splines::interpSpline(data_weighted_burden_min$time, data_weighted_burden_min$cumdiff_daly_min)
-  data_weighted_burden_spline$cumdiff_daly_min <- stats::predict(spline_fit_min, data_weighted_burden_spline$time)$y
+  spline_fit_min <- splines::interpSpline(
+    as.numeric(unlist(data_weighted_burden_min[config$group])),
+    as.numeric(unlist(data_weighted_burden_min[burden_spline[[2]]$burden_min])))
+  data_weighted_burden_spline[burden_spline[[2]]$burden_min] <- stats::predict(
+    spline_fit_min,
+    as.numeric(unlist(data_weighted_burden_spline[config$group])))$y
 
   ## Use smooth.spline for ps4-low
-  spline_fit_max <- splines::interpSpline(data_weighted_burden_max$time, data_weighted_burden_max$cumdiff_daly_max)
-  data_weighted_burden_spline$cumdiff_daly_max <- stats::predict(spline_fit_max, data_weighted_burden_spline$time)$y
+  spline_fit_max <- splines::interpSpline(
+    as.numeric(unlist(data_weighted_burden_max[config$group])),
+    as.numeric(unlist(data_weighted_burden_max[burden_spline[[3]]$burden_max])))
+  data_weighted_burden_spline[burden_spline[[3]]$burden_max] <- stats::predict(
+    spline_fit_max,
+    as.numeric(unlist(data_weighted_burden_spline[config$group])))$y
 
   ## Keep 0 values in the first two years, before policy implementation
-  data_weighted_burden_spline$cumdiff_daly_mean <- ifelse(data_weighted_burden_spline$time < 2024, 0, data_weighted_burden_spline$cumdiff_daly_mean)
-  data_weighted_burden_spline$cumdiff_daly_min <- ifelse(data_weighted_burden_spline$time < 2024, 0, data_weighted_burden_spline$cumdiff_daly_min)
-  data_weighted_burden_spline$cumdiff_daly_max <- ifelse(data_weighted_burden_spline$time < 2024, 0, data_weighted_burden_spline$cumdiff_daly_max)
+  group <- config$group
+  burden_spline <- unlist(config$burden_spline)
+
+  for (burden_sp in burden_spline) {
+    data_weighted_burden_spline[[burden_sp]] <- ifelse(
+      data_weighted_burden_spline[[group]] < 2024,
+      0,
+      data_weighted_burden_spline[[burden_sp]])
+  }
 
   return(data_weighted_burden_spline)
 }

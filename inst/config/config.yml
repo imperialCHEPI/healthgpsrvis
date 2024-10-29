@@ -53,7 +53,7 @@ default:
     - obesity
   group:
     - time # Also used in gen_data_weighted_burden
-  summary_columns_rf:  # Variables that are used to calculate the summary statistics
+  summary_columns_rf:  # Risk factor variables to calculate summary statistics, such as mean, min and max
     - diff_sodium
     - diff_ei
     - diff_bmi
@@ -105,6 +105,11 @@ default:
     - cumdiff_daly
     - cumdiff_yll
     - cumdiff_yld
+  # For the gen_data_weighted_burden_spline() function
+  burden_spline:
+    - burden_mean: cumdiff_daly_mean
+    - burden_min: cumdiff_daly_min
+    - burden_max: cumdiff_daly_max
   stroke:
     - intracerebralhemorrhage
     - ischemicstroke
