@@ -34,38 +34,50 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(healthgpsrvis)
-data_mean_weighted <- data.frame(
-  time = rep(seq(2020, 2055, by = 5), 3),
-  weighted_bmi = runif(24, 25, 38),
-  weighted_energyintake = runif(24, 1700, 2750),
-  weighted_fat = runif(24, 38, 120),
-  weighted_obesity = runif(24, 0.1, 0.7),
-  weighted_protein = runif(24, 46, 210),
-  weighted_sodium = runif(24, 874, 2768),
-  source = rep(c("Source_1", "Source_2", "Source_3"), each = 8)
-)
-plot_bmi <- riskfactors("bmi", data_mean_weighted)
-plot_bmi
-#> Warning: Use of `data_mean_weighted$time` is discouraged.
-#> ℹ Use `time` instead.
+
+# Get the path to the .rds file
+filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+# Read the .rds file
+data <- readRDS(filepath)
+
+# Generate the weighted data
+data_weighted <- gen_data_weighted(data)
+
+# Generate the weighted data for the risk factors
+data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
+
+# Summarise the weighted data for the risk factors
+summary(data_weighted_rf_wide_collapse)
+#>       time      diff_sodium_mean diff_sodium_min  diff_sodium_max 
+#>  Min.   :2022   Min.   :-33.67   Min.   :-33.92   Min.   :-33.65  
+#>  1st Qu.:2030   1st Qu.:-33.55   1st Qu.:-33.73   1st Qu.:-33.36  
+#>  Median :2038   Median :-33.24   Median :-33.56   Median :-32.99  
+#>  Mean   :2038   Mean   :-31.35   Mean   :-31.60   Mean   :-31.07  
+#>  3rd Qu.:2047   3rd Qu.:-33.07   3rd Qu.:-33.34   3rd Qu.:-32.54  
+#>  Max.   :2055   Max.   :  0.00   Max.   :  0.00   Max.   :  0.00  
+#>   diff_ei_mean     diff_ei_min      diff_ei_max     diff_bmi_mean    
+#>  Min.   :-23.15   Min.   :-23.19   Min.   :-23.14   Min.   :-0.1460  
+#>  1st Qu.:-23.08   1st Qu.:-23.14   1st Qu.:-23.04   1st Qu.:-0.1445  
+#>  Median :-22.88   Median :-23.01   Median :-22.78   Median :-0.1429  
+#>  Mean   :-21.58   Mean   :-21.67   Mean   :-21.48   Mean   :-0.1321  
+#>  3rd Qu.:-22.77   3rd Qu.:-22.92   3rd Qu.:-22.59   3rd Qu.:-0.1409  
+#>  Max.   :  0.00   Max.   :  0.00   Max.   :  0.00   Max.   : 0.0000  
+#>   diff_bmi_min      diff_bmi_max     diff_obesity_mean   diff_obesity_min   
+#>  Min.   :-0.1470   Min.   :-0.1457   Min.   :-0.004656   Min.   :-0.004688  
+#>  1st Qu.:-0.1456   1st Qu.:-0.1432   1st Qu.:-0.004463   1st Qu.:-0.004518  
+#>  Median :-0.1438   Median :-0.1417   Median :-0.004195   Median :-0.004245  
+#>  Mean   :-0.1329   Mean   :-0.1312   Mean   :-0.003953   Mean   :-0.004009  
+#>  3rd Qu.:-0.1419   3rd Qu.:-0.1399   3rd Qu.:-0.003997   3rd Qu.:-0.004048  
+#>  Max.   : 0.0000   Max.   : 0.0000   Max.   : 0.000000   Max.   : 0.000000  
+#>  diff_obesity_max   
+#>  Min.   :-0.004606  
+#>  1st Qu.:-0.004401  
+#>  Median :-0.004163  
+#>  Mean   :-0.003896  
+#>  3rd Qu.:-0.003922  
+#>  Max.   : 0.000000
 ```
-
-<img src="man/figures/README-example-1.png" width="100%" />
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-# summary(cars)
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
 
 <!--
 ### Cloning the Repository

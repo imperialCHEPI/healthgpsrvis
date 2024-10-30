@@ -43,35 +43,22 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(healthgpsrvis)
-data_mean_weighted <- data.frame(
-  time = rep(seq(2020, 2055, by = 5), 3),
-  weighted_bmi = runif(24, 25, 38),
-  weighted_energyintake = runif(24, 1700, 2750),
-  weighted_fat = runif(24, 38, 120),
-  weighted_obesity = runif(24, 0.1, 0.7),
-  weighted_protein = runif(24, 46, 210),
-  weighted_sodium = runif(24, 874, 2768),
-  source = rep(c("Source_1", "Source_2", "Source_3"), each = 8)
-)
-plot_bmi <- riskfactors("bmi", data_mean_weighted)
-plot_bmi
+
+# Get the path to the .rds file
+filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+# Read the .rds file
+data <- readRDS(filepath)
+
+# Generate the weighted data
+data_weighted <- gen_data_weighted(data)
+
+# Generate the weighted data for the risk factors
+data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
+
+# Summarise the weighted data for the risk factors
+summary(data_weighted_rf_wide_collapse)
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-# summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-# plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
 
 <!--
 ### Cloning the Repository
