@@ -11,7 +11,7 @@ Below is a description of how to use these functions in sequence.
 \subsection{Step-by-Step Usage:}{
 \enumerate{
 \item \strong{Read the data}: This function reads the data from the location specified \code{data <-  readRDS("data.rds")}.
-\item \strong{\code{gen_data_mean}}: Calculates weighted mean values for various metrics over years \code{data_weighted <- gen_data_mean(data)}.
+\item \strong{\code{gen_data_weighted}}: Calculates weighted mean values for various metrics over years \code{data_weighted <- gen_data_weighted(data)}.
 \item \strong{\code{gen_data_weighted_rf}}: Calculates the differences between intervention and baseline values for risk factors \code{data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)}.
 \item \strong{\code{gen_data_weighted_ds}}: Calculates the differences between intervention and baseline values for incidences \code{data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)}.
 \item \strong{\code{gen_data_weighted_burden}}: Calculates the differences between intervention and baseline values for burden of disease \code{data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)}.

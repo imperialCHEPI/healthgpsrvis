@@ -7,7 +7,7 @@
 #'
 #' 1. **Read the data**: This function reads the data from the location specified `data <-  readRDS("data.rds")`.
 #'
-#' 1. **`gen_data_mean`**: Calculates weighted mean values for various metrics over years `data_weighted <- gen_data_mean(data)`.
+#' 1. **`gen_data_weighted`**: Calculates weighted mean values for various metrics over years `data_weighted <- gen_data_weighted(data)`.
 #'
 #' 1. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for risk factors `data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)`.
 #'
