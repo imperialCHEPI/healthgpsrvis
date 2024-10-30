@@ -53,7 +53,7 @@ Below is a description of how to use these functions in sequence.</p>
 <h3 id="step-by-step-usage-">Step-by-Step Usage:<a class="anchor" aria-label="anchor" href="#step-by-step-usage-"></a></h3>
 
 <ol><li><p><strong>Read the data</strong>: This function reads the data from the location specified <code>data &lt;-  readRDS("data.rds")</code>.</p></li>
-<li><p><strong><code>gen_data_mean</code></strong>: Calculates weighted mean values for various metrics over years <code>data_weighted &lt;- gen_data_mean(data)</code>.</p></li>
+<li><p><strong><code>gen_data_weighted</code></strong>: Calculates weighted mean values for various metrics over years <code>data_weighted &lt;- gen_data_weighted(data)</code>.</p></li>
 <li><p><strong><code>gen_data_weighted_rf</code></strong>: Calculates the differences between intervention and baseline values for risk factors <code>data_weighted_rf_wide_collapse &lt;- gen_data_weighted_rf(data_weighted)</code>.</p></li>
 <li><p><strong><code>gen_data_weighted_ds</code></strong>: Calculates the differences between intervention and baseline values for incidences <code>data_weighted_ds_wide_collapse &lt;- gen_data_weighted_ds(data_weighted)</code>.</p></li>
 <li><p><strong><code>gen_data_weighted_burden</code></strong>: Calculates the differences between intervention and baseline values for burden of disease <code>data_weighted_burden_wide_collapse &lt;- gen_data_weighted_burden(data_weighted)</code>.</p></li>
