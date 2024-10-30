@@ -86,27 +86,49 @@
 <p>This is a basic example which shows you how to solve a common problem:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://imperialchepi.github.io/healthgpsrvis/">healthgpsrvis</a></span><span class="op">)</span></span>
-<span><span class="va">data_mean_weighted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2020</span>, <span class="fl">2055</span>, by <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>  weighted_bmi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">25</span>, <span class="fl">38</span><span class="op">)</span>,</span>
-<span>  weighted_energyintake <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">1700</span>, <span class="fl">2750</span><span class="op">)</span>,</span>
-<span>  weighted_fat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">38</span>, <span class="fl">120</span><span class="op">)</span>,</span>
-<span>  weighted_obesity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">0.1</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
-<span>  weighted_protein <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">46</span>, <span class="fl">210</span><span class="op">)</span>,</span>
-<span>  weighted_sodium <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">874</span>, <span class="fl">2768</span><span class="op">)</span>,</span>
-<span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Source_1"</span>, <span class="st">"Source_2"</span>, <span class="st">"Source_3"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">plot_bmi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/riskfactors.html">riskfactors</a></span><span class="op">(</span><span class="st">"bmi"</span>, <span class="va">data_mean_weighted</span><span class="op">)</span></span>
-<span><span class="va">plot_bmi</span></span>
-<span><span class="co">#&gt; Warning: Use of `data_mean_weighted$time` is discouraged.</span></span>
-<span><span class="co">#&gt; ℹ Use `time` instead.</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-1.png" width="100%"></p>
-<p>What is special about using <code>README.Rmd</code> instead of just <code>README.md</code>? You can include R chunks like so:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># summary(cars)</span></span></code></pre></div>
-<p>You’ll still need to render <code>README.Rmd</code> regularly, to keep <code>README.md</code> up-to-date. <code>devtools::build_readme()</code> is handy for this.</p>
-<p>You can also embed plots, for example:</p>
-<p>In that case, don’t forget to commit and push the resulting figure files, so they display on GitHub and CRAN.</p>
+<span></span>
+<span><span class="co"># Get the path to the .rds file</span></span>
+<span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_path.html" class="external-link">test_path</a></span><span class="op">(</span><span class="st">"testdata"</span>, <span class="st">"data_ps3_reformulation"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Read the .rds file</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">filepath</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Generate the weighted data</span></span>
+<span><span class="va">data_weighted</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen_data_weighted.html">gen_data_weighted</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Generate the weighted data for the risk factors</span></span>
+<span><span class="va">data_weighted_rf_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen_data_weighted_rf.html">gen_data_weighted_rf</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Summarise the weighted data for the risk factors</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data_weighted_rf_wide_collapse</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       time      diff_sodium_mean diff_sodium_min  diff_sodium_max </span></span>
+<span><span class="co">#&gt;  Min.   :2022   Min.   :-33.67   Min.   :-33.92   Min.   :-33.65  </span></span>
+<span><span class="co">#&gt;  1st Qu.:2030   1st Qu.:-33.55   1st Qu.:-33.73   1st Qu.:-33.36  </span></span>
+<span><span class="co">#&gt;  Median :2038   Median :-33.24   Median :-33.56   Median :-32.99  </span></span>
+<span><span class="co">#&gt;  Mean   :2038   Mean   :-31.35   Mean   :-31.60   Mean   :-31.07  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:2047   3rd Qu.:-33.07   3rd Qu.:-33.34   3rd Qu.:-32.54  </span></span>
+<span><span class="co">#&gt;  Max.   :2055   Max.   :  0.00   Max.   :  0.00   Max.   :  0.00  </span></span>
+<span><span class="co">#&gt;   diff_ei_mean     diff_ei_min      diff_ei_max     diff_bmi_mean    </span></span>
+<span><span class="co">#&gt;  Min.   :-23.15   Min.   :-23.19   Min.   :-23.14   Min.   :-0.1460  </span></span>
+<span><span class="co">#&gt;  1st Qu.:-23.08   1st Qu.:-23.14   1st Qu.:-23.04   1st Qu.:-0.1445  </span></span>
+<span><span class="co">#&gt;  Median :-22.88   Median :-23.01   Median :-22.78   Median :-0.1429  </span></span>
+<span><span class="co">#&gt;  Mean   :-21.58   Mean   :-21.67   Mean   :-21.48   Mean   :-0.1321  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:-22.77   3rd Qu.:-22.92   3rd Qu.:-22.59   3rd Qu.:-0.1409  </span></span>
+<span><span class="co">#&gt;  Max.   :  0.00   Max.   :  0.00   Max.   :  0.00   Max.   : 0.0000  </span></span>
+<span><span class="co">#&gt;   diff_bmi_min      diff_bmi_max     diff_obesity_mean   diff_obesity_min   </span></span>
+<span><span class="co">#&gt;  Min.   :-0.1470   Min.   :-0.1457   Min.   :-0.004656   Min.   :-0.004688  </span></span>
+<span><span class="co">#&gt;  1st Qu.:-0.1456   1st Qu.:-0.1432   1st Qu.:-0.004463   1st Qu.:-0.004518  </span></span>
+<span><span class="co">#&gt;  Median :-0.1438   Median :-0.1417   Median :-0.004195   Median :-0.004245  </span></span>
+<span><span class="co">#&gt;  Mean   :-0.1329   Mean   :-0.1312   Mean   :-0.003953   Mean   :-0.004009  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:-0.1419   3rd Qu.:-0.1399   3rd Qu.:-0.003997   3rd Qu.:-0.004048  </span></span>
+<span><span class="co">#&gt;  Max.   : 0.0000   Max.   : 0.0000   Max.   : 0.000000   Max.   : 0.000000  </span></span>
+<span><span class="co">#&gt;  diff_obesity_max   </span></span>
+<span><span class="co">#&gt;  Min.   :-0.004606  </span></span>
+<span><span class="co">#&gt;  1st Qu.:-0.004401  </span></span>
+<span><span class="co">#&gt;  Median :-0.004163  </span></span>
+<span><span class="co">#&gt;  Mean   :-0.003896  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:-0.003922  </span></span>
+<span><span class="co">#&gt;  Max.   : 0.000000</span></span></code></pre></div>
 <!--
 ### Cloning the Repository
 &#10;```bash
