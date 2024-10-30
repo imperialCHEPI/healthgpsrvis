@@ -26,6 +26,7 @@ You can install the development version of `healthgpsrvis` from
 ``` r
 # install.packages("devtools")
 devtools::install_github("imperialCHEPI/healthgpsrvis")
+# devtools::install_github("imperialCHEPI/healthgpsrvis", ref = "branch-name")
 ```
 
 ## Example
