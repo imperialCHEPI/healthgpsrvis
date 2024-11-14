@@ -1,16 +1,13 @@
 # Testing riskfactors() function
 test_that("riskfactors function works correctly", {
-  # Create sample data
-  data_weighted <- data.frame(
-    time = rep(seq(2020, 2055, by = 5), 3),
-    weighted_bmi = runif(24, 25, 38),
-    weighted_energyintake = runif(24, 1700, 2750),
-    weighted_fat = runif(24, 38, 120),
-    weighted_obesity = runif(24, 0.1, 0.7),
-    weighted_protein = runif(24, 46, 210),
-    weighted_sodium = runif(24, 874, 2768),
-    source = rep(c("Source_1", "Source_2", "Source_3"), each = 8)
-  )
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
 
   # Test for valid input
   plot_bmi <- riskfactors("bmi", data_weighted)
