@@ -114,7 +114,7 @@ riskfactors_diff <- function(riskft_diff,
     ggplot2::aes(
       x = data_weighted_rf_wide_collapse$time,
       y = get(y_value),
-      colour = data_weighted_rf_wide_collapse$income
+      #colour = data_weighted_rf_wide_collapse$income
     )
   ) +
     ggplot2::geom_line(linewidth = 1) +

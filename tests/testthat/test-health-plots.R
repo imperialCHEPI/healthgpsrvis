@@ -34,23 +34,17 @@ test_that("riskfactors function works correctly", {
 
 # Testing riskfactors_diff() function
 test_that("riskfactors_diff function works correctly", {
-  # Create sample data
-  data_weighted_rf_wide_collapse <- data.frame(
-    time = seq(-9, 21, by = 1),
-    income = c(rep("low", 9), rep("middle", 16), rep("high", 6)),
-    diff_bmi_mean = runif(31, -3, 0),
-    diff_bmi_max = runif(31, -5, 0),
-    diff_bmi_min = runif(31, -1, 0),
-    diff_ei_mean = runif(31, -200, 0),
-    diff_ei_max = runif(31, -300, 0),
-    diff_ei_min = runif(31, -100, 0),
-    diff_obesity_mean = runif(31, -0.3, 0),
-    diff_obesity_max = runif(31, -0.5, 0),
-    diff_obesity_min = runif(31, -0.1, 0),
-    diff_sodium_mean = runif(31, -700, 0),
-    diff_sodium_max = runif(31, -1000, 0),
-    diff_sodium_min = runif(31, -300, 0)
-  )
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
+
+  # Generate the weighted data for the risk factors
+  data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
 
   # Test for valid input
   plot_bmi <- riskfactors_diff("bmi",
