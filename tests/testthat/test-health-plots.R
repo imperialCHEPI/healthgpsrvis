@@ -15,9 +15,9 @@ test_that("riskfactors function works correctly", {
   expect_equal(plot_bmi$labels$title, "BMI")
   expect_equal(plot_bmi$labels$y, "BMI (weighted)")
 
-  plot_ei <- riskfactors("ei", data_weighted)
+  plot_ei <- riskfactors("energyintake", data_weighted)
   expect_s3_class(plot_ei, "ggplot")
-  expect_equal(plot_ei$labels$title, "EI")
+  expect_equal(plot_ei$labels$title, "ENERGYINTAKE")
   expect_equal(plot_ei$labels$y, "Energy intake (weighted)")
 
   plot_sodium <- riskfactors("sodium", data_weighted)
@@ -28,7 +28,7 @@ test_that("riskfactors function works correctly", {
   # Test for invalid input
   expect_error(
     riskfactors("invalid_riskft", data_weighted),
-    "Invalid risk factor. Choose from: 'bmi', 'ei', 'fat', 'obese', 'protein', 'sodium'."
+    "Invalid risk factor. Choose from: 'bmi', 'energyintake', 'fat', 'obesity', 'protein', 'sodium'."
   )
 })
 
@@ -287,21 +287,18 @@ test_that("life_exp function works correctly", {
 test_that("combine_plots function works correctly", {
   # Create sample metrics
   metrics <- list(
-    risk_factors = c("bmi", "ei")
+    risk_factors = c("bmi", "energyintake")
   )
   # burden_disease = c("dalycum", "yld"))
 
-  # Create sample data
-  data_mean_weighted <- data.frame(
-    time = rep(seq(2020, 2055, by = 5), 3),
-    weighted_bmi = runif(24, 25, 38),
-    weighted_energyintake = runif(24, 1700, 2750),
-    weighted_fat = runif(24, 38, 120),
-    weighted_obesity = runif(24, 0.1, 0.7),
-    weighted_protein = runif(24, 46, 210),
-    weighted_sodium = runif(24, 874, 2768),
-    source = rep(c("Source_1", "Source_2", "Source_3"), each = 8)
-  )
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
 
   data_weighted_burden_wide_collapse <- data.frame(
     time = seq(-9, 21, by = 1),
@@ -326,7 +323,7 @@ test_that("combine_plots function works correctly", {
   # Create the combined plot
   plot_combine <- combine_plots(
     metrics = metrics,
-    data_mean_weighted = data_mean_weighted,
+    data_weighted = data_weighted,
     data_weighted_burden_wide_collapse = data_weighted_burden_wide_collapse,
     output_file = output_file
   )

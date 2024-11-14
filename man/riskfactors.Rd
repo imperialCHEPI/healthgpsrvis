@@ -8,9 +8,9 @@ riskfactors(riskft, data_weighted)
 }
 \arguments{
 \item{riskft}{A character string specifying the risk factor to plot.
-Options are: "bmi", "ei", "fat", "obese", "protein", "sodium".}
+Options are: "bmi", "energyintake", "fat", "obesity", "protein", "sodium".}
 
-\item{data_weighted}{A data frame with weighted mean values for various metrics.}
+\item{data_weighted}{A data frame with weighted values for various metrics.}
 }
 \value{
 A ggplot object representing the specified plot.

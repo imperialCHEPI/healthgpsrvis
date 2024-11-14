@@ -3,31 +3,31 @@
 #' Generates a line plot of a specified risk factor over time, grouped by source.
 #'
 #' @param riskft A character string specifying the risk factor to plot.
-#'        Options are: "bmi", "ei", "fat", "obese", "protein", "sodium".
-#' @param data_weighted A data frame with weighted mean values for various metrics.
+#'        Options are: "bmi", "energyintake", "fat", "obesity", "protein", "sodium".
+#' @param data_weighted A data frame with weighted values for various metrics.
 #' @return A ggplot object representing the specified plot.
 #' @export
 riskfactors <- function(riskft, data_weighted) {
-  riskfts <- c("bmi", "ei", "fat", "obese", "protein", "sodium")
+  riskfts <- c("bmi", "energyintake", "fat", "obesity", "protein", "sodium")
 
   if (!(riskft %in% riskfts)) {
-    stop("Invalid risk factor. Choose from: 'bmi', 'ei', 'fat', 'obese', 'protein', 'sodium'.")
+    stop("Invalid risk factor. Choose from: 'bmi', 'energyintake', 'fat', 'obesity', 'protein', 'sodium'.")
   }
 
   y_label <- switch(riskft,
     bmi = "BMI (weighted)",
-    ei = "Energy intake (weighted)",
+    energyintake = "Energy intake (weighted)",
     fat = "Fat (weighted)",
-    obese = "Obesity (weighted)",
+    obesity = "Obesity (weighted)",
     protein = "Protein (weighted)",
     sodium = "Sodium (weighted)"
   )
 
   y_value <- switch(riskft,
     bmi = "weighted_bmi",
-    ei = "weighted_energyintake",
+    energyintake = "weighted_energyintake",
     fat = "weighted_fat",
-    obese = "weighted_obesity",
+    obesity = "weighted_obesity",
     protein = "weighted_protein",
     sodium = "weighted_sodium"
   )
@@ -412,7 +412,7 @@ life_exp <- function(diff, data_ple_wide) {
 #' Creates a combined plot of several metrics.
 #'
 #' @param metrics A list specifying the metrics to plot.
-#' @param data_mean_weighted A data frame with weighted mean values for various metrics.
+#' @param data_weighted A data frame with weighted values for various metrics.
 #' @param data_mean_weighted_rf_wide A data frame containing the weighted mean values of risk factors.
 #' @param data_mean_weighted_inc_wide A data frame containing the weighted mean values of incidences.
 #' @param data_weighted_burden_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
@@ -421,7 +421,7 @@ life_exp <- function(diff, data_ple_wide) {
 #' @return A combined ggplot object arranged in a grid.
 #' @export
 combine_plots <- function(metrics,
-                          data_mean_weighted = NULL,
+                          data_weighted = NULL,
                           data_mean_weighted_rf_wide = NULL,
                           data_mean_weighted_inc_wide = NULL,
                           data_weighted_burden_wide_collapse = NULL,
@@ -429,9 +429,9 @@ combine_plots <- function(metrics,
                           output_file) {
   plots <- list()
 
-  if (!is.null(metrics$risk_factors) && !is.null(data_mean_weighted)) {
+  if (!is.null(metrics$risk_factors) && !is.null(data_weighted)) {
     for (riskft in metrics$risk_factors) {
-      plots <- c(plots, list(riskfactors(riskft, data_mean_weighted)))
+      plots <- c(plots, list(riskfactors(riskft, data_weighted)))
     }
   }
 
