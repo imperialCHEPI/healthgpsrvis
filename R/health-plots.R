@@ -266,7 +266,7 @@ inc_cum <- function(inc,
     data = data_weighted_ds_wide_collapse,
     ggplot2::aes(data_weighted_ds_wide_collapse$time,
       y = get(y_value),
-      colour = data_weighted_ds_wide_collapse$income
+      #colour = data_weighted_ds_wide_collapse$income
     )
   ) +
     ggplot2::geom_line(linewidth = 1) +

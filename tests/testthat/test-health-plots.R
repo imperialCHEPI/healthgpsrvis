@@ -131,26 +131,17 @@ test_that("inc_diff function works correctly", {
 
 # Testing inc_cum() function
 test_that("inc_cum function works correctly", {
-  # Create sample data
-  data_weighted_ds_wide_collapse <- data.frame(
-    time = seq(-9, 21, by = 1),
-    income = c(rep("low", 9), rep("middle", 16), rep("high", 6)),
-    cumdiff_inc_asthma_mean = runif(31, -3, 0),
-    cumdiff_inc_asthma_max = runif(31, -5, 0),
-    cumdiff_inc_asthma_min = runif(31, -1, 0),
-    cumdiff_inc_ckd_mean = runif(31, -200, 0),
-    cumdiff_inc_ckd_max = runif(31, -300, 0),
-    cumdiff_inc_ckd_min = runif(31, -100, 0),
-    cumdiff_inc_db_mean = runif(31, -0.3, 0),
-    cumdiff_inc_db_max = runif(31, -0.5, 0),
-    cumdiff_inc_db_min = runif(31, -0.1, 0),
-    cumdiff_inc_ihd_mean = runif(31, -700, 0),
-    cumdiff_inc_ihd_max = runif(31, -1000, 0),
-    cumdiff_inc_ihd_min = runif(31, -300, 0),
-    cumdiff_inc_stroke_mean = runif(31, -79, 0),
-    cumdiff_inc_stroke_max = runif(31, -100, 0),
-    cumdiff_inc_stroke_min = runif(31, -50, 0)
-  )
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
+
+  # Generate the weighted data for the risk factors
+  data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
 
   # Test for valid input
   plot_asthma <- inc_cum("asthma",
