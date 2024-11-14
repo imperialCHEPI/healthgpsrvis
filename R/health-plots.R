@@ -120,8 +120,8 @@ riskfactors_diff <- function(riskft_diff,
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = y_min,
-        ymax = y_max
+        ymin = get(y_min),
+        ymax = get(y_max)
       ),
       alpha = 0.2
     ) +

@@ -57,15 +57,26 @@ data_weighted <- gen_data_weighted(data)
 # Generate the weighted data for the risk factors
 data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
 
-# Summarise the weighted data for the risk factors
-summary(data_weighted_rf_wide_collapse)
+# View structure of the weighted data for the risk factors
+str(data_weighted_rf_wide_collapse)
 ```
 
-To plot a risk factor (say, "Sodium") for the weighted data, you can use the following code:
+To plot a risk factor (say, "sodium") for the weighted data, you can use the following code:
 
 ```{r riskfactor_plot}
-# Plot the risk factors
+# Plot the risk factor "sodium"
 riskfactors("sodium", data_weighted)
+```
+
+To plot the difference in the risk factor (say, "sodium") for the weighted data, you can use the following code:
+
+```{r riskfactors_diff_plot}
+# Plot of difference in the risk factor "sodium"
+riskfactors_diff("sodium", 
+                 data_weighted_rf_wide_collapse,
+                 scale_y_continuous_limits = c(-64.6, 0),
+                 scale_y_continuous_breaks = c(-64.6, -32.3, 0),
+                 scale_y_continuous_labels = c(-64.6, -32.3, 0))
 ```
 
 <!--
