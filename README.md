@@ -31,7 +31,7 @@ devtools::install_github("imperialCHEPI/healthgpsrvis")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is an example to create the weighted data using the package:
 
 ``` r
 library(healthgpsrvis)
@@ -79,6 +79,16 @@ summary(data_weighted_rf_wide_collapse)
 #>  3rd Qu.:-0.003922  
 #>  Max.   : 0.000000
 ```
+
+To plot a risk factor (say, “Sodium”) for the weighted data, you can use
+the following code:
+
+``` r
+# Plot the risk factors
+riskfactors("sodium", data_weighted)
+```
+
+<img src="man/figures/README-riskfactor_plot-1.png" width="100%" />
 
 <!--
 ### Cloning the Repository
