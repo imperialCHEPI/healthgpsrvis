@@ -415,7 +415,7 @@ life_exp <- function(diff, data_ple_wide) {
 #' @param data_weighted A data frame with weighted values for various metrics.
 #' @param data_mean_weighted_rf_wide A data frame containing the weighted mean values of risk factors.
 #' @param data_mean_weighted_inc_wide A data frame containing the weighted mean values of incidences.
-#' @param data_weighted_burden_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
+#' @param data_weighted_bd_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
 #' @param data_ple_wide A data frame containing the life expectancy.
 #' @param output_file Name of the output PDF as a string
 #' @return A combined ggplot object arranged in a grid.
@@ -424,7 +424,7 @@ combine_plots <- function(metrics,
                           data_weighted = NULL,
                           data_mean_weighted_rf_wide = NULL,
                           data_mean_weighted_inc_wide = NULL,
-                          data_weighted_burden_wide_collapse = NULL,
+                          data_weighted_bd_wide_collapse = NULL,
                           data_ple_wide = NULL,
                           output_file) {
   plots <- list()
@@ -453,9 +453,9 @@ combine_plots <- function(metrics,
     }
   }
 
-  if (!is.null(metrics$burden_disease) && !is.null(data_weighted_burden_wide_collapse)) {
+  if (!is.null(metrics$burden_disease) && !is.null(data_weighted_bd_wide_collapse)) {
     for (burden in metrics$burden_disease) {
-      plots <- c(plots, list(burden_disease(burden, data_weighted_burden_wide_collapse)))
+      plots <- c(plots, list(burden_disease(burden, data_weighted_bd_wide_collapse)))
     }
   }
 

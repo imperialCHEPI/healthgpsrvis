@@ -280,22 +280,9 @@ test_that("combine_plots function works correctly", {
   # Generate the weighted data
   data_weighted <- gen_data_weighted(data)
 
-  data_weighted_burden_wide_collapse <- data.frame(
-    time = seq(-9, 21, by = 1),
-    income = c(rep("low", 9), rep("middle", 16), rep("high", 6)),
-    diff_daly_mean = runif(31, -3, 0),
-    diff_daly_max = runif(31, -5, 0),
-    diff_daly_min = runif(31, -1, 0),
-    cumdiff_daly_mean = runif(31, -200, 0),
-    cumdiff_daly_max = runif(31, -300, 0),
-    cumdiff_daly_min = runif(31, -100, 0),
-    diff_yld_mean = runif(31, -0.3, 0),
-    diff_yld_max = runif(31, -0.5, 0),
-    diff_yld_min = runif(31, -0.1, 0),
-    diff_yll_mean = runif(31, -700, 0),
-    diff_yll_max = runif(31, -1000, 0),
-    diff_yll_min = runif(31, -300, 0)
-  )
+  # Generate the weighted data for the risk factors (using 'bd' instead of
+  # 'burden' to keep lintr happy)
+  data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
 
   # Create output file
   output_file <- tempfile(fileext = ".pdf")
@@ -304,7 +291,7 @@ test_that("combine_plots function works correctly", {
   plot_combine <- combine_plots(
     metrics = metrics,
     data_weighted = data_weighted,
-    data_weighted_burden_wide_collapse = data_weighted_burden_wide_collapse,
+    data_weighted_bd_wide_collapse = data_weighted_bd_wide_collapse,
     output_file = output_file
   )
 
