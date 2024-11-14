@@ -23,7 +23,7 @@
 #' ```r
 #' # Example of using all functions together
 #' data <- readRDS("data.rds")
-#' data_weighted <- gen_data_mean(data)
+#' data_weighted <- gen_data_weighted(data)
 #' data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
 #' data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
 #' data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
