@@ -94,6 +94,25 @@ riskfactors_diff("bmi",
 
 <img src="man/figures/README-riskfactors_diff_plot-1.png" width="100%" />
 
+To plot cumulative incidence difference for, say, “diabetes”, you can
+use the following code:
+
+``` r
+data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
+inc_cum("diabetes",
+    data_weighted_ds_wide_collapse,
+    scale_y_continuous_limits = c(-4424000, 0),
+    scale_y_continuous_breaks = c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0),
+    scale_y_continuous_labels = scales::comma(c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0))
+  )
+#> Warning: Use of `data_weighted_ds_wide_collapse$time` is discouraged.
+#> ℹ Use `time` instead.
+#> Use of `data_weighted_ds_wide_collapse$time` is discouraged.
+#> ℹ Use `time` instead.
+```
+
+<img src="man/figures/README-inc_cum_plot-1.png" width="100%" />
+
 <!--
 ### Cloning the Repository
 &#10;```bash
