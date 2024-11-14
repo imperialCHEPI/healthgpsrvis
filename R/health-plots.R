@@ -272,8 +272,8 @@ inc_cum <- function(inc,
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = y_min,
-        ymax = y_max
+        ymin = get(y_min),
+        ymax = get(y_max)
       ),
       alpha = 0.2
     ) +
@@ -361,8 +361,8 @@ burden_disease <- function(burden,
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = y_min,
-        ymax = y_max
+        ymin = get(y_min),
+        ymax = get(y_max)
       ),
       alpha = 0.2
     ) +
