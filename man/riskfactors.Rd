@@ -4,13 +4,13 @@
 \alias{riskfactors}
 \title{Plot Risk Factors Over Time}
 \usage{
-riskfactors(riskft, data_mean_weighted)
+riskfactors(riskft, data_weighted)
 }
 \arguments{
 \item{riskft}{A character string specifying the risk factor to plot.
 Options are: "bmi", "ei", "fat", "obese", "protein", "sodium".}
 
-\item{data_mean_weighted}{A data frame with weighted mean values for various metrics.}
+\item{data_weighted}{A data frame with weighted mean values for various metrics.}
 }
 \value{
 A ggplot object representing the specified plot.

@@ -4,10 +4,10 @@
 #'
 #' @param riskft A character string specifying the risk factor to plot.
 #'        Options are: "bmi", "ei", "fat", "obese", "protein", "sodium".
-#' @param data_mean_weighted A data frame with weighted mean values for various metrics.
+#' @param data_weighted A data frame with weighted mean values for various metrics.
 #' @return A ggplot object representing the specified plot.
 #' @export
-riskfactors <- function(riskft, data_mean_weighted) {
+riskfactors <- function(riskft, data_weighted) {
   riskfts <- c("bmi", "ei", "fat", "obese", "protein", "sodium")
 
   if (!(riskft %in% riskfts)) {
@@ -33,9 +33,9 @@ riskfactors <- function(riskft, data_mean_weighted) {
   )
 
   ggplot2::ggplot(
-    data = data_mean_weighted,
+    data = data_weighted,
     ggplot2::aes(
-      x = data_mean_weighted$time,
+      x = data_weighted$time,
       y = get(y_value),
       group = source
     )
