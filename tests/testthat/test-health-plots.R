@@ -203,32 +203,27 @@ test_that("inc_cum function works correctly", {
 
 # Testing burden_disease() function
 test_that("burden_disease function works correctly", {
-  # Create sample data
-  data_weighted_burden_wide_collapse <- data.frame(
-    time = seq(-9, 21, by = 1),
-    income = c(rep("low", 9), rep("middle", 16), rep("high", 6)),
-    diff_daly_mean = runif(31, -3, 0),
-    diff_daly_max = runif(31, -5, 0),
-    diff_daly_min = runif(31, -1, 0),
-    cumdiff_daly_mean = runif(31, -200, 0),
-    cumdiff_daly_max = runif(31, -300, 0),
-    cumdiff_daly_min = runif(31, -100, 0),
-    diff_yld_mean = runif(31, -0.3, 0),
-    diff_yld_max = runif(31, -0.5, 0),
-    diff_yld_min = runif(31, -0.1, 0),
-    diff_yll_mean = runif(31, -700, 0),
-    diff_yll_max = runif(31, -1000, 0),
-    diff_yll_min = runif(31, -300, 0)
-  )
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
+
+  # Generate the weighted data for the risk factors (using 'bd' instead of
+  # 'burden' to keep lintr happy)
+  data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
 
   # Test for valid input
-  plot_daly <- burden_disease("daly", data_weighted_burden_wide_collapse)
+  plot_daly <- burden_disease("daly", data_weighted_bd_wide_collapse)
   expect_s3_class(plot_daly, "ggplot")
   expect_equal(plot_daly$labels$title, "Reduction in DALYs by income class")
   expect_equal(plot_daly$labels$y, "DALYs")
 
   plot_dalycum <- burden_disease("dalycum",
-    data_weighted_burden_wide_collapse,
+    data_weighted_bd_wide_collapse,
     scale_y_continuous_limits = c(-41917000, 0),
     scale_y_continuous_breaks = c(-41917000, -33534000, -25150000, -16767000, -8383000, 0),
     scale_y_continuous_labels = scales::comma(c(-41917000, -33534000, -25150000, -16767000, -8383000, 0))
@@ -237,19 +232,19 @@ test_that("burden_disease function works correctly", {
   expect_equal(plot_dalycum$labels$title, "Cumulative reduction in DALYs by income class")
   expect_equal(plot_dalycum$labels$y, "DALYs")
 
-  plot_yld <- burden_disease("yld", data_weighted_burden_wide_collapse)
+  plot_yld <- burden_disease("yld", data_weighted_bd_wide_collapse)
   expect_s3_class(plot_yld, "ggplot")
   expect_equal(plot_yld$labels$title, "Reduction in YLDs by income class")
   expect_equal(plot_yld$labels$y, "YLDs")
 
-  plot_yll <- burden_disease("yll", data_weighted_burden_wide_collapse)
+  plot_yll <- burden_disease("yll", data_weighted_bd_wide_collapse)
   expect_s3_class(plot_yll, "ggplot")
   expect_equal(plot_yll$labels$title, "Reduction in YLLs by income class")
   expect_equal(plot_yll$labels$y, "YLLs")
 
   # Test for invalid input
   expect_error(
-    burden_disease("invalid_burden_disease", data_weighted_burden_wide_collapse),
+    burden_disease("invalid_burden_disease", data_weighted_bd_wide_collapse),
     "Invalid burden of disease. Choose from: 'daly', 'dalycum', 'yld', 'yll'."
   )
 })

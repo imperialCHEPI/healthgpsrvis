@@ -298,14 +298,14 @@ inc_cum <- function(inc,
 #'
 #' @param burden A character string specifying the burden of disease to plot.
 #'        Options are: "daly", "dalycum", "yld", "yll".
-#' @param data_weighted_burden_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
+#' @param data_weighted_bd_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
 #' @param scale_y_continuous_limits A numeric vector specifying the limits of the scales for continuous y aesthetics.
 #' @param scale_y_continuous_breaks A numeric vector specifying the breaks of the scales for continuous y aesthetics.
 #' @param scale_y_continuous_labels A numeric vector specifying the labels of the scales for continuous y aesthetics.
 #' @return A ggplot object representing the specified plot.
 #' @export
 burden_disease <- function(burden,
-                           data_weighted_burden_wide_collapse,
+                           data_weighted_bd_wide_collapse,
                            scale_y_continuous_limits = NULL,
                            scale_y_continuous_breaks = ggplot2::waiver(),
                            scale_y_continuous_labels = ggplot2::waiver()) {
@@ -351,11 +351,11 @@ burden_disease <- function(burden,
   )
 
   ggplot2::ggplot(
-    data = data_weighted_burden_wide_collapse,
+    data = data_weighted_bd_wide_collapse,
     ggplot2::aes(
-      x = data_weighted_burden_wide_collapse$time,
+      x = data_weighted_bd_wide_collapse$time,
       y = get(y_value),
-      colour = data_weighted_burden_wide_collapse$income
+      #colour = data_weighted_bd_wide_collapse$income
     )
   ) +
     ggplot2::geom_line(linewidth = 1) +
