@@ -91,6 +91,13 @@ inc_cum("diabetes",
   )
 ```
 
+To plot burden of disease for, say, "yld", you can use the following code:
+
+```{r burden_disease_plot}
+data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+burden_disease("yld", data_weighted_bd_wide_collapse)
+```
+
 <!--
 ### Cloning the Repository
 

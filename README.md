@@ -113,6 +113,20 @@ inc_cum("diabetes",
 
 <img src="man/figures/README-inc_cum_plot-1.png" width="100%" />
 
+To plot burden of disease for, say, “yld”, you can use the following
+code:
+
+``` r
+data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+burden_disease("yld", data_weighted_bd_wide_collapse)
+#> Warning: Use of `data_weighted_bd_wide_collapse$time` is discouraged.
+#> ℹ Use `time` instead.
+#> Use of `data_weighted_bd_wide_collapse$time` is discouraged.
+#> ℹ Use `time` instead.
+```
+
+<img src="man/figures/README-burden_disease_plot-1.png" width="100%" />
+
 <!--
 ### Cloning the Repository
 &#10;```bash
