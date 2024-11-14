@@ -66,26 +66,26 @@ str(data_weighted_rf_wide_collapse)
 #>  $ diff_obesity_max : num [1:34] 0 0 -0.00256 -0.00362 -0.00416 ...
 ```
 
-To plot a risk factor (say, “sodium”) for the weighted data, you can use
+To plot a risk factor (say, “bmi”) for the weighted data, you can use
 the following code:
 
 ``` r
-# Plot the risk factor "sodium"
-riskfactors("sodium", data_weighted)
+# Plot the risk factor "bmi"
+riskfactors("bmi", data_weighted)
 ```
 
 <img src="man/figures/README-riskfactor_plot-1.png" width="100%" />
 
-To plot the difference in the risk factor (say, “sodium”) for the
-weighted data, you can use the following code:
+To plot the difference in the risk factor (say, “bmi”) for the weighted
+data, you can use the following code:
 
 ``` r
-# Plot of difference in the risk factor "sodium"
-riskfactors_diff("sodium", 
+# Plot of difference in the risk factor "bmi"
+riskfactors_diff("bmi", 
                  data_weighted_rf_wide_collapse,
-                 scale_y_continuous_limits = c(-64.6, 0),
-                 scale_y_continuous_breaks = c(-64.6, -32.3, 0),
-                 scale_y_continuous_labels = c(-64.6, -32.3, 0))
+                 scale_y_continuous_limits = c(-0.148, 0),
+                 scale_y_continuous_breaks = c(-0.148, -0.074, 0),
+                 scale_y_continuous_labels = c(-0.148, -0.074, 0))
 #> Warning: Use of `data_weighted_rf_wide_collapse$time` is discouraged.
 #> ℹ Use `time` instead.
 #> Use of `data_weighted_rf_wide_collapse$time` is discouraged.
