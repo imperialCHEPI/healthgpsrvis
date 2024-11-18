@@ -8,8 +8,8 @@
 <title>Visualisation Functions for Health-GPS • healthgpsrvis</title>
 <script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Visualisation Functions for Health-GPS">
 <meta name="description" content="A collection of functions for visualising data from the Health-GPS project.">
 <meta property="og:description" content="A collection of functions for visualising data from the Health-GPS project.">
@@ -84,7 +84,7 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<p>This is an example to create the weighted data using the package:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://imperialchepi.github.io/healthgpsrvis/">healthgpsrvis</a></span><span class="op">)</span></span>
 <span></span>
@@ -100,36 +100,63 @@
 <span><span class="co"># Generate the weighted data for the risk factors</span></span>
 <span><span class="va">data_weighted_rf_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen_data_weighted_rf.html">gen_data_weighted_rf</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Summarise the weighted data for the risk factors</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">data_weighted_rf_wide_collapse</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       time      diff_sodium_mean diff_sodium_min  diff_sodium_max </span></span>
-<span><span class="co">#&gt;  Min.   :2022   Min.   :-33.67   Min.   :-33.92   Min.   :-33.65  </span></span>
-<span><span class="co">#&gt;  1st Qu.:2030   1st Qu.:-33.55   1st Qu.:-33.73   1st Qu.:-33.36  </span></span>
-<span><span class="co">#&gt;  Median :2038   Median :-33.24   Median :-33.56   Median :-32.99  </span></span>
-<span><span class="co">#&gt;  Mean   :2038   Mean   :-31.35   Mean   :-31.60   Mean   :-31.07  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:2047   3rd Qu.:-33.07   3rd Qu.:-33.34   3rd Qu.:-32.54  </span></span>
-<span><span class="co">#&gt;  Max.   :2055   Max.   :  0.00   Max.   :  0.00   Max.   :  0.00  </span></span>
-<span><span class="co">#&gt;   diff_ei_mean     diff_ei_min      diff_ei_max     diff_bmi_mean    </span></span>
-<span><span class="co">#&gt;  Min.   :-23.15   Min.   :-23.19   Min.   :-23.14   Min.   :-0.1460  </span></span>
-<span><span class="co">#&gt;  1st Qu.:-23.08   1st Qu.:-23.14   1st Qu.:-23.04   1st Qu.:-0.1445  </span></span>
-<span><span class="co">#&gt;  Median :-22.88   Median :-23.01   Median :-22.78   Median :-0.1429  </span></span>
-<span><span class="co">#&gt;  Mean   :-21.58   Mean   :-21.67   Mean   :-21.48   Mean   :-0.1321  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:-22.77   3rd Qu.:-22.92   3rd Qu.:-22.59   3rd Qu.:-0.1409  </span></span>
-<span><span class="co">#&gt;  Max.   :  0.00   Max.   :  0.00   Max.   :  0.00   Max.   : 0.0000  </span></span>
-<span><span class="co">#&gt;   diff_bmi_min      diff_bmi_max     diff_obesity_mean   diff_obesity_min   </span></span>
-<span><span class="co">#&gt;  Min.   :-0.1470   Min.   :-0.1457   Min.   :-0.004656   Min.   :-0.004688  </span></span>
-<span><span class="co">#&gt;  1st Qu.:-0.1456   1st Qu.:-0.1432   1st Qu.:-0.004463   1st Qu.:-0.004518  </span></span>
-<span><span class="co">#&gt;  Median :-0.1438   Median :-0.1417   Median :-0.004195   Median :-0.004245  </span></span>
-<span><span class="co">#&gt;  Mean   :-0.1329   Mean   :-0.1312   Mean   :-0.003953   Mean   :-0.004009  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:-0.1419   3rd Qu.:-0.1399   3rd Qu.:-0.003997   3rd Qu.:-0.004048  </span></span>
-<span><span class="co">#&gt;  Max.   : 0.0000   Max.   : 0.0000   Max.   : 0.000000   Max.   : 0.000000  </span></span>
-<span><span class="co">#&gt;  diff_obesity_max   </span></span>
-<span><span class="co">#&gt;  Min.   :-0.004606  </span></span>
-<span><span class="co">#&gt;  1st Qu.:-0.004401  </span></span>
-<span><span class="co">#&gt;  Median :-0.004163  </span></span>
-<span><span class="co">#&gt;  Mean   :-0.003896  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:-0.003922  </span></span>
-<span><span class="co">#&gt;  Max.   : 0.000000</span></span></code></pre></div>
+<span><span class="co"># View structure of the weighted data for the risk factors</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data_weighted_rf_wide_collapse</span><span class="op">)</span></span>
+<span><span class="co">#&gt; tibble [34 × 13] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;  $ time             : int [1:34] 2022 2023 2024 2025 2026 2027 2028 2029 2030 2031 ...</span></span>
+<span><span class="co">#&gt;  $ diff_sodium_mean : num [1:34] 0 0 -33.7 -33.7 -33.6 ...</span></span>
+<span><span class="co">#&gt;  $ diff_sodium_min  : num [1:34] 0 0 -33.7 -33.7 -33.7 ...</span></span>
+<span><span class="co">#&gt;  $ diff_sodium_max  : num [1:34] 0 0 -33.7 -33.6 -33.5 ...</span></span>
+<span><span class="co">#&gt;  $ diff_ei_mean     : num [1:34] 0 0 -23.1 -23.1 -23.1 ...</span></span>
+<span><span class="co">#&gt;  $ diff_ei_min      : num [1:34] 0 0 -23.2 -23.2 -23.2 ...</span></span>
+<span><span class="co">#&gt;  $ diff_ei_max      : num [1:34] 0 0 -23.1 -23.1 -23.1 ...</span></span>
+<span><span class="co">#&gt;  $ diff_bmi_mean    : num [1:34] 0 0 -0.0852 -0.1178 -0.133 ...</span></span>
+<span><span class="co">#&gt;  $ diff_bmi_min     : num [1:34] 0 0 -0.0852 -0.1178 -0.1333 ...</span></span>
+<span><span class="co">#&gt;  $ diff_bmi_max     : num [1:34] 0 0 -0.0852 -0.1177 -0.1328 ...</span></span>
+<span><span class="co">#&gt;  $ diff_obesity_mean: num [1:34] 0 0 -0.00258 -0.00363 -0.00419 ...</span></span>
+<span><span class="co">#&gt;  $ diff_obesity_min : num [1:34] 0 0 -0.0026 -0.00365 -0.00422 ...</span></span>
+<span><span class="co">#&gt;  $ diff_obesity_max : num [1:34] 0 0 -0.00256 -0.00362 -0.00416 ...</span></span></code></pre></div>
+<p>To plot a risk factor (say, “bmi”) for the weighted data, you can use the following code:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Plot the risk factor "bmi"</span></span>
+<span><span class="fu"><a href="reference/riskfactors.html">riskfactors</a></span><span class="op">(</span><span class="st">"bmi"</span>, <span class="va">data_weighted</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-riskfactor_plot-1.png" width="100%"></p>
+<p>To plot the difference in the risk factor (say, “bmi”) for the weighted data, you can use the following code:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Plot of difference in the risk factor "bmi"</span></span>
+<span><span class="fu"><a href="reference/riskfactors_diff.html">riskfactors_diff</a></span><span class="op">(</span><span class="st">"bmi"</span>, </span>
+<span>                 <span class="va">data_weighted_rf_wide_collapse</span>,</span>
+<span>                 scale_y_continuous_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.148</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>                 scale_y_continuous_breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.148</span>, <span class="op">-</span><span class="fl">0.074</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>                 scale_y_continuous_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.148</span>, <span class="op">-</span><span class="fl">0.074</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Use of `data_weighted_rf_wide_collapse$time` is discouraged.</span></span>
+<span><span class="co">#&gt; ℹ Use `time` instead.</span></span>
+<span><span class="co">#&gt; Use of `data_weighted_rf_wide_collapse$time` is discouraged.</span></span>
+<span><span class="co">#&gt; ℹ Use `time` instead.</span></span></code></pre></div>
+<p><img src="reference/figures/README-riskfactors_diff_plot-1.png" width="100%"></p>
+<p>To plot cumulative incidence difference for, say, “diabetes”, you can use the following code:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_weighted_ds_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen_data_weighted_ds.html">gen_data_weighted_ds</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/inc_cum.html">inc_cum</a></span><span class="op">(</span><span class="st">"diabetes"</span>,</span>
+<span>    <span class="va">data_weighted_ds_wide_collapse</span>,</span>
+<span>    scale_y_continuous_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4424000</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>    scale_y_continuous_breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4424000</span>, <span class="op">-</span><span class="fl">4084000</span>, <span class="op">-</span><span class="fl">3743000</span>, <span class="op">-</span><span class="fl">3403000</span>, <span class="op">-</span><span class="fl">3063000</span>, <span class="op">-</span><span class="fl">2722000</span>, <span class="op">-</span><span class="fl">2382000</span>, <span class="op">-</span><span class="fl">2042000</span>, <span class="op">-</span><span class="fl">1701000</span>, <span class="op">-</span><span class="fl">1361000</span>, <span class="op">-</span><span class="fl">1021000</span>, <span class="op">-</span><span class="fl">681000</span>, <span class="op">-</span><span class="fl">340000</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>    scale_y_continuous_labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4424000</span>, <span class="op">-</span><span class="fl">4084000</span>, <span class="op">-</span><span class="fl">3743000</span>, <span class="op">-</span><span class="fl">3403000</span>, <span class="op">-</span><span class="fl">3063000</span>, <span class="op">-</span><span class="fl">2722000</span>, <span class="op">-</span><span class="fl">2382000</span>, <span class="op">-</span><span class="fl">2042000</span>, <span class="op">-</span><span class="fl">1701000</span>, <span class="op">-</span><span class="fl">1361000</span>, <span class="op">-</span><span class="fl">1021000</span>, <span class="op">-</span><span class="fl">681000</span>, <span class="op">-</span><span class="fl">340000</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Use of `data_weighted_ds_wide_collapse$time` is discouraged.</span></span>
+<span><span class="co">#&gt; ℹ Use `time` instead.</span></span>
+<span><span class="co">#&gt; Use of `data_weighted_ds_wide_collapse$time` is discouraged.</span></span>
+<span><span class="co">#&gt; ℹ Use `time` instead.</span></span></code></pre></div>
+<p><img src="reference/figures/README-inc_cum_plot-1.png" width="100%"></p>
+<p>To plot burden of disease for, say, “yld”, you can use the following code:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_weighted_bd_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen_data_weighted_burden.html">gen_data_weighted_burden</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/burden_disease.html">burden_disease</a></span><span class="op">(</span><span class="st">"yld"</span>, <span class="va">data_weighted_bd_wide_collapse</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Use of `data_weighted_bd_wide_collapse$time` is discouraged.</span></span>
+<span><span class="co">#&gt; ℹ Use `time` instead.</span></span>
+<span><span class="co">#&gt; Use of `data_weighted_bd_wide_collapse$time` is discouraged.</span></span>
+<span><span class="co">#&gt; ℹ Use `time` instead.</span></span></code></pre></div>
+<p><img src="reference/figures/README-burden_disease_plot-1.png" width="100%"></p>
 <!--
 ### Cloning the Repository
 &#10;```bash
