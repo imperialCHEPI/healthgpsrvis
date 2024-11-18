@@ -31,7 +31,7 @@ devtools::install_github("imperialCHEPI/healthgpsrvis")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is an example to create the weighted data using the package:
 
 ``` r
 library(healthgpsrvis)
@@ -48,37 +48,84 @@ data_weighted <- gen_data_weighted(data)
 # Generate the weighted data for the risk factors
 data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
 
-# Summarise the weighted data for the risk factors
-summary(data_weighted_rf_wide_collapse)
-#>       time      diff_sodium_mean diff_sodium_min  diff_sodium_max 
-#>  Min.   :2022   Min.   :-33.67   Min.   :-33.92   Min.   :-33.65  
-#>  1st Qu.:2030   1st Qu.:-33.55   1st Qu.:-33.73   1st Qu.:-33.36  
-#>  Median :2038   Median :-33.24   Median :-33.56   Median :-32.99  
-#>  Mean   :2038   Mean   :-31.35   Mean   :-31.60   Mean   :-31.07  
-#>  3rd Qu.:2047   3rd Qu.:-33.07   3rd Qu.:-33.34   3rd Qu.:-32.54  
-#>  Max.   :2055   Max.   :  0.00   Max.   :  0.00   Max.   :  0.00  
-#>   diff_ei_mean     diff_ei_min      diff_ei_max     diff_bmi_mean    
-#>  Min.   :-23.15   Min.   :-23.19   Min.   :-23.14   Min.   :-0.1460  
-#>  1st Qu.:-23.08   1st Qu.:-23.14   1st Qu.:-23.04   1st Qu.:-0.1445  
-#>  Median :-22.88   Median :-23.01   Median :-22.78   Median :-0.1429  
-#>  Mean   :-21.58   Mean   :-21.67   Mean   :-21.48   Mean   :-0.1321  
-#>  3rd Qu.:-22.77   3rd Qu.:-22.92   3rd Qu.:-22.59   3rd Qu.:-0.1409  
-#>  Max.   :  0.00   Max.   :  0.00   Max.   :  0.00   Max.   : 0.0000  
-#>   diff_bmi_min      diff_bmi_max     diff_obesity_mean   diff_obesity_min   
-#>  Min.   :-0.1470   Min.   :-0.1457   Min.   :-0.004656   Min.   :-0.004688  
-#>  1st Qu.:-0.1456   1st Qu.:-0.1432   1st Qu.:-0.004463   1st Qu.:-0.004518  
-#>  Median :-0.1438   Median :-0.1417   Median :-0.004195   Median :-0.004245  
-#>  Mean   :-0.1329   Mean   :-0.1312   Mean   :-0.003953   Mean   :-0.004009  
-#>  3rd Qu.:-0.1419   3rd Qu.:-0.1399   3rd Qu.:-0.003997   3rd Qu.:-0.004048  
-#>  Max.   : 0.0000   Max.   : 0.0000   Max.   : 0.000000   Max.   : 0.000000  
-#>  diff_obesity_max   
-#>  Min.   :-0.004606  
-#>  1st Qu.:-0.004401  
-#>  Median :-0.004163  
-#>  Mean   :-0.003896  
-#>  3rd Qu.:-0.003922  
-#>  Max.   : 0.000000
+# View structure of the weighted data for the risk factors
+str(data_weighted_rf_wide_collapse)
+#> tibble [34 × 13] (S3: tbl_df/tbl/data.frame)
+#>  $ time             : int [1:34] 2022 2023 2024 2025 2026 2027 2028 2029 2030 2031 ...
+#>  $ diff_sodium_mean : num [1:34] 0 0 -33.7 -33.7 -33.6 ...
+#>  $ diff_sodium_min  : num [1:34] 0 0 -33.7 -33.7 -33.7 ...
+#>  $ diff_sodium_max  : num [1:34] 0 0 -33.7 -33.6 -33.5 ...
+#>  $ diff_ei_mean     : num [1:34] 0 0 -23.1 -23.1 -23.1 ...
+#>  $ diff_ei_min      : num [1:34] 0 0 -23.2 -23.2 -23.2 ...
+#>  $ diff_ei_max      : num [1:34] 0 0 -23.1 -23.1 -23.1 ...
+#>  $ diff_bmi_mean    : num [1:34] 0 0 -0.0852 -0.1178 -0.133 ...
+#>  $ diff_bmi_min     : num [1:34] 0 0 -0.0852 -0.1178 -0.1333 ...
+#>  $ diff_bmi_max     : num [1:34] 0 0 -0.0852 -0.1177 -0.1328 ...
+#>  $ diff_obesity_mean: num [1:34] 0 0 -0.00258 -0.00363 -0.00419 ...
+#>  $ diff_obesity_min : num [1:34] 0 0 -0.0026 -0.00365 -0.00422 ...
+#>  $ diff_obesity_max : num [1:34] 0 0 -0.00256 -0.00362 -0.00416 ...
 ```
+
+To plot a risk factor (say, “bmi”) for the weighted data, you can use
+the following code:
+
+``` r
+# Plot the risk factor "bmi"
+riskfactors("bmi", data_weighted)
+```
+
+<img src="man/figures/README-riskfactor_plot-1.png" width="100%" />
+
+To plot the difference in the risk factor (say, “bmi”) for the weighted
+data, you can use the following code:
+
+``` r
+# Plot of difference in the risk factor "bmi"
+riskfactors_diff("bmi", 
+                 data_weighted_rf_wide_collapse,
+                 scale_y_continuous_limits = c(-0.148, 0),
+                 scale_y_continuous_breaks = c(-0.148, -0.074, 0),
+                 scale_y_continuous_labels = c(-0.148, -0.074, 0))
+#> Warning: Use of `data_weighted_rf_wide_collapse$time` is discouraged.
+#> ℹ Use `time` instead.
+#> Use of `data_weighted_rf_wide_collapse$time` is discouraged.
+#> ℹ Use `time` instead.
+```
+
+<img src="man/figures/README-riskfactors_diff_plot-1.png" width="100%" />
+
+To plot cumulative incidence difference for, say, “diabetes”, you can
+use the following code:
+
+``` r
+data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
+inc_cum("diabetes",
+    data_weighted_ds_wide_collapse,
+    scale_y_continuous_limits = c(-4424000, 0),
+    scale_y_continuous_breaks = c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0),
+    scale_y_continuous_labels = scales::comma(c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0))
+  )
+#> Warning: Use of `data_weighted_ds_wide_collapse$time` is discouraged.
+#> ℹ Use `time` instead.
+#> Use of `data_weighted_ds_wide_collapse$time` is discouraged.
+#> ℹ Use `time` instead.
+```
+
+<img src="man/figures/README-inc_cum_plot-1.png" width="100%" />
+
+To plot burden of disease for, say, “yld”, you can use the following
+code:
+
+``` r
+data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+burden_disease("yld", data_weighted_bd_wide_collapse)
+#> Warning: Use of `data_weighted_bd_wide_collapse$time` is discouraged.
+#> ℹ Use `time` instead.
+#> Use of `data_weighted_bd_wide_collapse$time` is discouraged.
+#> ℹ Use `time` instead.
+```
+
+<img src="man/figures/README-burden_disease_plot-1.png" width="100%" />
 
 <!--
 ### Cloning the Repository

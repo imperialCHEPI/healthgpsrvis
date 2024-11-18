@@ -6,7 +6,7 @@
 \usage{
 burden_disease(
   burden,
-  data_weighted_burden_wide_collapse,
+  data_weighted_bd_wide_collapse,
   scale_y_continuous_limits = NULL,
   scale_y_continuous_breaks = ggplot2::waiver(),
   scale_y_continuous_labels = ggplot2::waiver()
@@ -16,7 +16,7 @@ burden_disease(
 \item{burden}{A character string specifying the burden of disease to plot.
 Options are: "daly", "dalycum", "yld", "yll".}
 
-\item{data_weighted_burden_wide_collapse}{A data frame with differences between intervention and baseline values for burden of disease.}
+\item{data_weighted_bd_wide_collapse}{A data frame with differences between intervention and baseline values for burden of disease.}
 
 \item{scale_y_continuous_limits}{A numeric vector specifying the limits of the scales for continuous y aesthetics.}
 

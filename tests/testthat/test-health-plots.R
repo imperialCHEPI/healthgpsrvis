@@ -1,59 +1,50 @@
 # Testing riskfactors() function
 test_that("riskfactors function works correctly", {
-  # Create sample data
-  data_mean_weighted <- data.frame(
-    time = rep(seq(2020, 2055, by = 5), 3),
-    weighted_bmi = runif(24, 25, 38),
-    weighted_energyintake = runif(24, 1700, 2750),
-    weighted_fat = runif(24, 38, 120),
-    weighted_obesity = runif(24, 0.1, 0.7),
-    weighted_protein = runif(24, 46, 210),
-    weighted_sodium = runif(24, 874, 2768),
-    source = rep(c("Source_1", "Source_2", "Source_3"), each = 8)
-  )
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
 
   # Test for valid input
-  plot_bmi <- riskfactors("bmi", data_mean_weighted)
+  plot_bmi <- riskfactors("bmi", data_weighted)
   expect_s3_class(plot_bmi, "ggplot")
   expect_equal(plot_bmi$labels$title, "BMI")
   expect_equal(plot_bmi$labels$y, "BMI (weighted)")
 
-  plot_ei <- riskfactors("ei", data_mean_weighted)
+  plot_ei <- riskfactors("energyintake", data_weighted)
   expect_s3_class(plot_ei, "ggplot")
-  expect_equal(plot_ei$labels$title, "EI")
+  expect_equal(plot_ei$labels$title, "ENERGYINTAKE")
   expect_equal(plot_ei$labels$y, "Energy intake (weighted)")
 
-  plot_sodium <- riskfactors("sodium", data_mean_weighted)
+  plot_sodium <- riskfactors("sodium", data_weighted)
   expect_s3_class(plot_sodium, "ggplot")
   expect_equal(plot_sodium$labels$title, "SODIUM")
   expect_equal(plot_sodium$labels$y, "Sodium (weighted)")
 
   # Test for invalid input
   expect_error(
-    riskfactors("invalid_riskft", data_mean_weighted),
-    "Invalid risk factor. Choose from: 'bmi', 'ei', 'fat', 'obese', 'protein', 'sodium'."
+    riskfactors("invalid_riskft", data_weighted),
+    "Invalid risk factor. Choose from: 'bmi', 'energyintake', 'fat', 'obesity', 'protein', 'sodium'."
   )
 })
 
 # Testing riskfactors_diff() function
 test_that("riskfactors_diff function works correctly", {
-  # Create sample data
-  data_weighted_rf_wide_collapse <- data.frame(
-    time = seq(-9, 21, by = 1),
-    income = c(rep("low", 9), rep("middle", 16), rep("high", 6)),
-    diff_bmi_mean = runif(31, -3, 0),
-    diff_bmi_max = runif(31, -5, 0),
-    diff_bmi_min = runif(31, -1, 0),
-    diff_ei_mean = runif(31, -200, 0),
-    diff_ei_max = runif(31, -300, 0),
-    diff_ei_min = runif(31, -100, 0),
-    diff_obesity_mean = runif(31, -0.3, 0),
-    diff_obesity_max = runif(31, -0.5, 0),
-    diff_obesity_min = runif(31, -0.1, 0),
-    diff_sodium_mean = runif(31, -700, 0),
-    diff_sodium_max = runif(31, -1000, 0),
-    diff_sodium_min = runif(31, -300, 0)
-  )
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
+
+  # Generate the weighted data for the risk factors
+  data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
 
   # Test for valid input
   plot_bmi <- riskfactors_diff("bmi",
@@ -140,26 +131,17 @@ test_that("inc_diff function works correctly", {
 
 # Testing inc_cum() function
 test_that("inc_cum function works correctly", {
-  # Create sample data
-  data_weighted_ds_wide_collapse <- data.frame(
-    time = seq(-9, 21, by = 1),
-    income = c(rep("low", 9), rep("middle", 16), rep("high", 6)),
-    cumdiff_inc_asthma_mean = runif(31, -3, 0),
-    cumdiff_inc_asthma_max = runif(31, -5, 0),
-    cumdiff_inc_asthma_min = runif(31, -1, 0),
-    cumdiff_inc_ckd_mean = runif(31, -200, 0),
-    cumdiff_inc_ckd_max = runif(31, -300, 0),
-    cumdiff_inc_ckd_min = runif(31, -100, 0),
-    cumdiff_inc_db_mean = runif(31, -0.3, 0),
-    cumdiff_inc_db_max = runif(31, -0.5, 0),
-    cumdiff_inc_db_min = runif(31, -0.1, 0),
-    cumdiff_inc_ihd_mean = runif(31, -700, 0),
-    cumdiff_inc_ihd_max = runif(31, -1000, 0),
-    cumdiff_inc_ihd_min = runif(31, -300, 0),
-    cumdiff_inc_stroke_mean = runif(31, -79, 0),
-    cumdiff_inc_stroke_max = runif(31, -100, 0),
-    cumdiff_inc_stroke_min = runif(31, -50, 0)
-  )
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
+
+  # Generate the weighted data for the risk factors
+  data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
 
   # Test for valid input
   plot_asthma <- inc_cum("asthma",
@@ -221,32 +203,27 @@ test_that("inc_cum function works correctly", {
 
 # Testing burden_disease() function
 test_that("burden_disease function works correctly", {
-  # Create sample data
-  data_weighted_burden_wide_collapse <- data.frame(
-    time = seq(-9, 21, by = 1),
-    income = c(rep("low", 9), rep("middle", 16), rep("high", 6)),
-    diff_daly_mean = runif(31, -3, 0),
-    diff_daly_max = runif(31, -5, 0),
-    diff_daly_min = runif(31, -1, 0),
-    cumdiff_daly_mean = runif(31, -200, 0),
-    cumdiff_daly_max = runif(31, -300, 0),
-    cumdiff_daly_min = runif(31, -100, 0),
-    diff_yld_mean = runif(31, -0.3, 0),
-    diff_yld_max = runif(31, -0.5, 0),
-    diff_yld_min = runif(31, -0.1, 0),
-    diff_yll_mean = runif(31, -700, 0),
-    diff_yll_max = runif(31, -1000, 0),
-    diff_yll_min = runif(31, -300, 0)
-  )
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
+
+  # Generate the weighted data for the risk factors (using 'bd' instead of
+  # 'burden' to keep lintr happy)
+  data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
 
   # Test for valid input
-  plot_daly <- burden_disease("daly", data_weighted_burden_wide_collapse)
+  plot_daly <- burden_disease("daly", data_weighted_bd_wide_collapse)
   expect_s3_class(plot_daly, "ggplot")
   expect_equal(plot_daly$labels$title, "Reduction in DALYs by income class")
   expect_equal(plot_daly$labels$y, "DALYs")
 
   plot_dalycum <- burden_disease("dalycum",
-    data_weighted_burden_wide_collapse,
+    data_weighted_bd_wide_collapse,
     scale_y_continuous_limits = c(-41917000, 0),
     scale_y_continuous_breaks = c(-41917000, -33534000, -25150000, -16767000, -8383000, 0),
     scale_y_continuous_labels = scales::comma(c(-41917000, -33534000, -25150000, -16767000, -8383000, 0))
@@ -255,19 +232,19 @@ test_that("burden_disease function works correctly", {
   expect_equal(plot_dalycum$labels$title, "Cumulative reduction in DALYs by income class")
   expect_equal(plot_dalycum$labels$y, "DALYs")
 
-  plot_yld <- burden_disease("yld", data_weighted_burden_wide_collapse)
+  plot_yld <- burden_disease("yld", data_weighted_bd_wide_collapse)
   expect_s3_class(plot_yld, "ggplot")
   expect_equal(plot_yld$labels$title, "Reduction in YLDs by income class")
   expect_equal(plot_yld$labels$y, "YLDs")
 
-  plot_yll <- burden_disease("yll", data_weighted_burden_wide_collapse)
+  plot_yll <- burden_disease("yll", data_weighted_bd_wide_collapse)
   expect_s3_class(plot_yll, "ggplot")
   expect_equal(plot_yll$labels$title, "Reduction in YLLs by income class")
   expect_equal(plot_yll$labels$y, "YLLs")
 
   # Test for invalid input
   expect_error(
-    burden_disease("invalid_burden_disease", data_weighted_burden_wide_collapse),
+    burden_disease("invalid_burden_disease", data_weighted_bd_wide_collapse),
     "Invalid burden of disease. Choose from: 'daly', 'dalycum', 'yld', 'yll'."
   )
 })
@@ -290,38 +267,22 @@ test_that("life_exp function works correctly", {
 test_that("combine_plots function works correctly", {
   # Create sample metrics
   metrics <- list(
-    risk_factors = c("bmi", "ei")
+    risk_factors = c("bmi", "energyintake")
   )
   # burden_disease = c("dalycum", "yld"))
 
-  # Create sample data
-  data_mean_weighted <- data.frame(
-    time = rep(seq(2020, 2055, by = 5), 3),
-    weighted_bmi = runif(24, 25, 38),
-    weighted_energyintake = runif(24, 1700, 2750),
-    weighted_fat = runif(24, 38, 120),
-    weighted_obesity = runif(24, 0.1, 0.7),
-    weighted_protein = runif(24, 46, 210),
-    weighted_sodium = runif(24, 874, 2768),
-    source = rep(c("Source_1", "Source_2", "Source_3"), each = 8)
-  )
+  # Get the path to the .rds file
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
 
-  data_weighted_burden_wide_collapse <- data.frame(
-    time = seq(-9, 21, by = 1),
-    income = c(rep("low", 9), rep("middle", 16), rep("high", 6)),
-    diff_daly_mean = runif(31, -3, 0),
-    diff_daly_max = runif(31, -5, 0),
-    diff_daly_min = runif(31, -1, 0),
-    cumdiff_daly_mean = runif(31, -200, 0),
-    cumdiff_daly_max = runif(31, -300, 0),
-    cumdiff_daly_min = runif(31, -100, 0),
-    diff_yld_mean = runif(31, -0.3, 0),
-    diff_yld_max = runif(31, -0.5, 0),
-    diff_yld_min = runif(31, -0.1, 0),
-    diff_yll_mean = runif(31, -700, 0),
-    diff_yll_max = runif(31, -1000, 0),
-    diff_yll_min = runif(31, -300, 0)
-  )
+  # Read the .rds file
+  data <- readRDS(filepath)
+
+  # Generate the weighted data
+  data_weighted <- gen_data_weighted(data)
+
+  # Generate the weighted data for the risk factors (using 'bd' instead of
+  # 'burden' to keep lintr happy)
+  data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
 
   # Create output file
   output_file <- tempfile(fileext = ".pdf")
@@ -329,8 +290,8 @@ test_that("combine_plots function works correctly", {
   # Create the combined plot
   plot_combine <- combine_plots(
     metrics = metrics,
-    data_mean_weighted = data_mean_weighted,
-    data_weighted_burden_wide_collapse = data_weighted_burden_wide_collapse,
+    data_weighted = data_weighted,
+    data_weighted_bd_wide_collapse = data_weighted_bd_wide_collapse,
     output_file = output_file
   )
 

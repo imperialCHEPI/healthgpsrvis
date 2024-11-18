@@ -40,7 +40,7 @@ devtools::install_github("imperialCHEPI/healthgpsrvis")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is an example to create the weighted data using the package:
 
 ```{r example}
 library(healthgpsrvis)
@@ -57,8 +57,45 @@ data_weighted <- gen_data_weighted(data)
 # Generate the weighted data for the risk factors
 data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
 
-# Summarise the weighted data for the risk factors
-summary(data_weighted_rf_wide_collapse)
+# View structure of the weighted data for the risk factors
+str(data_weighted_rf_wide_collapse)
+```
+
+To plot a risk factor (say, "bmi") for the weighted data, you can use the following code:
+
+```{r riskfactor_plot}
+# Plot the risk factor "bmi"
+riskfactors("bmi", data_weighted)
+```
+
+To plot the difference in the risk factor (say, "bmi") for the weighted data, you can use the following code:
+
+```{r riskfactors_diff_plot}
+# Plot of difference in the risk factor "bmi"
+riskfactors_diff("bmi", 
+                 data_weighted_rf_wide_collapse,
+                 scale_y_continuous_limits = c(-0.148, 0),
+                 scale_y_continuous_breaks = c(-0.148, -0.074, 0),
+                 scale_y_continuous_labels = c(-0.148, -0.074, 0))
+```
+
+To plot cumulative incidence difference for, say, "diabetes", you can use the following code:
+
+```{r inc_cum_plot}
+data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
+inc_cum("diabetes",
+    data_weighted_ds_wide_collapse,
+    scale_y_continuous_limits = c(-4424000, 0),
+    scale_y_continuous_breaks = c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0),
+    scale_y_continuous_labels = scales::comma(c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0))
+  )
+```
+
+To plot burden of disease for, say, "yld", you can use the following code:
+
+```{r burden_disease_plot}
+data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+burden_disease("yld", data_weighted_bd_wide_collapse)
 ```
 
 <!--

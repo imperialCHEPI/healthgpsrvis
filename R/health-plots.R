@@ -3,39 +3,39 @@
 #' Generates a line plot of a specified risk factor over time, grouped by source.
 #'
 #' @param riskft A character string specifying the risk factor to plot.
-#'        Options are: "bmi", "ei", "fat", "obese", "protein", "sodium".
-#' @param data_mean_weighted A data frame with weighted mean values for various metrics.
+#'        Options are: "bmi", "energyintake", "fat", "obesity", "protein", "sodium".
+#' @param data_weighted A data frame with weighted values for various metrics.
 #' @return A ggplot object representing the specified plot.
 #' @export
-riskfactors <- function(riskft, data_mean_weighted) {
-  riskfts <- c("bmi", "ei", "fat", "obese", "protein", "sodium")
+riskfactors <- function(riskft, data_weighted) {
+  riskfts <- c("bmi", "energyintake", "fat", "obesity", "protein", "sodium")
 
   if (!(riskft %in% riskfts)) {
-    stop("Invalid risk factor. Choose from: 'bmi', 'ei', 'fat', 'obese', 'protein', 'sodium'.")
+    stop("Invalid risk factor. Choose from: 'bmi', 'energyintake', 'fat', 'obesity', 'protein', 'sodium'.")
   }
 
   y_label <- switch(riskft,
     bmi = "BMI (weighted)",
-    ei = "Energy intake (weighted)",
+    energyintake = "Energy intake (weighted)",
     fat = "Fat (weighted)",
-    obese = "Obesity (weighted)",
+    obesity = "Obesity (weighted)",
     protein = "Protein (weighted)",
     sodium = "Sodium (weighted)"
   )
 
   y_value <- switch(riskft,
     bmi = "weighted_bmi",
-    ei = "weighted_energyintake",
+    energyintake = "weighted_energyintake",
     fat = "weighted_fat",
-    obese = "weighted_obesity",
+    obesity = "weighted_obesity",
     protein = "weighted_protein",
     sodium = "weighted_sodium"
   )
 
   ggplot2::ggplot(
-    data = data_mean_weighted,
+    data = data_weighted,
     ggplot2::aes(
-      x = data_mean_weighted$time,
+      x = data_weighted$time,
       y = get(y_value),
       group = source
     )
@@ -114,14 +114,14 @@ riskfactors_diff <- function(riskft_diff,
     ggplot2::aes(
       x = data_weighted_rf_wide_collapse$time,
       y = get(y_value),
-      colour = data_weighted_rf_wide_collapse$income
+      #colour = data_weighted_rf_wide_collapse$income
     )
   ) +
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = y_min,
-        ymax = y_max
+        ymin = get(y_min),
+        ymax = get(y_max)
       ),
       alpha = 0.2
     ) +
@@ -231,27 +231,27 @@ inc_cum <- function(inc,
   )
 
   y_value <- switch(inc,
-    asthma = "cumdiff_inc_asthma_mean",
-    ckd = "cumdiff_inc_ckd_mean",
-    diabetes = "cumdiff_inc_db_mean",
-    ischemia = "cumdiff_inc_ihd_mean",
-    stroke = "cumdiff_inc_stroke_mean"
+    asthma = "diff_inc_asthma_mean",
+    ckd = "diff_inc_ckd_mean",
+    diabetes = "diff_inc_db_mean",
+    ischemia = "diff_inc_ihd_mean",
+    stroke = "diff_inc_stroke_mean"
   )
 
   y_min <- switch(inc,
-    asthma = "cumdiff_inc_asthma_min",
-    ckd = "cumdiff_inc_ckd_min",
-    diabetes = "cumdiff_inc_db_min",
-    ischemia = "cumdiff_inc_ihd_min",
-    stroke = "cumdiff_inc_stroke_min"
+    asthma = "diff_inc_asthma_min",
+    ckd = "diff_inc_ckd_min",
+    diabetes = "diff_inc_db_min",
+    ischemia = "diff_inc_ihd_min",
+    stroke = "diff_inc_stroke_min"
   )
 
   y_max <- switch(inc,
-    asthma = "cumdiff_inc_asthma_max",
-    ckd = "cumdiff_inc_ckd_max",
-    diabetes = "cumdiff_inc_db_max",
-    ischemia = "cumdiff_inc_ihd_max",
-    stroke = "cumdiff_inc_stroke_max"
+    asthma = "diff_inc_asthma_max",
+    ckd = "diff_inc_ckd_max",
+    diabetes = "diff_inc_db_max",
+    ischemia = "diff_inc_ihd_max",
+    stroke = "diff_inc_stroke_max"
   )
 
   plot_title <- switch(inc,
@@ -266,14 +266,14 @@ inc_cum <- function(inc,
     data = data_weighted_ds_wide_collapse,
     ggplot2::aes(data_weighted_ds_wide_collapse$time,
       y = get(y_value),
-      colour = data_weighted_ds_wide_collapse$income
+      #colour = data_weighted_ds_wide_collapse$income
     )
   ) +
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = y_min,
-        ymax = y_max
+        ymin = get(y_min),
+        ymax = get(y_max)
       ),
       alpha = 0.2
     ) +
@@ -298,14 +298,14 @@ inc_cum <- function(inc,
 #'
 #' @param burden A character string specifying the burden of disease to plot.
 #'        Options are: "daly", "dalycum", "yld", "yll".
-#' @param data_weighted_burden_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
+#' @param data_weighted_bd_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
 #' @param scale_y_continuous_limits A numeric vector specifying the limits of the scales for continuous y aesthetics.
 #' @param scale_y_continuous_breaks A numeric vector specifying the breaks of the scales for continuous y aesthetics.
 #' @param scale_y_continuous_labels A numeric vector specifying the labels of the scales for continuous y aesthetics.
 #' @return A ggplot object representing the specified plot.
 #' @export
 burden_disease <- function(burden,
-                           data_weighted_burden_wide_collapse,
+                           data_weighted_bd_wide_collapse,
                            scale_y_continuous_limits = NULL,
                            scale_y_continuous_breaks = ggplot2::waiver(),
                            scale_y_continuous_labels = ggplot2::waiver()) {
@@ -351,18 +351,18 @@ burden_disease <- function(burden,
   )
 
   ggplot2::ggplot(
-    data = data_weighted_burden_wide_collapse,
+    data = data_weighted_bd_wide_collapse,
     ggplot2::aes(
-      x = data_weighted_burden_wide_collapse$time,
+      x = data_weighted_bd_wide_collapse$time,
       y = get(y_value),
-      colour = data_weighted_burden_wide_collapse$income
+      #colour = data_weighted_bd_wide_collapse$income
     )
   ) +
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = y_min,
-        ymax = y_max
+        ymin = get(y_min),
+        ymax = get(y_max)
       ),
       alpha = 0.2
     ) +
@@ -412,26 +412,26 @@ life_exp <- function(diff, data_ple_wide) {
 #' Creates a combined plot of several metrics.
 #'
 #' @param metrics A list specifying the metrics to plot.
-#' @param data_mean_weighted A data frame with weighted mean values for various metrics.
+#' @param data_weighted A data frame with weighted values for various metrics.
 #' @param data_mean_weighted_rf_wide A data frame containing the weighted mean values of risk factors.
 #' @param data_mean_weighted_inc_wide A data frame containing the weighted mean values of incidences.
-#' @param data_weighted_burden_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
+#' @param data_weighted_bd_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
 #' @param data_ple_wide A data frame containing the life expectancy.
 #' @param output_file Name of the output PDF as a string
 #' @return A combined ggplot object arranged in a grid.
 #' @export
 combine_plots <- function(metrics,
-                          data_mean_weighted = NULL,
+                          data_weighted = NULL,
                           data_mean_weighted_rf_wide = NULL,
                           data_mean_weighted_inc_wide = NULL,
-                          data_weighted_burden_wide_collapse = NULL,
+                          data_weighted_bd_wide_collapse = NULL,
                           data_ple_wide = NULL,
                           output_file) {
   plots <- list()
 
-  if (!is.null(metrics$risk_factors) && !is.null(data_mean_weighted)) {
+  if (!is.null(metrics$risk_factors) && !is.null(data_weighted)) {
     for (riskft in metrics$risk_factors) {
-      plots <- c(plots, list(riskfactors(riskft, data_mean_weighted)))
+      plots <- c(plots, list(riskfactors(riskft, data_weighted)))
     }
   }
 
@@ -453,9 +453,9 @@ combine_plots <- function(metrics,
     }
   }
 
-  if (!is.null(metrics$burden_disease) && !is.null(data_weighted_burden_wide_collapse)) {
+  if (!is.null(metrics$burden_disease) && !is.null(data_weighted_bd_wide_collapse)) {
     for (burden in metrics$burden_disease) {
-      plots <- c(plots, list(burden_disease(burden, data_weighted_burden_wide_collapse)))
+      plots <- c(plots, list(burden_disease(burden, data_weighted_bd_wide_collapse)))
     }
   }
 
