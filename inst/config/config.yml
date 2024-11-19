@@ -79,6 +79,12 @@ default:
     - diff_inc_stroke
     - diff_inc_asthma
     - diff_inc_ckd
+  summary_columns_ds_cum:  # Variables that are used to calculate the summary statistics
+    - cumdiff_inc_ihd
+    - cumdiff_inc_db
+    - cumdiff_inc_stroke
+    - cumdiff_inc_asthma
+    - cumdiff_inc_ckd
   # For the gen_data_weighted_burden() function
   weighted_burden:
     - total_yll

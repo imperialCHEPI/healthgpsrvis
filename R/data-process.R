@@ -205,13 +205,13 @@ gen_data_weighted_ds <- function(data_weighted) {
     ) |>
     dplyr::summarise(
       dplyr::across(
-        dplyr::all_of(config$summary_columns_ds),
+        dplyr::all_of(config$summary_columns_ds_cum),
         list(
           mean = ~ mean(.x, na.rm = TRUE),
           min = ~ min(.x, na.rm = TRUE),
           max = ~ max(.x, na.rm = TRUE)
         ),
-        .names = "cum{.col}_{.fn}"
+        .names = "{.col}_{.fn}"
       ),
       .groups = "drop"
     )
