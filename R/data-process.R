@@ -211,7 +211,7 @@ gen_data_weighted_ds <- function(data_weighted) {
           min = ~ min(.x, na.rm = TRUE),
           max = ~ max(.x, na.rm = TRUE)
         ),
-        .names = "{stringr::str_sub(.col, 4)}_{.fn}"
+        .names = "{.col}_{.fn}"
       ),
       .groups = "drop"
     )

@@ -230,27 +230,27 @@ inc_cum <- function(inc,
   )
 
   y_value <- switch(inc,
-    asthma = "diff_inc_asthma_mean",
-    ckd = "diff_inc_ckd_mean",
-    diabetes = "diff_inc_db_mean",
-    ischemia = "diff_inc_ihd_mean",
-    stroke = "diff_inc_stroke_mean"
+    asthma = "cumdiff_inc_asthma_mean",
+    ckd = "cumdiff_inc_ckd_mean",
+    diabetes = "cumdiff_inc_db_mean",
+    ischemia = "cumdiff_inc_ihd_mean",
+    stroke = "cumdiff_inc_stroke_mean"
   )
 
   y_min <- switch(inc,
-    asthma = "diff_inc_asthma_min",
-    ckd = "diff_inc_ckd_min",
-    diabetes = "diff_inc_db_min",
-    ischemia = "diff_inc_ihd_min",
-    stroke = "diff_inc_stroke_min"
+    asthma = "cumdiff_inc_asthma_min",
+    ckd = "cumdiff_inc_ckd_min",
+    diabetes = "cumdiff_inc_db_min",
+    ischemia = "cumdiff_inc_ihd_min",
+    stroke = "cumdiff_inc_stroke_min"
   )
 
   y_max <- switch(inc,
-    asthma = "diff_inc_asthma_max",
-    ckd = "diff_inc_ckd_max",
-    diabetes = "diff_inc_db_max",
-    ischemia = "diff_inc_ihd_max",
-    stroke = "diff_inc_stroke_max"
+    asthma = "cumdiff_inc_asthma_max",
+    ckd = "cumdiff_inc_ckd_max",
+    diabetes = "cumdiff_inc_db_max",
+    ischemia = "cumdiff_inc_ihd_max",
+    stroke = "cumdiff_inc_stroke_max"
   )
 
   plot_title <- switch(inc,

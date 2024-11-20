@@ -103,12 +103,12 @@ test_that("Columns in the generated dataframe", {
   expect_equal(
     colnames(data_weighted_ds_wide_collapse),
     c(
-      "time", "diff_inc_ihd_mean", "diff_inc_ihd_min",
-      "diff_inc_ihd_max", "diff_inc_db_mean", "diff_inc_db_min",
-      "diff_inc_db_max", "diff_inc_stroke_mean", "diff_inc_stroke_min",
-      "diff_inc_stroke_max", "diff_inc_asthma_mean", "diff_inc_asthma_min",
-      "diff_inc_asthma_max", "diff_inc_ckd_mean", "diff_inc_ckd_min",
-      "diff_inc_ckd_max"
+      "time", "cumdiff_inc_ihd_mean", "cumdiff_inc_ihd_min",
+      "cumdiff_inc_ihd_max", "cumdiff_inc_db_mean", "cumdiff_inc_db_min",
+      "cumdiff_inc_db_max", "cumdiff_inc_stroke_mean", "cumdiff_inc_stroke_min",
+      "cumdiff_inc_stroke_max", "cumdiff_inc_asthma_mean", "cumdiff_inc_asthma_min",
+      "cumdiff_inc_asthma_max", "cumdiff_inc_ckd_mean", "cumdiff_inc_ckd_min",
+      "cumdiff_inc_ckd_max"
     )
   )
 })
