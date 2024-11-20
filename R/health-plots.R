@@ -254,11 +254,11 @@ inc_cum <- function(inc,
   )
 
   plot_title <- switch(inc,
-    asthma = "Asthma - Cumulative reduction",
-    ckd = "Chronic kidney disease - Cumulative reduction",
-    diabetes = "Diabetes - Cumulative reduction",
-    ischemia = "Ischemic heart disease - Cumulative reduction",
-    stroke = "Stroke - Cumulative reduction"
+    asthma = "Asthma - Cumulative reduction in incidence",
+    ckd = "Chronic kidney disease - Cumulative reduction in incidence",
+    diabetes = "Diabetes - Cumulative reduction in incidence",
+    ischemia = "Ischemic heart disease - Cumulative reduction in incidence",
+    stroke = "Stroke - Cumulative reduction in incidence"
   )
 
   ggplot2::ggplot(
