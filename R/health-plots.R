@@ -103,18 +103,17 @@ riskfactors_diff <- function(riskft_diff,
   )
 
   plot_title <- switch(riskft_diff,
-    bmi = "Reduction in BMI by income class",
-    ei = "Reduction in energy intake (kcal) by income class",
-    obesity = "Reduction in obesity prevalence by income class",
-    sodium = "Reduction in sodium (mg) by income class"
+    bmi = "Reduction in BMI",
+    ei = "Reduction in energy intake (kcal)",
+    obesity = "Reduction in obesity prevalence",
+    sodium = "Reduction in sodium (mg)"
   )
 
   ggplot2::ggplot(
     data = data_weighted_rf_wide_collapse,
     ggplot2::aes(
       x = data_weighted_rf_wide_collapse$time,
-      y = get(y_value),
-      #colour = data_weighted_rf_wide_collapse$income
+      y = get(y_value)
     )
   ) +
     ggplot2::geom_line(linewidth = 1) +
@@ -255,18 +254,17 @@ inc_cum <- function(inc,
   )
 
   plot_title <- switch(inc,
-    asthma = "Asthma - Cumulative reduction by income class",
-    ckd = "Chronic kidney disease - Cumulative reduction by income class",
-    diabetes = "Diabetes - Cumulative reduction by income class",
-    ischemia = "Ischemic heart disease - Cumulative reduction by income class",
-    stroke = "Stroke - Cumulative reduction by income class"
+    asthma = "Asthma - Cumulative reduction in incidence",
+    ckd = "Chronic kidney disease - Cumulative reduction in incidence",
+    diabetes = "Diabetes - Cumulative reduction in incidence",
+    ischemia = "Ischemic heart disease - Cumulative reduction in incidence",
+    stroke = "Stroke - Cumulative reduction in incidence"
   )
 
   ggplot2::ggplot(
     data = data_weighted_ds_wide_collapse,
     ggplot2::aes(data_weighted_ds_wide_collapse$time,
-      y = get(y_value),
-      #colour = data_weighted_ds_wide_collapse$income
+      y = get(y_value)
     )
   ) +
     ggplot2::geom_line(linewidth = 1) +
@@ -344,18 +342,17 @@ burden_disease <- function(burden,
   )
 
   plot_title <- switch(burden,
-    daly = "Reduction in DALYs by income class",
-    dalycum = "Cumulative reduction in DALYs by income class",
-    yld = "Reduction in YLDs by income class",
-    yll = "Reduction in YLLs by income class"
+    daly = "Reduction in DALYs",
+    dalycum = "Cumulative reduction in DALYs",
+    yld = "Reduction in YLDs",
+    yll = "Reduction in YLLs"
   )
 
   ggplot2::ggplot(
     data = data_weighted_bd_wide_collapse,
     ggplot2::aes(
       x = data_weighted_bd_wide_collapse$time,
-      y = get(y_value),
-      #colour = data_weighted_bd_wide_collapse$income
+      y = get(y_value)
     )
   ) +
     ggplot2::geom_line(linewidth = 1) +
