@@ -83,10 +83,10 @@ To plot the incidence difference for, say, "stroke", you can use the following c
 
 ```{r inc_diff_plot}
 data_weighted_ds_wide_diff <- gen_data_weighted_ds_diff(data_weighted)
-inc_diff("asthma", data_weighted_ds_wide_diff)
+inc_diff("stroke", data_weighted_ds_wide_diff)
 ```
 
-To plot cumulative incidence difference for, say, "diabetes", you can use the following code:
+To plot the cumulative incidence difference for, say, "diabetes", you can use the following code:
 
 ```{r inc_cum_plot}
 data_weighted_ds_wide_collapse <- gen_data_weighted_ds_cumdiff(data_weighted)
