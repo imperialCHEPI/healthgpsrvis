@@ -96,41 +96,6 @@ test_that("riskfactors_diff function works correctly", {
 
 # Testing inc_diff() function
 test_that("inc_diff function works correctly", {
-  # Create sample data
-  data_mean_weighted_inc_wide <- data.frame(
-    timediff = seq(-9, 21, by = 1),
-    diff_asthma = runif(31, -3, 0),
-    diff_ckd = runif(31, -200, 0),
-    diff_diabetes = runif(31, -0.3, 0),
-    diff_ischemia = runif(31, -700, 0),
-    diff_stroke = runif(31, -79, 0)
-  )
-
-  # Test for valid input
-  plot_ckd <- inc_diff("ckd", data_mean_weighted_inc_wide)
-  expect_s3_class(plot_ckd, "ggplot")
-  expect_equal(plot_ckd$labels$title, "Chronic kidney disease - Reduction in incidence number")
-  expect_equal(plot_ckd$labels$y, "CKD incidence")
-
-  plot_ihd <- inc_diff("ischemia", data_mean_weighted_inc_wide)
-  expect_s3_class(plot_ihd, "ggplot")
-  expect_equal(plot_ihd$labels$title, "Ischemic heart disease - Reduction in incidence number")
-  expect_equal(plot_ihd$labels$y, "Ischemia incidence")
-
-  plot_stroke <- inc_diff("stroke", data_mean_weighted_inc_wide)
-  expect_s3_class(plot_stroke, "ggplot")
-  expect_equal(plot_stroke$labels$title, "Stroke - Reduction in incidence number")
-  expect_equal(plot_stroke$labels$y, "Stroke incidence")
-
-  # Test for invalid input
-  expect_error(
-    inc_diff("invalid_inc", data_mean_weighted_inc_wide),
-    "Invalid incidence. Choose from: 'asthma', 'ckd', 'diabetes', 'ischemia', 'stroke'."
-  )
-})
-
-# Testing inc_cum() function
-test_that("inc_cum function works correctly", {
   # Get the path to the .rds file
   filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
 
@@ -140,10 +105,47 @@ test_that("inc_cum function works correctly", {
   # Generate the weighted data
   data_weighted <- gen_data_weighted(data)
 
-  # Generate the weighted data for the risk factors
-  data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
+  # Generate the weighted data for incidence differences
+  data_weighted_ds_wide_diff <- gen_data_weighted_ds_diff(data_weighted)
 
   # Test for valid input
+  plot_ckd <- inc_diff("ckd", data_weighted_ds_wide_diff)
+  expect_s3_class(plot_ckd, "ggplot")
+  expect_equal(plot_ckd$labels$title, "Chronic kidney disease - Reduction in incidence number")
+  expect_equal(plot_ckd$labels$y, "CKD incidence")
+
+  plot_ihd <- inc_diff("ischemia", data_weighted_ds_wide_diff)
+  expect_s3_class(plot_ihd, "ggplot")
+  expect_equal(plot_ihd$labels$title, "Ischemic heart disease - Reduction in incidence number")
+  expect_equal(plot_ihd$labels$y, "Ischemia incidence")
+
+  plot_stroke <- inc_diff("stroke", data_weighted_ds_wide_diff)
+  expect_s3_class(plot_stroke, "ggplot")
+  expect_equal(plot_stroke$labels$title, "Stroke - Reduction in incidence number")
+  expect_equal(plot_stroke$labels$y, "Stroke incidence")
+
+  # Test for invalid input
+  expect_error(
+    inc_diff("invalid_inc", data_weighted_ds_wide_diff),
+    "Invalid incidence. Choose from: 'asthma', 'ckd', 'diabetes', 'ischemia', 'stroke'."
+  )
+})
+
+# Testing inc_cum() function ----
+test_that("inc_cum function works correctly", {
+  # Get the path to the .rds file ----
+  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+
+  # Read the .rds file ----
+  data <- readRDS(filepath)
+
+  # Generate the weighted data ----
+  data_weighted <- gen_data_weighted(data)
+
+  # Generate the weighted data for cumulative incidence differences ----
+  data_weighted_ds_wide_collapse <- gen_data_weighted_ds_cumdiff(data_weighted)
+
+  # Test for valid input ----
   plot_asthma <- inc_cum("asthma",
     data_weighted_ds_wide_collapse,
     scale_y_continuous_limits = c(-4769000, 0),
@@ -194,7 +196,7 @@ test_that("inc_cum function works correctly", {
   expect_equal(plot_stroke$labels$title, "Stroke - Cumulative reduction in incidence")
   expect_equal(plot_stroke$labels$y, "Stroke incidence")
 
-  # Test for invalid input
+  # Test for invalid input ----
   expect_error(
     inc_cum("invalid_inc_cum", data_weighted_ds_wide_collapse),
     "Invalid incidence. Choose from: 'asthma', 'ckd', 'diabetes', 'ischemia', 'stroke'."
