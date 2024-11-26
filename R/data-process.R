@@ -129,8 +129,14 @@ gen_data_weighted_rf <- function(data_weighted) {
         }),
         paste0("diff_", config$rf)
       )
-    ) |>
-    dplyr::rename(diff_ei = diff_energyintake)
+    )
+
+  if ("diff_energyintake" %in% colnames(data_weighted_rf_wide)) {
+    data_weighted_rf_wide <- data_weighted_rf_wide |>
+      dplyr::rename(
+        diff_ei = diff_energyintake
+      )
+  }
 
   data_weighted_rf_wide_collapse <- data_weighted_rf_wide |>
     dplyr::group_by(dplyr::across(dplyr::all_of(config$group))) |>
@@ -180,8 +186,12 @@ gen_data_weighted_ds_diff <- function(data_weighted) {
         }),
         paste0("diff_inc_", config$disease)
       )
-    ) |>
-    dplyr::rename(diff_inc_db = diff_inc_diabetes)
+    )
+
+  if ("diff_inc_diabetes" %in% colnames(data_weighted_ds_wide_diff)) {
+    data_weighted_ds_wide_diff <- data_weighted_ds_wide_diff |>
+      dplyr::rename(diff_inc_db = diff_inc_diabetes)
+  }
 
   return(data_weighted_ds_wide_diff)
 }
@@ -216,8 +226,12 @@ gen_data_weighted_ds_cumdiff <- function(data_weighted) {
         }),
         paste0("diff_inc_", config$disease)
       )
-    ) |>
-    dplyr::rename(diff_inc_db = diff_inc_diabetes)
+    )
+
+  if ("diff_inc_diabetes" %in% colnames(data_weighted_ds_wide)) {
+    data_weighted_ds_wide <- data_weighted_ds_wide |>
+      dplyr::rename(diff_inc_db = diff_inc_diabetes)
+  }
 
   data_weighted_ds_wide <- data_weighted_ds_wide |>
     dplyr::group_by(
@@ -460,5 +474,4 @@ utils::globalVariables(c(
   "incidence_intracerebralhemorrhage", "incidence_ischemicstroke",
   "incidence_subarachnoidhemorrhage", "prevalence_intracerebralhemorrhage",
   "prevalence_ischemicstroke", "prevalence_subarachnoidhemorrhage",
-  "diff_energyintake", "diff_inc_diabetes"
-))
+  "diff_energyintake", "diff_inc_diabetes"))
