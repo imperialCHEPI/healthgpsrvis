@@ -58,7 +58,7 @@ default:
     - diff_ei
     - diff_bmi
     - diff_obesity
-  # For the gen_data_weighted_ds() function
+  # For the gen_data_weighted_ds_diff() and gen_data_weighted_ds_cumdiff() functions
   weighted_ds:
     - totalcase_ihd
     - totalcase_diabetes

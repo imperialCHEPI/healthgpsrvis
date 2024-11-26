@@ -172,7 +172,7 @@ gen_data_weighted_ds_diff <- function(data_weighted) {
                                               values_from = config$weighted_ds
   )
 
-  data_weighted_ds_wide <- data_weighted_ds_wide |>
+  data_weighted_ds_wide_diff <- data_weighted_ds_wide |>
     dplyr::mutate(
       !!!stats::setNames(
         lapply(config$disease, function(ds) {
@@ -183,27 +183,7 @@ gen_data_weighted_ds_diff <- function(data_weighted) {
     ) |>
     dplyr::rename(diff_inc_db = diff_inc_diabetes)
 
-
-  data_weighted_ds_wide_collapse <- data_weighted_ds_wide |>
-    dplyr::group_by(
-      dplyr::across(
-        dplyr::all_of(config$group)
-      )
-    ) |>
-    dplyr::summarise(
-      dplyr::across(
-        dplyr::all_of(config$summary_columns_ds),
-        list(
-          mean = ~ mean(.x, na.rm = TRUE),
-          min = ~ min(.x, na.rm = TRUE),
-          max = ~ max(.x, na.rm = TRUE)
-        ),
-        .names = "{stringr::str_sub(.col, 4)}_{.fn}"
-      ),
-      .groups = "drop"
-    )
-
-  return(data_weighted_ds_wide_collapse)
+  return(data_weighted_ds_wide_diff)
 }
 
 #' Calculate Cumulative Differences for Incidences
@@ -213,7 +193,7 @@ gen_data_weighted_ds_diff <- function(data_weighted) {
 #' @param data_weighted A data frame containing weighted mean values for various metrics.
 #' @return A data frame with differences between intervention and baseline values for incidences.
 #' @export
-gen_data_weighted_ds <- function(data_weighted) {
+gen_data_weighted_ds_cumdiff <- function(data_weighted) {
   config <- load_config("default")
   data_weighted_ds <- dplyr::select(
     data_weighted,
