@@ -44,9 +44,15 @@ data <- readRDS(filepath)
 
 # Generate the weighted data
 data_weighted <- gen_data_weighted(data)
+#> [1] "Loading the config file..."
+#> [1] "Processing the data..."
+#> [1] "Data processing complete."
 
 # Generate the weighted data for the risk factors
 data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
+#> [1] "Loading the config file..."
+#> [1] "Processing the data..."
+#> [1] "Data processing complete."
 
 # View structure of the weighted data for the risk factors
 str(data_weighted_rf_wide_collapse)
@@ -99,6 +105,9 @@ use the following code:
 
 ``` r
 data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
+#> [1] "Loading the config file..."
+#> [1] "Processing the data..."
+#> [1] "Data processing complete."
 inc_cum("diabetes",
     data_weighted_ds_wide_collapse,
     scale_y_continuous_limits = c(-4424000, 0),
@@ -118,6 +127,9 @@ code:
 
 ``` r
 data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+#> [1] "Loading the config file..."
+#> [1] "Processing the data..."
+#> [1] "Data processing complete."
 burden_disease("yld", data_weighted_bd_wide_collapse)
 #> Warning: Use of `data_weighted_bd_wide_collapse$time` is discouraged.
 #> ℹ Use `time` instead.
