@@ -42,7 +42,9 @@ NULL
 #' @return A data frame with weighted values for various metrics over years.
 #' @export
 gen_data_weighted <- function(data) {
+  print("Loading the config file...")
   config <- load_config("default")
+  print("Processing the data...")
   colnames(data) <- gsub("^mean_", "", colnames(data)) # Clean the column names by removing 'mean_'
   weight_column <- rlang::sym(config$weight)
   data_weighted <- data |>
@@ -95,7 +97,7 @@ gen_data_weighted <- function(data) {
       )),
       dplyr::matches("^(weighted_|wprev_|prevcase_|totalcase_)")
     )
-
+  print("Data processing complete.")
   return(data_weighted)
 }
 
@@ -107,7 +109,9 @@ gen_data_weighted <- function(data) {
 #' @return A data frame with differences between intervention and baseline values for risk factors.
 #' @export
 gen_data_weighted_rf <- function(data_weighted) {
+  print("Loading the config file...")
   config <- load_config("default")
+  print("Processing the data...")
   data_weighted_rf <- dplyr::select(
     data_weighted,
     config$names_from,
@@ -146,7 +150,7 @@ gen_data_weighted_rf <- function(data_weighted) {
       ),
       .groups = "drop"
     )
-
+  print("Data processing complete.")
   return(data_weighted_rf_wide_collapse)
 }
 
@@ -158,7 +162,9 @@ gen_data_weighted_rf <- function(data_weighted) {
 #' @return A data frame with differences between intervention and baseline values for incidences.
 #' @export
 gen_data_weighted_ds <- function(data_weighted) {
+  print("Loading the config file...")
   config <- load_config("default")
+  print("Processing the data...")
   data_weighted_ds <- dplyr::select(
     data_weighted,
     config$names_from,
@@ -215,7 +221,7 @@ gen_data_weighted_ds <- function(data_weighted) {
       ),
       .groups = "drop"
     )
-
+  print("Data processing complete.")
   return(data_weighted_ds_wide_collapse)
 }
 
@@ -227,8 +233,9 @@ gen_data_weighted_ds <- function(data_weighted) {
 #' @return A data frame with differences between intervention and baseline values for burden of disease.
 #' @export
 gen_data_weighted_burden <- function(data_weighted) {
+  print("Loading the config file...")
   config <- load_config("default")
-
+  print("Processing the data...")
   data_weighted_burden <- dplyr::select(
     data_weighted,
     config$names_from,
@@ -284,7 +291,7 @@ gen_data_weighted_burden <- function(data_weighted) {
       ),
       .groups = "drop"
     )
-
+  print("Data processing complete.")
   return(data_weighted_bd_wide_collapse)
 }
 
@@ -296,7 +303,9 @@ gen_data_weighted_burden <- function(data_weighted) {
 #' @return A data frame with spline smoothing applied for burden of disease.
 #' @export
 gen_data_weighted_burden_spline <- function(data_weighted_burden_wide_collapse) {
+  print("Loading the config file...")
   config <- load_config("default")
+  print("Processing the data...")
   config_file_path <- system.file("config", "config.yml", package = "healthgpsrvis")
   burden_spline <- config::get(value = "burden_spline",
                                file = config_file_path,
@@ -360,7 +369,7 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden_wide_collapse) 
       0,
       data_weighted_burden_spline[[burden_sp]])
   }
-
+  print("Data processing complete.")
   return(data_weighted_burden_spline)
 }
 
