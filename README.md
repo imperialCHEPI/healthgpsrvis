@@ -36,8 +36,10 @@ This is an example to create the weighted data using the package:
 ``` r
 library(healthgpsrvis)
 
-# Get the path to the .rds file
+# Get the path to the .rds file included in the testdata folder
 filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+#filepath <- "path/to/data.rds" # Get the path to the .rds file included in any other local folder
+
 
 # Read the .rds file
 data <- readRDS(filepath)
