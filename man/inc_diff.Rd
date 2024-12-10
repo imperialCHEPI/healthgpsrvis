@@ -4,13 +4,13 @@
 \alias{inc_diff}
 \title{Plot of Incidence Difference}
 \usage{
-inc_diff(inc, data_mean_weighted_inc_wide)
+inc_diff(inc, data_weighted_ds_wide_diff)
 }
 \arguments{
 \item{inc}{A character string specifying the incidence to plot.
 Options are: "asthma", "ckd", "diabetes", "ischemia", "stroke".}
 
-\item{data_mean_weighted_inc_wide}{A data frame containing the weighted mean values of incidences.}
+\item{data_weighted_ds_wide_diff}{A data frame containing the weighted mean values of differences of incidences.}
 }
 \value{
 A ggplot object representing the specified plot.

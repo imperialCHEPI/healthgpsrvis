@@ -144,10 +144,11 @@ riskfactors_diff <- function(riskft_diff,
 #'
 #' @param inc A character string specifying the incidence to plot.
 #'        Options are: "asthma", "ckd", "diabetes", "ischemia", "stroke".
-#' @param data_mean_weighted_inc_wide A data frame containing the weighted mean values of incidences.
+#' @param data_weighted_ds_wide_diff A data frame containing the weighted mean values of differences of incidences.
 #' @return A ggplot object representing the specified plot.
 #' @export
-inc_diff <- function(inc, data_mean_weighted_inc_wide) {
+inc_diff <- function(inc,
+                     data_weighted_ds_wide_diff) {
   incs <- c("asthma", "ckd", "diabetes", "ischemia", "stroke")
 
   if (!(inc %in% incs)) {
@@ -163,11 +164,11 @@ inc_diff <- function(inc, data_mean_weighted_inc_wide) {
   )
 
   y_value <- switch(inc,
-    asthma = "diff_asthma",
-    ckd = "diff_ckd",
-    diabetes = "diff_diabetes",
-    ischemia = "diff_ihd",
-    stroke = "diff_stroke"
+    asthma = "diff_inc_asthma",
+    ckd = "diff_inc_ckd",
+    diabetes = "diff_inc_db",
+    ischemia = "diff_inc_ihd",
+    stroke = "diff_inc_stroke"
   )
 
   plot_title <- switch(inc,
@@ -179,12 +180,12 @@ inc_diff <- function(inc, data_mean_weighted_inc_wide) {
   )
 
   ggplot2::ggplot(
-    data = data_mean_weighted_inc_wide,
-    ggplot2::aes(data_mean_weighted_inc_wide$timediff,
+    data = data_weighted_ds_wide_diff,
+    ggplot2::aes(data_weighted_ds_wide_diff$time,
       y = get(y_value)
     )
   ) +
-    ggplot2::geom_line(colour = "red", linewidth = 1) +
+    ggplot2::geom_line(linewidth = 1) +
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +

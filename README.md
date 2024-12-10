@@ -102,11 +102,26 @@ riskfactors_diff("bmi",
 
 <img src="man/figures/README-riskfactors_diff_plot-1.png" width="100%" />
 
-To plot cumulative incidence difference for, say, “diabetes”, you can
-use the following code:
+To plot the incidence difference for, say, “stroke”, you can use the
+following code:
 
 ``` r
-data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
+data_weighted_ds_wide_diff <- gen_data_weighted_ds_diff(data_weighted)
+#> [1] "Loading the config file..."
+#> [1] "Processing the data..."
+#> [1] "Data processing complete."
+inc_diff("stroke", data_weighted_ds_wide_diff)
+#> Warning: Removed 170 rows containing missing values or values outside the scale range
+#> (`geom_line()`).
+```
+
+<img src="man/figures/README-inc_diff_plot-1.png" width="100%" />
+
+To plot the cumulative incidence difference for, say, “diabetes”, you
+can use the following code:
+
+``` r
+data_weighted_ds_wide_collapse <- gen_data_weighted_ds_cumdiff(data_weighted)
 #> [1] "Loading the config file..."
 #> [1] "Processing the data..."
 #> [1] "Data processing complete."
