@@ -142,9 +142,19 @@
 <span><span class="co">#&gt; Use of `data_weighted_rf_wide_collapse$time` is discouraged.</span></span>
 <span><span class="co">#&gt; ℹ Use `time` instead.</span></span></code></pre></div>
 <p><img src="reference/figures/README-riskfactors_diff_plot-1.png" width="100%"></p>
-<p>To plot cumulative incidence difference for, say, “diabetes”, you can use the following code:</p>
+<p>To plot the incidence difference for, say, “stroke”, you can use the following code:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_weighted_ds_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen_data_weighted_ds.html">gen_data_weighted_ds</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">data_weighted_ds_wide_diff</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen_data_weighted_ds_diff.html">gen_data_weighted_ds_diff</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Loading the config file..."</span></span>
+<span><span class="co">#&gt; [1] "Processing the data..."</span></span>
+<span><span class="co">#&gt; [1] "Data processing complete."</span></span>
+<span><span class="fu"><a href="reference/inc_diff.html">inc_diff</a></span><span class="op">(</span><span class="st">"stroke"</span>, <span class="va">data_weighted_ds_wide_diff</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 170 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_line()`).</span></span></code></pre></div>
+<p><img src="reference/figures/README-inc_diff_plot-1.png" width="100%"></p>
+<p>To plot the cumulative incidence difference for, say, “diabetes”, you can use the following code:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_weighted_ds_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen_data_weighted_ds_cumdiff.html">gen_data_weighted_ds_cumdiff</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Loading the config file..."</span></span>
 <span><span class="co">#&gt; [1] "Processing the data..."</span></span>
 <span><span class="co">#&gt; [1] "Data processing complete."</span></span>
@@ -160,7 +170,7 @@
 <span><span class="co">#&gt; ℹ Use `time` instead.</span></span></code></pre></div>
 <p><img src="reference/figures/README-inc_cum_plot-1.png" width="100%"></p>
 <p>To plot burden of disease for, say, “yld”, you can use the following code:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_weighted_bd_wide_collapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen_data_weighted_burden.html">gen_data_weighted_burden</a></span><span class="op">(</span><span class="va">data_weighted</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Loading the config file..."</span></span>
 <span><span class="co">#&gt; [1] "Processing the data..."</span></span>
