@@ -36,17 +36,25 @@ This is an example to create the weighted data using the package:
 ``` r
 library(healthgpsrvis)
 
-# Get the path to the .rds file
+# Get the path to the .rds file included in the testdata folder
 filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+#filepath <- "path/to/data.rds" # Get the path to the .rds file included in any other local folder
+
 
 # Read the .rds file
 data <- readRDS(filepath)
 
 # Generate the weighted data
 data_weighted <- gen_data_weighted(data)
+#> [1] "Loading the config file..."
+#> [1] "Processing the data..."
+#> [1] "Data processing complete."
 
 # Generate the weighted data for the risk factors
 data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
+#> [1] "Loading the config file..."
+#> [1] "Processing the data..."
+#> [1] "Data processing complete."
 
 # View structure of the weighted data for the risk factors
 str(data_weighted_rf_wide_collapse)
@@ -99,6 +107,9 @@ following code:
 
 ``` r
 data_weighted_ds_wide_diff <- gen_data_weighted_ds_diff(data_weighted)
+#> [1] "Loading the config file..."
+#> [1] "Processing the data..."
+#> [1] "Data processing complete."
 inc_diff("stroke", data_weighted_ds_wide_diff)
 #> Warning: Removed 170 rows containing missing values or values outside the scale range
 #> (`geom_line()`).
@@ -111,6 +122,9 @@ can use the following code:
 
 ``` r
 data_weighted_ds_wide_collapse <- gen_data_weighted_ds_cumdiff(data_weighted)
+#> [1] "Loading the config file..."
+#> [1] "Processing the data..."
+#> [1] "Data processing complete."
 inc_cum("diabetes",
     data_weighted_ds_wide_collapse,
     scale_y_continuous_limits = c(-4424000, 0),
@@ -130,6 +144,9 @@ code:
 
 ``` r
 data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+#> [1] "Loading the config file..."
+#> [1] "Processing the data..."
+#> [1] "Data processing complete."
 burden_disease("yld", data_weighted_bd_wide_collapse)
 #> Warning: Use of `data_weighted_bd_wide_collapse$time` is discouraged.
 #> ℹ Use `time` instead.
