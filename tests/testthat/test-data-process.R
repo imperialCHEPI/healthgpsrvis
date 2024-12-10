@@ -204,3 +204,5 @@ test_that("Columns in the generated dataframe", {
     c("time", "cumdiff_daly_mean", "cumdiff_daly_min", "cumdiff_daly_max")
   )
 })
+
+# Testing gen_data_le() function
