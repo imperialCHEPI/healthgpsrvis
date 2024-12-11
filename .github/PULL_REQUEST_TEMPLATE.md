@@ -29,5 +29,3 @@ Fixes #<NUM>
 
 - [ ] *Lorem ipsum dolor sit amet, consectetur adipiscing.*
 - [ ] Everything looks ok?
-
-Thank you!
