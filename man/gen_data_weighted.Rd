@@ -4,10 +4,12 @@
 \alias{gen_data_weighted}
 \title{Generate Weighted Mean Values Over Years}
 \usage{
-gen_data_weighted(data)
+gen_data_weighted(data, configname = "default")
 }
 \arguments{
 \item{data}{A data frame containing values for various metrics.}
+
+\item{configname}{The name of the configuration file to use (e.g., "default", "development", "production", "testing").}
 }
 \value{
 A data frame with weighted values for various metrics over years.

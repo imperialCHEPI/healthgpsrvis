@@ -4,10 +4,12 @@
 \alias{gen_data_weighted_rf}
 \title{Calculate Differences for Risk Factors}
 \usage{
-gen_data_weighted_rf(data_weighted)
+gen_data_weighted_rf(data_weighted, configname = "default")
 }
 \arguments{
 \item{data_weighted}{A data frame containing weighted mean values for various metrics.}
+
+\item{configname}{The name of the configuration file to use (e.g., "default", "development", "production", "testing").}
 }
 \value{
 A data frame with differences between intervention and baseline values for risk factors.
