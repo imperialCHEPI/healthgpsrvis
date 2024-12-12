@@ -114,3 +114,120 @@ default:
     - intracerebralhemorrhage
     - ischemicstroke
     - subarachnoidhemorrhage
+
+production:
+# For the gen_data_weighted() function
+  grouping_vars:  # Variables that are used to group the data
+    - source
+    - time
+    - simID
+  weight: # Population size of each group is used as weight
+    - count
+  weighted_vars:  # List of risk factors to calculate population weighted mean
+    - income
+    - sector
+    - sodium
+    - carbohydrate
+    - fat
+    - protein
+    - energyintake
+    - physicalactivity
+    - bmi
+    - height
+    - weight
+    - over_weight
+    - obese_weight
+    - disability_weight
+    - deaths
+    - migrations
+  prevalence_disease:  # List of disease to calculate the total prevalence number in the population
+    - prevalence_ischemicheartdisease # ihd at places
+    - prevalence_diabetes # at some places used db, check
+    - prevalence_stroke
+    - prevalence_asthma
+    - prevalence_chronickidneydisease # ckd at places
+  incidence_disease:  # List of disease to calculate the total incidence number in the population
+    - incidence_ischemicheartdisease # ihd at places
+    - incidence_diabetes # at some places used db, check
+    - incidence_stroke
+    - incidence_asthma
+    - incidence_chronickidneydisease # ckd at places
+  # For the gen_data_weighted_rf() function
+  names_from: # Also used in gen_data_weighted_burden
+    - source
+  id_cols: # Also used in gen_data_weighted_burdens
+    - time
+    - simID
+  weighted_rf:
+    - weighted_sodium
+    - weighted_energyintake
+    - weighted_bmi
+    - weighted_obesity
+  rf:
+    - sodium
+    - energyintake
+    - bmi
+    - obesity
+  group:
+    - time # Also used in gen_data_weighted_burden
+  summary_columns_rf:  # Risk factor variables to calculate summary statistics, such as mean, min and max
+    - diff_sodium
+    - diff_ei
+    - diff_bmi
+    - diff_obesity
+  # For the gen_data_weighted_ds_diff() and gen_data_weighted_ds_cumdiff() functions
+  weighted_ds:
+    - totalcase_ihd
+    - totalcase_diabetes
+    - totalcase_stroke
+    - totalcase_asthma
+    - totalcase_ckd
+  disease:  # List of disease to calculate the total prevalence number or incidence number in the population
+    - ihd
+    - diabetes # at some places used db, check
+    - stroke
+    - asthma
+    - ckd
+  group_ds:  # Also used in gen_data_weighted_burden
+    - simID
+  summary_columns_ds:  # Variables that are used to calculate the summary statistics
+    - diff_inc_ihd
+    - diff_inc_db
+    - diff_inc_stroke
+    - diff_inc_asthma
+    - diff_inc_ckd
+  summary_columns_ds_cum:  # Variables that are used to calculate the summary statistics
+    - cumdiff_inc_ihd
+    - cumdiff_inc_db
+    - cumdiff_inc_stroke
+    - cumdiff_inc_asthma
+    - cumdiff_inc_ckd
+  # For the gen_data_weighted_burden() function
+  weighted_burden:
+    - total_yll
+    - total_yld
+    - total_daly
+  burden:  # List of disease burden measures
+    - yll
+    - yld
+    - daly
+  summary_columns_burden:  # Variables that are used to calculate the summary statistics
+    - diff_daly
+    - diff_yll
+    - diff_yld
+  summary_columns_burden_cum:  # Variables that are used to calculate the summary statistics
+    - diff_daly
+    - diff_yll
+    - diff_yld
+    - cumdiff_daly
+    - cumdiff_yll
+    - cumdiff_yld
+  # For the gen_data_weighted_burden_spline() function
+  burden_spline:
+    - burden_mean: cumdiff_daly_mean
+    - burden_min: cumdiff_daly_min
+    - burden_max: cumdiff_daly_max
+  stroke:
+    - intracerebralhemorrhage
+    - ischemicstroke
+    - subarachnoidhemorrhage
