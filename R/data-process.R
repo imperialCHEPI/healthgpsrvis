@@ -433,6 +433,7 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden_wide_collapse) 
 #' @return A data frame with life expectancy.
 #' @export
 gen_data_le <- function(data_mean) {
+  print("Processing the data...")
   data_le <- data_mean[, c(
     data_mean$source,
     data_mean$time,
@@ -476,7 +477,7 @@ gen_data_le <- function(data_mean) {
     values_from = c(data_ple$ple)
   )
   data_ple_wide$diff <- data_ple_wide$intervention - data_ple_wide$baseline
-
+  print("Data processing complete.")
   return(data_ple_wide)
 }
 
