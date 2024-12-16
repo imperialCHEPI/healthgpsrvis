@@ -15,5 +15,6 @@ life_exp(diff, data_ple_wide)
 A ggplot object representing the specified plot.
 }
 \description{
-Creates a line plot showing the increase in life expectancy under intervention over time.
+Creates a line plot showing the increase in life expectancy under
+intervention over time.
 }

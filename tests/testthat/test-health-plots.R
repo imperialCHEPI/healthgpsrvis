@@ -29,7 +29,7 @@ test_that("riskfactors function works correctly", {
   expect_error(
     riskfactors("invalid_riskft", data_weighted),
     "Invalid risk factor. Choose from: 'bmi', 'energyintake', 'fat', 'obesity', 'protein', 'sodium'."
-  )
+    )
 })
 
 # Testing riskfactors_diff() function
@@ -111,17 +111,20 @@ test_that("inc_diff function works correctly", {
   # Test for valid input
   plot_ckd <- inc_diff("ckd", data_weighted_ds_wide_diff)
   expect_s3_class(plot_ckd, "ggplot")
-  expect_equal(plot_ckd$labels$title, "Chronic kidney disease - Reduction in incidence number")
+  expect_equal(plot_ckd$labels$title,
+               "Chronic kidney disease - Reduction in incidence number")
   expect_equal(plot_ckd$labels$y, "CKD incidence")
 
   plot_ihd <- inc_diff("ischemia", data_weighted_ds_wide_diff)
   expect_s3_class(plot_ihd, "ggplot")
-  expect_equal(plot_ihd$labels$title, "Ischemic heart disease - Reduction in incidence number")
+  expect_equal(plot_ihd$labels$title,
+               "Ischemic heart disease - Reduction in incidence number")
   expect_equal(plot_ihd$labels$y, "Ischemia incidence")
 
   plot_stroke <- inc_diff("stroke", data_weighted_ds_wide_diff)
   expect_s3_class(plot_stroke, "ggplot")
-  expect_equal(plot_stroke$labels$title, "Stroke - Reduction in incidence number")
+  expect_equal(plot_stroke$labels$title,
+               "Stroke - Reduction in incidence number")
   expect_equal(plot_stroke$labels$y, "Stroke incidence")
 
   # Test for invalid input
@@ -149,51 +152,83 @@ test_that("inc_cum function works correctly", {
   plot_asthma <- inc_cum("asthma",
     data_weighted_ds_wide_collapse,
     scale_y_continuous_limits = c(-4769000, 0),
-    scale_y_continuous_breaks = c(-4769000, -4292000, -3815000, -3338000, -2861000, -2384000, -1908000, -1431000, -954000, -477000, 0),
-    scale_y_continuous_labels = scales::comma(c(-4769000, -4292000, -3815000, -3338000, -2861000, -2384000, -1908000, -1431000, -954000, -477000, 0))
+    scale_y_continuous_breaks = c(-4769000, -4292000, -3815000, -3338000,
+                                  -2861000, -2384000, -1908000, -1431000,
+                                  -954000, -477000, 0),
+    scale_y_continuous_labels = scales::comma(c(-4769000, -4292000, -3815000,
+                                                -3338000, -2861000, -2384000,
+                                                -1908000, -1431000, -954000,
+                                                -477000, 0))
   )
   expect_s3_class(plot_asthma, "ggplot")
-  expect_equal(plot_asthma$labels$title, "Asthma - Cumulative reduction in incidence")
+  expect_equal(plot_asthma$labels$title,
+               "Asthma - Cumulative reduction in incidence")
   expect_equal(plot_asthma$labels$y, "Asthma incidence")
 
   plot_ckd <- inc_cum("ckd",
     data_weighted_ds_wide_collapse,
     scale_y_continuous_limits = c(-2098000, 0),
-    scale_y_continuous_breaks = c(-2098000, -1888000, -1679000, -1469000, -1259000, -1049000, -839000, -629000, -420000, -210000, 0),
-    scale_y_continuous_labels = scales::comma(c(-2098000, -1888000, -1679000, -1469000, -1259000, -1049000, -839000, -629000, -420000, -210000, 0))
+    scale_y_continuous_breaks = c(-2098000, -1888000, -1679000, -1469000,
+                                  -1259000, -1049000, -839000, -629000, -420000,
+                                  -210000, 0),
+    scale_y_continuous_labels = scales::comma(c(-2098000, -1888000, -1679000,
+                                                -1469000, -1259000, -1049000,
+                                                -839000, -629000, -420000,
+                                                -210000, 0))
   )
   expect_s3_class(plot_ckd, "ggplot")
-  expect_equal(plot_ckd$labels$title, "Chronic kidney disease - Cumulative reduction in incidence")
+  expect_equal(plot_ckd$labels$title,
+               "Chronic kidney disease - Cumulative reduction in incidence")
   expect_equal(plot_ckd$labels$y, "CKD incidence")
 
   plot_db <- inc_cum("diabetes",
     data_weighted_ds_wide_collapse,
     scale_y_continuous_limits = c(-4424000, 0),
-    scale_y_continuous_breaks = c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0),
-    scale_y_continuous_labels = scales::comma(c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0))
+    scale_y_continuous_breaks = c(-4424000, -4084000, -3743000, -3403000,
+                                  -3063000, -2722000, -2382000, -2042000,
+                                  -1701000, -1361000, -1021000, -681000,
+                                  -340000, 0),
+    scale_y_continuous_labels = scales::comma(c(-4424000, -4084000, -3743000,
+                                                -3403000, -3063000, -2722000,
+                                                -2382000, -2042000, -1701000,
+                                                -1361000, -1021000, -681000,
+                                                -340000, 0))
   )
   expect_s3_class(plot_db, "ggplot")
-  expect_equal(plot_db$labels$title, "Diabetes - Cumulative reduction in incidence")
+  expect_equal(plot_db$labels$title,
+               "Diabetes - Cumulative reduction in incidence")
   expect_equal(plot_db$labels$y, "Diabetes incidence")
 
   plot_ihd <- inc_cum("ischemia",
     data_weighted_ds_wide_collapse,
     scale_y_continuous_limits = c(-6455000, 0),
-    scale_y_continuous_breaks = c(-6455000, -5810000, -5164000, -4519000, -3873000, -3228000, -2582000, -1937000, -1291000, -646000, 0),
-    scale_y_continuous_labels = scales::comma(c(-6455000, -5810000, -5164000, -4519000, -3873000, -3228000, -2582000, -1937000, -1291000, -646000, 0))
+    scale_y_continuous_breaks = c(-6455000, -5810000, -5164000, -4519000,
+                                  -3873000, -3228000, -2582000, -1937000,
+                                  -1291000, -646000, 0),
+    scale_y_continuous_labels = scales::comma(c(-6455000, -5810000, -5164000,
+                                                -4519000, -3873000, -3228000,
+                                                -2582000, -1937000, -1291000,
+                                                -646000, 0))
   )
   expect_s3_class(plot_ihd, "ggplot")
-  expect_equal(plot_ihd$labels$title, "Ischemic heart disease - Cumulative reduction in incidence")
+  expect_equal(plot_ihd$labels$title,
+               "Ischemic heart disease - Cumulative reduction in incidence")
   expect_equal(plot_ihd$labels$y, "Ischemia incidence")
 
   plot_stroke <- inc_cum("stroke",
     data_weighted_ds_wide_collapse,
     scale_y_continuous_limits = c(-1198000, 0),
-    scale_y_continuous_breaks = c(-1198000, -1078000, -959000, -839000, -719000, -599000, -479000, -359000, -240000, -120000, 0),
-    scale_y_continuous_labels = scales::comma(c(-1198000, -1078000, -959000, -839000, -719000, -599000, -479000, -359000, -240000, -120000, 0))
+    scale_y_continuous_breaks = c(-1198000, -1078000, -959000, -839000,
+                                  -719000, -599000, -479000, -359000, -240000,
+                                  -120000, 0),
+    scale_y_continuous_labels = scales::comma(c(-1198000, -1078000, -959000,
+                                                -839000, -719000, -599000,
+                                                -479000, -359000, -240000,
+                                                -120000, 0))
   )
   expect_s3_class(plot_stroke, "ggplot")
-  expect_equal(plot_stroke$labels$title, "Stroke - Cumulative reduction in incidence")
+  expect_equal(plot_stroke$labels$title,
+               "Stroke - Cumulative reduction in incidence")
   expect_equal(plot_stroke$labels$y, "Stroke incidence")
 
   # Test for invalid input ----
@@ -227,8 +262,10 @@ test_that("burden_disease function works correctly", {
   plot_dalycum <- burden_disease("dalycum",
     data_weighted_bd_wide_collapse,
     scale_y_continuous_limits = c(-41917000, 0),
-    scale_y_continuous_breaks = c(-41917000, -33534000, -25150000, -16767000, -8383000, 0),
-    scale_y_continuous_labels = scales::comma(c(-41917000, -33534000, -25150000, -16767000, -8383000, 0))
+    scale_y_continuous_breaks = c(-41917000, -33534000, -25150000, -16767000,
+                                  -8383000, 0),
+    scale_y_continuous_labels = scales::comma(c(-41917000, -33534000, -25150000,
+                                                -16767000, -8383000, 0))
   )
   expect_s3_class(plot_dalycum, "ggplot")
   expect_equal(plot_dalycum$labels$title, "Cumulative reduction in DALYs")
@@ -262,7 +299,8 @@ test_that("life_exp function works correctly", {
   # Test for valid input
   plot_le <- life_exp(data_ple_wide$diff, data_ple_wide)
   expect_s3_class(plot_le, "ggplot")
-  expect_equal(plot_le$labels$title, "Increase in life expectancy under intervention")
+  expect_equal(plot_le$labels$title,
+               "Increase in life expectancy under intervention")
 })
 
 # Testing combine_plots() function

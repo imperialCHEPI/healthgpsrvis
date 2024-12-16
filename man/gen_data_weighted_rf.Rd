@@ -7,11 +7,14 @@
 gen_data_weighted_rf(data_weighted)
 }
 \arguments{
-\item{data_weighted}{A data frame containing weighted mean values for various metrics.}
+\item{data_weighted}{A data frame containing weighted mean values for various
+metrics.}
 }
 \value{
-A data frame with differences between intervention and baseline values for risk factors.
+A data frame with differences between intervention and baseline
+values for risk factors.
 }
 \description{
-This function calculates the differences between intervention and baseline values for risk factors.
+This function calculates the differences between intervention and baseline
+values for risk factors.
 }

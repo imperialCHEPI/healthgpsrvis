@@ -7,11 +7,14 @@
 gen_data_weighted_ds_cumdiff(data_weighted)
 }
 \arguments{
-\item{data_weighted}{A data frame containing weighted mean values for various metrics.}
+\item{data_weighted}{A data frame containing weighted mean values for various
+metrics.}
 }
 \value{
-A data frame with differences between intervention and baseline values for incidences.
+A data frame with differences between intervention and baseline
+values for incidences.
 }
 \description{
-This function calculates the cumulative differences between intervention and baseline values for incidences.
+This function calculates the cumulative differences between intervention and
+baseline values for incidences.
 }

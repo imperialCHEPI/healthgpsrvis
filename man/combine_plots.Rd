@@ -19,11 +19,14 @@ combine_plots(
 
 \item{data_weighted}{A data frame with weighted values for various metrics.}
 
-\item{data_mean_weighted_rf_wide}{A data frame containing the weighted mean values of risk factors.}
+\item{data_mean_weighted_rf_wide}{A data frame containing the weighted mean
+values of risk factors.}
 
-\item{data_mean_weighted_inc_wide}{A data frame containing the weighted mean values of incidences.}
+\item{data_mean_weighted_inc_wide}{A data frame containing the weighted mean
+values of incidences.}
 
-\item{data_weighted_bd_wide_collapse}{A data frame with differences between intervention and baseline values for burden of disease.}
+\item{data_weighted_bd_wide_collapse}{A data frame with differences between
+intervention and baseline values for burden of disease.}
 
 \item{data_ple_wide}{A data frame containing the life expectancy.}
 

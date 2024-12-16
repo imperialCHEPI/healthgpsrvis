@@ -14,19 +14,24 @@ inc_cum(
 }
 \arguments{
 \item{inc}{A character string specifying the incidence to plot.
-Options are: "asthma", "ckd", "diabetes", "ischemia", "stroke".}
+Options: "asthma", "ckd", "diabetes", "ischemia", "stroke".}
 
-\item{data_weighted_ds_wide_collapse}{A data frame with differences between intervention and baseline values for incidences.}
+\item{data_weighted_ds_wide_collapse}{A data frame with differences between
+intervention and baseline values for incidences.}
 
-\item{scale_y_continuous_limits}{A numeric vector specifying the limits of the scales for continuous y aesthetics.}
+\item{scale_y_continuous_limits}{A numeric vector specifying the limits of
+the scales for continuous y aesthetics.}
 
-\item{scale_y_continuous_breaks}{A numeric vector specifying the breaks of the scales for continuous y aesthetics.}
+\item{scale_y_continuous_breaks}{A numeric vector specifying the breaks of
+the scales for continuous y aesthetics.}
 
-\item{scale_y_continuous_labels}{A numeric vector specifying the labels of the scales for continuous y aesthetics.}
+\item{scale_y_continuous_labels}{A numeric vector specifying the labels of
+the scales for continuous y aesthetics.}
 }
 \value{
 A ggplot object representing the specified plot.
 }
 \description{
-Creates a line plot showing the cumulative reduction in a specified incidence number over time.
+Creates a line plot showing the cumulative reduction in a specified incidence
+number over time.
 }

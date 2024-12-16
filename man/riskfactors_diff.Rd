@@ -13,20 +13,26 @@ riskfactors_diff(
 )
 }
 \arguments{
-\item{riskft_diff}{A character string specifying the difference in risk factor to plot.
-Options are: "bmi", "ei", "obesity", "sodium".}
+\item{riskft_diff}{A character string specifying the difference in risk
+factor to plot.
+Options: "bmi", "ei", "obesity", "sodium".}
 
-\item{data_weighted_rf_wide_collapse}{A data frame with differences between intervention and baseline values for risk factors.}
+\item{data_weighted_rf_wide_collapse}{A data frame with differences between
+intervention and baseline values for risk factors.}
 
-\item{scale_y_continuous_limits}{A numeric vector specifying the limits of the scales for continuous y aesthetics.}
+\item{scale_y_continuous_limits}{A numeric vector specifying the limits of
+the scales for continuous y aesthetics.}
 
-\item{scale_y_continuous_breaks}{A numeric vector specifying the breaks of the scales for continuous y aesthetics.}
+\item{scale_y_continuous_breaks}{A numeric vector specifying the breaks of
+the scales for continuous y aesthetics.}
 
-\item{scale_y_continuous_labels}{A numeric vector specifying the labels of the scales for continuous y aesthetics.}
+\item{scale_y_continuous_labels}{A numeric vector specifying the labels of
+the scales for continuous y aesthetics.}
 }
 \value{
 A ggplot object representing the specified plot.
 }
 \description{
-Creates a line plot showing the reduction in a specified risk factor under intervention over time.
+Creates a line plot showing the reduction in a specified risk factor under
+intervention over time.
 }
