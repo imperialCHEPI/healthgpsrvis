@@ -48,7 +48,7 @@ riskfactors <- function(riskft, data_weighted) {
     ggplot2::scale_x_continuous(limits = c(2020, 2055),
                                 breaks = c(2020, 2025, 2030, 2035,
                                            2040, 2045, 2050, 2055)) +
-    ggplot2::scale_y_continuous(labels = scaleFUN) +
+    ggplot2::scale_y_continuous(labels = scale_fun) +
     ggplot2::labs(alt = "A line plot of a specified risk factor over time,
                   grouped by source") +
     hgps_theme()
