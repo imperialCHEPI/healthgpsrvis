@@ -179,9 +179,9 @@ gen_data_weighted_ds_diff <- function(data_weighted) {
   )
 
   data_weighted_ds_wide <- tidyr::pivot_wider(data_weighted_ds,
-                                              names_from = config$names_from,
-                                              id_cols = config$id_cols,
-                                              values_from = config$weighted_ds
+    names_from = config$names_from,
+    id_cols = config$id_cols,
+    values_from = config$weighted_ds
   )
 
   data_weighted_ds_wide_diff <- data_weighted_ds_wide |>
@@ -359,9 +359,11 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden_wide_collapse) 
   config <- load_config("default")
   print("Processing the data...")
   config_file_path <- system.file("config", "config.yml", package = "healthgpsrvis")
-  burden_spline <- config::get(value = "burden_spline",
-                               file = config_file_path,
-                               use_parent = FALSE)
+  burden_spline <- config::get(
+    value = "burden_spline",
+    file = config_file_path,
+    use_parent = FALSE
+  )
 
   ## This function is data smoothing
   ## It is applied manually now in India project due to abnormal positive values in diff_daly or cumdiff_daly
@@ -391,25 +393,31 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden_wide_collapse) 
   ## Fit spline and predict
   spline_fit_mean <- splines::interpSpline(
     as.numeric(unlist(data_weighted_burden_mean[config$group])),
-    as.numeric(unlist(data_weighted_burden_mean[burden_spline[[1]]$burden_mean])))
+    as.numeric(unlist(data_weighted_burden_mean[burden_spline[[1]]$burden_mean]))
+  )
   data_weighted_burden_spline[burden_spline[[1]]$burden_mean] <- stats::predict(
     spline_fit_mean,
-    as.numeric(unlist(data_weighted_burden_spline[config$group])))$y
+    as.numeric(unlist(data_weighted_burden_spline[config$group]))
+  )$y
 
   spline_fit_min <- splines::interpSpline(
     as.numeric(unlist(data_weighted_burden_min[config$group])),
-    as.numeric(unlist(data_weighted_burden_min[burden_spline[[2]]$burden_min])))
+    as.numeric(unlist(data_weighted_burden_min[burden_spline[[2]]$burden_min]))
+  )
   data_weighted_burden_spline[burden_spline[[2]]$burden_min] <- stats::predict(
     spline_fit_min,
-    as.numeric(unlist(data_weighted_burden_spline[config$group])))$y
+    as.numeric(unlist(data_weighted_burden_spline[config$group]))
+  )$y
 
   ## Use smooth.spline for ps4-low
   spline_fit_max <- splines::interpSpline(
     as.numeric(unlist(data_weighted_burden_max[config$group])),
-    as.numeric(unlist(data_weighted_burden_max[burden_spline[[3]]$burden_max])))
+    as.numeric(unlist(data_weighted_burden_max[burden_spline[[3]]$burden_max]))
+  )
   data_weighted_burden_spline[burden_spline[[3]]$burden_max] <- stats::predict(
     spline_fit_max,
-    as.numeric(unlist(data_weighted_burden_spline[config$group])))$y
+    as.numeric(unlist(data_weighted_burden_spline[config$group]))
+  )$y
 
   ## Keep 0 values in the first two years, before policy implementation
   group <- config$group
@@ -419,7 +427,8 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden_wide_collapse) 
     data_weighted_burden_spline[[burden_sp]] <- ifelse(
       data_weighted_burden_spline[[group]] < 2024,
       0,
-      data_weighted_burden_spline[[burden_sp]])
+      data_weighted_burden_spline[[burden_sp]]
+    )
   }
   print("Data processing complete.")
   return(data_weighted_burden_spline)
@@ -486,4 +495,5 @@ utils::globalVariables(c(
   "incidence_intracerebralhemorrhage", "incidence_ischemicstroke",
   "incidence_subarachnoidhemorrhage", "prevalence_intracerebralhemorrhage",
   "prevalence_ischemicstroke", "prevalence_subarachnoidhemorrhage",
-  "diff_energyintake", "diff_inc_diabetes"))
+  "diff_energyintake", "diff_inc_diabetes"
+))
