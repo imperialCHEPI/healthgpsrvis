@@ -29,7 +29,7 @@ test_that("riskfactors function works correctly", {
   expect_error(
     riskfactors("invalid_riskft", data_weighted),
     "Invalid risk factor. Choose from: 'bmi', 'energyintake', 'fat', 'obesity', 'protein', 'sodium'."
-    )
+  )
 })
 
 # Testing riskfactors_diff() function

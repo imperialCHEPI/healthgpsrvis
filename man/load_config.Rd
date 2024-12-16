@@ -7,7 +7,8 @@
 load_config(config_name = "default")
 }
 \arguments{
-\item{config_name}{The name of the configuration environment to load (e.g., "default", "development", "production", "testing").}
+\item{config_name}{The name of the configuration environment to load (e.g.,
+"default", "development", "production", "testing").}
 }
 \value{
 A list containing the configuration data.
