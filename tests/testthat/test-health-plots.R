@@ -265,6 +265,20 @@ test_that("life_exp function works correctly", {
   expect_equal(plot_le$labels$title, "Increase in life expectancy under intervention")
 })
 
+# Testing life_exp() function
+test_that("life_exp function works correctly", {
+  # Create sample data
+  data_ple_wide <- data.frame(
+    timediff = seq(-9, 21, by = 1),
+    diff = runif(31, -3, 0)
+  )
+
+  # Test for valid input
+  plot_le <- life_exp(data_ple_wide$diff, data_ple_wide)
+  expect_s3_class(plot_le, "ggplot")
+  expect_equal(plot_le$labels$title, "Increase in life expectancy under intervention")
+})
+
 # Testing combine_plots() function
 test_that("combine_plots function works correctly", {
   # Create sample metrics

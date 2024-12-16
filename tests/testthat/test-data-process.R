@@ -193,7 +193,8 @@ test_that("Columns in the generated dataframe", {
 
   # Generate a data frame with spline smoothing applied for burden of disease
   data_weighted_burden_spline <- gen_data_weighted_burden_spline(
-    data_weighted_bd_wide_collapse)
+    data_weighted_bd_wide_collapse
+  )
 
   # Check if the data has the expected number of columns
   expect_equal(ncol(data_weighted_burden_spline), 4)
@@ -204,3 +205,5 @@ test_that("Columns in the generated dataframe", {
     c("time", "cumdiff_daly_mean", "cumdiff_daly_min", "cumdiff_daly_max")
   )
 })
+
+# Testing gen_data_le() function
