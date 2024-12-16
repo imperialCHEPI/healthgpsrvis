@@ -193,7 +193,9 @@ test_that("Columns in the generated dataframe", {
 
   # Generate a data frame with spline smoothing applied for burden of disease
   data_weighted_burden_spline <- gen_data_weighted_burden_spline(
-    data_weighted_bd_wide_collapse, configname = "default")
+    data_weighted_bd_wide_collapse,
+    configname = "default"
+  )
 
   # Check if the data has the expected number of columns
   expect_equal(ncol(data_weighted_burden_spline), 4)
