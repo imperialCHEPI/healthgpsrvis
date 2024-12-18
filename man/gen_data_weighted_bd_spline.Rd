@@ -4,11 +4,16 @@
 \alias{gen_data_weighted_bd_spline}
 \title{Perform data smoothing}
 \usage{
-gen_data_weighted_bd_spline(data_weighted_bd_wide_collapse)
+gen_data_weighted_bd_spline(
+  data_weighted_bd_wide_collapse,
+  configname = "default"
+)
 }
 \arguments{
 \item{data_weighted_bd_wide_collapse}{A data frame containing weighted
 values for burden of disease.}
+
+\item{configname}{The name of the configuration file to use (e.g., "default", "development", "production", "testing").}
 }
 \value{
 A data frame with spline smoothing applied for burden of disease.
