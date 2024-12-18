@@ -4,10 +4,12 @@
 \alias{gen_data_le}
 \title{Calculate Life Expectancy}
 \usage{
-gen_data_le(data_mean)
+gen_data_le(data_mean, configname = "default")
 }
 \arguments{
 \item{data_mean}{A data frame containing mean values for various metrics.}
+
+\item{configname}{The name of the configuration file to use (e.g., "default", "development", "production", "testing").}
 }
 \value{
 A data frame with life expectancy.

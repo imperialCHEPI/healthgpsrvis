@@ -53,12 +53,13 @@ NULL
 #' This function calculates weighted mean values for various metrics over years.
 #'
 #' @param data A data frame containing values for various metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
 #' @return A data frame with weighted values for various metrics over years.
 #' @export
-gen_data_weighted <- function(data) {
+gen_data_weighted <- function(data, configname = "default") {
 
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
   colnames(data) <- gsub("^mean_", "", colnames(data)) # Clean the column names
   ## by removing 'mean_'
@@ -124,12 +125,13 @@ gen_data_weighted <- function(data) {
 #'
 #' @param data_weighted A data frame containing weighted mean values for various
 #'  metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
 #' @return A data frame with differences between intervention and baseline
 #' values for risk factors.
 #' @export
-gen_data_weighted_rf <- function(data_weighted) {
+gen_data_weighted_rf <- function(data_weighted, configname = "default") {
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
   data_weighted_rf <- dplyr::select(
     data_weighted,
@@ -187,12 +189,13 @@ gen_data_weighted_rf <- function(data_weighted) {
 #'
 #' @param data_weighted A data frame containing weighted mean values for various
 #'  metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
 #' @return A data frame with differences between intervention and baseline
 #' values for incidences.
 #' @export
-gen_data_weighted_ds_diff <- function(data_weighted) {
+gen_data_weighted_ds_diff <- function(data_weighted, configname = "default") {
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
   data_weighted_ds <- dplyr::select(
     data_weighted,
@@ -237,12 +240,13 @@ gen_data_weighted_ds_diff <- function(data_weighted) {
 #'
 #' @param data_weighted A data frame containing weighted mean values for various
 #'  metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
 #' @return A data frame with differences between intervention and baseline
 #' values for incidences.
 #' @export
-gen_data_weighted_ds_cumdiff <- function(data_weighted) {
+gen_data_weighted_ds_cumdiff <- function(data_weighted, configname = "default") {
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
   data_weighted_ds <- dplyr::select(
     data_weighted,
@@ -320,12 +324,13 @@ gen_data_weighted_ds_cumdiff <- function(data_weighted) {
 #'
 #' @param data_weighted A data frame containing weighted mean values for various
 #'  metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
 #' @return A data frame with differences between intervention and baseline
 #' values for burden of disease.
 #' @export
-gen_data_weighted_burden <- function(data_weighted) {
+gen_data_weighted_burden <- function(data_weighted, configname = "default") {
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
   data_weighted_burden <- dplyr::select(
     data_weighted,
@@ -399,11 +404,12 @@ gen_data_weighted_burden <- function(data_weighted) {
 #'
 #' @param data_weighted_bd_wide_collapse A data frame containing weighted
 #' values for burden of disease.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
 #' @return A data frame with spline smoothing applied for burden of disease.
 #' @export
-gen_data_weighted_bd_spline <- function(data_weighted_bd_wide_collapse) {
+gen_data_weighted_bd_spline <- function(data_weighted_bd_wide_collapse, configname = "default") {
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
   config_file_path <- system.file("config",
                                   "config.yml",
@@ -492,9 +498,10 @@ gen_data_weighted_bd_spline <- function(data_weighted_bd_wide_collapse) {
 #' This function calculates life expectancy for various age and groups.
 #'
 #' @param data_mean A data frame containing mean values for various metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
 #' @return A data frame with life expectancy.
 #' @export
-gen_data_le <- function(data_mean) {
+gen_data_le <- function(data_mean, configname = "default") {
   data_le <- data_mean[, c(
     data_mean$source,
     data_mean$time,
