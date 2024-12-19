@@ -62,20 +62,72 @@ data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted,
 
 # View structure of the weighted data for the risk factors
 str(data_weighted_rf_wide_collapse)
-#> tibble [34 × 13] (S3: tbl_df/tbl/data.frame)
-#>  $ time             : int [1:34] 2022 2023 2024 2025 2026 2027 2028 2029 2030 2031 ...
-#>  $ diff_sodium_mean : num [1:34] 0 0 -33.7 -33.7 -33.6 ...
-#>  $ diff_sodium_min  : num [1:34] 0 0 -33.7 -33.7 -33.7 ...
-#>  $ diff_sodium_max  : num [1:34] 0 0 -33.7 -33.6 -33.5 ...
-#>  $ diff_ei_mean     : num [1:34] 0 0 -23.1 -23.1 -23.1 ...
-#>  $ diff_ei_min      : num [1:34] 0 0 -23.2 -23.2 -23.2 ...
-#>  $ diff_ei_max      : num [1:34] 0 0 -23.1 -23.1 -23.1 ...
-#>  $ diff_bmi_mean    : num [1:34] 0 0 -0.0852 -0.1178 -0.133 ...
-#>  $ diff_bmi_min     : num [1:34] 0 0 -0.0852 -0.1178 -0.1333 ...
-#>  $ diff_bmi_max     : num [1:34] 0 0 -0.0852 -0.1177 -0.1328 ...
-#>  $ diff_obesity_mean: num [1:34] 0 0 -0.00258 -0.00363 -0.00419 ...
-#>  $ diff_obesity_min : num [1:34] 0 0 -0.0026 -0.00365 -0.00422 ...
-#>  $ diff_obesity_max : num [1:34] 0 0 -0.00256 -0.00362 -0.00416 ...
+#> gropd_df [170 × 26] (S3: grouped_df/tbl_df/tbl/data.frame)
+#>  $ time                              : int [1:170] 2022 2022 2022 2022 2022 2023 2023 2023 2023 2023 ...
+#>  $ simID                             : int [1:170] 1 2 3 4 5 1 2 3 4 5 ...
+#>  $ weighted_sodium_baseline          : num [1:170] 3232 3232 3232 3232 3232 ...
+#>  $ weighted_sodium_intervention      : num [1:170] 3232 3232 3232 3232 3232 ...
+#>  $ weighted_energyintake_baseline    : num [1:170] 1917 1917 1917 1917 1917 ...
+#>  $ weighted_energyintake_intervention: num [1:170] 1917 1917 1917 1917 1917 ...
+#>  $ weighted_bmi_baseline             : num [1:170] 21.5 21.5 21.5 21.5 21.5 ...
+#>  $ weighted_bmi_intervention         : num [1:170] 21.5 21.5 21.5 21.5 21.5 ...
+#>  $ weighted_obesity_baseline         : num [1:170] 0.0674 0.0675 0.0674 0.0676 0.0674 ...
+#>  $ weighted_obesity_intervention     : num [1:170] 0.0674 0.0675 0.0674 0.0676 0.0674 ...
+#>  $ diff_sodium                       : num [1:170] 0 0 0 0 0 0 0 0 0 0 ...
+#>  $ diff_ei                           : num [1:170] 0 0 0 0 0 0 0 0 0 0 ...
+#>  $ diff_bmi                          : num [1:170] 0 0 0 0 0 0 0 0 0 0 ...
+#>  $ diff_obesity                      : num [1:170] 0 0 0 0 0 0 0 0 0 0 ...
+#>  $ diff_sodium_mean                  : num [1:170] 0 0 0 0 0 0 0 0 0 0 ...
+#>  $ diff_ei_mean                      : num [1:170] 0 0 0 0 0 0 0 0 0 0 ...
+#>  $ diff_bmi_mean                     : num [1:170] 0 0 0 0 0 0 0 0 0 0 ...
+#>  $ diff_obesity_mean                 : num [1:170] 0 0 0 0 0 0 0 0 0 0 ...
+#>  $ diff_sodium_ci_low                : num [1:170] NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
+#>  $ diff_ei_ci_low                    : num [1:170] NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
+#>  $ diff_bmi_ci_low                   : num [1:170] NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
+#>  $ diff_obesity_ci_low               : num [1:170] NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
+#>  $ diff_sodium_ci_high               : num [1:170] NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
+#>  $ diff_ei_ci_high                   : num [1:170] NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
+#>  $ diff_bmi_ci_high                  : num [1:170] NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
+#>  $ diff_obesity_ci_high              : num [1:170] NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ...
+#>  - attr(*, "groups")= tibble [34 × 2] (S3: tbl_df/tbl/data.frame)
+#>   ..$ time : int [1:34] 2022 2023 2024 2025 2026 2027 2028 2029 2030 2031 ...
+#>   ..$ .rows: list<int> [1:34] 
+#>   .. ..$ : int [1:5] 1 2 3 4 5
+#>   .. ..$ : int [1:5] 6 7 8 9 10
+#>   .. ..$ : int [1:5] 11 12 13 14 15
+#>   .. ..$ : int [1:5] 16 17 18 19 20
+#>   .. ..$ : int [1:5] 21 22 23 24 25
+#>   .. ..$ : int [1:5] 26 27 28 29 30
+#>   .. ..$ : int [1:5] 31 32 33 34 35
+#>   .. ..$ : int [1:5] 36 37 38 39 40
+#>   .. ..$ : int [1:5] 41 42 43 44 45
+#>   .. ..$ : int [1:5] 46 47 48 49 50
+#>   .. ..$ : int [1:5] 51 52 53 54 55
+#>   .. ..$ : int [1:5] 56 57 58 59 60
+#>   .. ..$ : int [1:5] 61 62 63 64 65
+#>   .. ..$ : int [1:5] 66 67 68 69 70
+#>   .. ..$ : int [1:5] 71 72 73 74 75
+#>   .. ..$ : int [1:5] 76 77 78 79 80
+#>   .. ..$ : int [1:5] 81 82 83 84 85
+#>   .. ..$ : int [1:5] 86 87 88 89 90
+#>   .. ..$ : int [1:5] 91 92 93 94 95
+#>   .. ..$ : int [1:5] 96 97 98 99 100
+#>   .. ..$ : int [1:5] 101 102 103 104 105
+#>   .. ..$ : int [1:5] 106 107 108 109 110
+#>   .. ..$ : int [1:5] 111 112 113 114 115
+#>   .. ..$ : int [1:5] 116 117 118 119 120
+#>   .. ..$ : int [1:5] 121 122 123 124 125
+#>   .. ..$ : int [1:5] 126 127 128 129 130
+#>   .. ..$ : int [1:5] 131 132 133 134 135
+#>   .. ..$ : int [1:5] 136 137 138 139 140
+#>   .. ..$ : int [1:5] 141 142 143 144 145
+#>   .. ..$ : int [1:5] 146 147 148 149 150
+#>   .. ..$ : int [1:5] 151 152 153 154 155
+#>   .. ..$ : int [1:5] 156 157 158 159 160
+#>   .. ..$ : int [1:5] 161 162 163 164 165
+#>   .. ..$ : int [1:5] 166 167 168 169 170
+#>   .. ..@ ptype: int(0) 
+#>   ..- attr(*, ".drop")= logi TRUE
 ```
 
 To plot a risk factor (say, “bmi”) for the weighted data, you can use
@@ -98,10 +150,6 @@ riskfactors_diff("bmi",
                  scale_y_continuous_limits = c(-0.148, 0),
                  scale_y_continuous_breaks = c(-0.148, -0.074, 0),
                  scale_y_continuous_labels = c(-0.148, -0.074, 0))
-#> Warning: Use of `data_weighted_rf_wide_collapse$time` is discouraged.
-#> ℹ Use `time` instead.
-#> Use of `data_weighted_rf_wide_collapse$time` is discouraged.
-#> ℹ Use `time` instead.
 ```
 
 <img src="man/figures/README-riskfactors_diff_plot-1.png" width="100%" />
@@ -130,6 +178,25 @@ data_weighted_ds_wide_collapse <- gen_data_weighted_ds_cumdiff(data_weighted,
                                                                configname = "default")
 #> [1] "Loading the config file..."
 #> [1] "Processing the data..."
+#>  [1] "time"                            "simID"                          
+#>  [3] "totalcase_ihd_baseline"          "totalcase_ihd_intervention"     
+#>  [5] "totalcase_diabetes_baseline"     "totalcase_diabetes_intervention"
+#>  [7] "totalcase_stroke_baseline"       "totalcase_stroke_intervention"  
+#>  [9] "totalcase_asthma_baseline"       "totalcase_asthma_intervention"  
+#> [11] "totalcase_ckd_baseline"          "totalcase_ckd_intervention"     
+#> [13] "diff_inc_ihd"                    "diff_inc_db"                    
+#> [15] "diff_inc_stroke"                 "diff_inc_asthma"                
+#> [17] "diff_inc_ckd"                    "cumdiff_inc_ihd"                
+#> [19] "cumdiff_inc_db"                  "cumdiff_inc_stroke"             
+#> [21] "cumdiff_inc_asthma"              "cumdiff_inc_ckd"                
+#> [23] "cumdiff_inc_ihd_mean"            "cumdiff_inc_db_mean"            
+#> [25] "cumdiff_inc_stroke_mean"         "cumdiff_inc_asthma_mean"        
+#> [27] "cumdiff_inc_ckd_mean"            "cumdiff_inc_ihd_ci_low"         
+#> [29] "cumdiff_inc_db_ci_low"           "cumdiff_inc_stroke_ci_low"      
+#> [31] "cumdiff_inc_asthma_ci_low"       "cumdiff_inc_ckd_ci_low"         
+#> [33] "cumdiff_inc_ihd_ci_high"         "cumdiff_inc_db_ci_high"         
+#> [35] "cumdiff_inc_stroke_ci_high"      "cumdiff_inc_asthma_ci_high"     
+#> [37] "cumdiff_inc_ckd_ci_high"        
 #> [1] "Data processing complete."
 inc_cum("diabetes",
     data_weighted_ds_wide_collapse,
@@ -137,10 +204,6 @@ inc_cum("diabetes",
     scale_y_continuous_breaks = c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0),
     scale_y_continuous_labels = scales::comma(c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0))
   )
-#> Warning: Use of `data_weighted_ds_wide_collapse$time` is discouraged.
-#> ℹ Use `time` instead.
-#> Use of `data_weighted_ds_wide_collapse$time` is discouraged.
-#> ℹ Use `time` instead.
 ```
 
 <img src="man/figures/README-inc_cum_plot-1.png" width="100%" />
