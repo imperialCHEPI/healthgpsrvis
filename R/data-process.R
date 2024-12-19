@@ -166,18 +166,15 @@ gen_data_weighted_rf <- function(data_weighted, configname = "default") {
 
   data_weighted_rf_wide_collapse <- data_weighted_rf_wide |>
     dplyr::group_by(dplyr::across(dplyr::all_of(config$group))) |>
-    dplyr::summarise(
-      dplyr::across(
-        dplyr::all_of(config$summary_columns_rf),
-        list(
-          mean = ~ mean(.x, na.rm = TRUE),
-          min = ~ min(.x, na.rm = TRUE),
-          max = ~ max(.x, na.rm = TRUE)
-        ),
-        .names = "{.col}_{.fn}"
-      ),
-      .groups = "drop"
-    )
+    dplyr::mutate(dplyr::across(dplyr::all_of(config$summary_columns_rf),
+                                ~ mean(.x, na.rm = TRUE),
+                                .names = "{.col}_mean")) |>
+    dplyr::mutate(dplyr::across(dplyr::all_of(config$summary_columns_rf),
+                                ~ t.test(.x)$conf.int[1],
+                                .names = "{.col}_ci_low")) |>
+    dplyr::mutate(dplyr::across(dplyr::all_of(config$summary_columns_rf),
+                                ~ t.test(.x)$conf.int[2],
+                                .names = "{.col}_ci_high"))
   print("Data processing complete.")
   return(data_weighted_rf_wide_collapse)
 }

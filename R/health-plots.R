@@ -97,18 +97,18 @@ riskfactors_diff <- function(riskft_diff,
     sodium = "diff_sodium_mean"
   )
 
-  y_min <- switch(riskft_diff,
-    bmi = "diff_bmi_min",
-    ei = "diff_ei_min",
-    obesity = "diff_obesity_min",
-    sodium = "diff_sodium_min"
+  y_ci_low <- switch(riskft_diff,
+    bmi = "diff_bmi_ci_low",
+    ei = "diff_ei_ci_low",
+    obesity = "diff_obesity_ci_low",
+    sodium = "diff_sodium_ci_low"
   )
 
-  y_max <- switch(riskft_diff,
-    bmi = "diff_bmi_max",
-    ei = "diff_ei_max",
-    obesity = "diff_obesity_max",
-    sodium = "diff_sodium_max"
+  y_ci_high <- switch(riskft_diff,
+    bmi = "diff_bmi_ci_high",
+    ei = "diff_ei_ci_high",
+    obesity = "diff_obesity_ci_high",
+    sodium = "diff_sodium_ci_high"
   )
 
   plot_title <- switch(riskft_diff,
@@ -128,8 +128,8 @@ riskfactors_diff <- function(riskft_diff,
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = get(y_min),
-        ymax = get(y_max)
+        ymin = get(y_ci_low),
+        ymax = get(y_ci_high)
       ),
       alpha = 0.2
     ) +

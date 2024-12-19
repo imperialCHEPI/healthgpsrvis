@@ -69,16 +69,21 @@ test_that("Columns in the generated dataframe", {
                                                          configname = "default")
 
   # Check if the data has the expected number of columns
-  expect_equal(ncol(data_weighted_rf_wide_collapse), 13)
+  expect_equal(ncol(data_weighted_rf_wide_collapse), 26)
 
   # Check if the data has the expected column names
   expect_equal(
     colnames(data_weighted_rf_wide_collapse),
     c(
-      "time", "diff_sodium_mean", "diff_sodium_min",
-      "diff_sodium_max", "diff_ei_mean", "diff_ei_min",
-      "diff_ei_max", "diff_bmi_mean", "diff_bmi_min", "diff_bmi_max",
-      "diff_obesity_mean", "diff_obesity_min", "diff_obesity_max"
+      "time", "simID", "weighted_sodium_baseline",
+      "weighted_sodium_intervention", "weighted_energyintake_baseline",
+      "weighted_energyintake_intervention", "weighted_bmi_baseline",
+      "weighted_bmi_intervention", "weighted_obesity_baseline",
+      "weighted_obesity_intervention", "diff_sodium", "diff_ei", "diff_bmi",
+      "diff_obesity", "diff_sodium_mean", "diff_ei_mean", "diff_bmi_mean",
+      "diff_obesity_mean", "diff_sodium_ci_low", "diff_ei_ci_low",
+      "diff_bmi_ci_low", "diff_obesity_ci_low", "diff_sodium_ci_high",
+      "diff_ei_ci_high", "diff_bmi_ci_high", "diff_obesity_ci_high"
     )
   )
 })
