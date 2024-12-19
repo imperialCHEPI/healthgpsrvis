@@ -257,20 +257,20 @@ inc_cum <- function(inc,
     stroke = "cumdiff_inc_stroke_mean"
   )
 
-  y_min <- switch(inc,
-    asthma = "cumdiff_inc_asthma_min",
-    ckd = "cumdiff_inc_ckd_min",
-    diabetes = "cumdiff_inc_db_min",
-    ischemia = "cumdiff_inc_ihd_min",
-    stroke = "cumdiff_inc_stroke_min"
+  y_ci_low <- switch(inc,
+    asthma = "cumdiff_inc_asthma_ci_low",
+    ckd = "cumdiff_inc_ckd_ci_low",
+    diabetes = "cumdiff_inc_db_ci_low",
+    ischemia = "cumdiff_inc_ihd_ci_low",
+    stroke = "cumdiff_inc_stroke_ci_low"
   )
 
-  y_max <- switch(inc,
-    asthma = "cumdiff_inc_asthma_max",
-    ckd = "cumdiff_inc_ckd_max",
-    diabetes = "cumdiff_inc_db_max",
-    ischemia = "cumdiff_inc_ihd_max",
-    stroke = "cumdiff_inc_stroke_max"
+  y_ci_high <- switch(inc,
+    asthma = "cumdiff_inc_asthma_ci_high",
+    ckd = "cumdiff_inc_ckd_ci_high",
+    diabetes = "cumdiff_inc_db_ci_high",
+    ischemia = "cumdiff_inc_ihd_ci_high",
+    stroke = "cumdiff_inc_stroke_ci_high"
   )
 
   plot_title <- switch(inc,
@@ -290,8 +290,8 @@ inc_cum <- function(inc,
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = get(y_min),
-        ymax = get(y_max)
+        ymin = get(y_ci_low),
+        ymax = get(y_ci_high)
       ),
       alpha = 0.2
     ) +

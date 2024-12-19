@@ -136,18 +136,27 @@ test_that("Columns in the generated dataframe", {
                                                                  configname = "default")
 
   # Check if the data has the expected number of columns
-  expect_equal(ncol(data_weighted_ds_wide_collapse), 16)
+  expect_equal(ncol(data_weighted_ds_wide_collapse), 37)
 
   # Check if the data has the expected column names
   expect_equal(
     colnames(data_weighted_ds_wide_collapse),
     c(
-      "time", "cumdiff_inc_ihd_mean", "cumdiff_inc_ihd_min",
-      "cumdiff_inc_ihd_max", "cumdiff_inc_db_mean", "cumdiff_inc_db_min",
-      "cumdiff_inc_db_max", "cumdiff_inc_stroke_mean", "cumdiff_inc_stroke_min",
-      "cumdiff_inc_stroke_max", "cumdiff_inc_asthma_mean",
-      "cumdiff_inc_asthma_min", "cumdiff_inc_asthma_max",
-      "cumdiff_inc_ckd_mean", "cumdiff_inc_ckd_min", "cumdiff_inc_ckd_max"
+      "time", "simID", "totalcase_ihd_baseline", "totalcase_ihd_intervention",
+      "totalcase_diabetes_baseline", "totalcase_diabetes_intervention",
+      "totalcase_stroke_baseline", "totalcase_stroke_intervention",
+      "totalcase_asthma_baseline", "totalcase_asthma_intervention",
+      "totalcase_ckd_baseline", "totalcase_ckd_intervention", "diff_inc_ihd",
+      "diff_inc_db", "diff_inc_stroke", "diff_inc_asthma", "diff_inc_ckd",
+      "cumdiff_inc_ihd", "cumdiff_inc_db", "cumdiff_inc_stroke",
+      "cumdiff_inc_asthma", "cumdiff_inc_ckd", "cumdiff_inc_ihd_mean",
+      "cumdiff_inc_db_mean", "cumdiff_inc_stroke_mean",
+      "cumdiff_inc_asthma_mean", "cumdiff_inc_ckd_mean",
+      "cumdiff_inc_ihd_ci_low", "cumdiff_inc_db_ci_low",
+      "cumdiff_inc_stroke_ci_low", "cumdiff_inc_asthma_ci_low",
+      "cumdiff_inc_ckd_ci_low", "cumdiff_inc_ihd_ci_high",
+      "cumdiff_inc_db_ci_high", "cumdiff_inc_stroke_ci_high",
+      "cumdiff_inc_asthma_ci_high", "cumdiff_inc_ckd_ci_high"
     )
   )
 })

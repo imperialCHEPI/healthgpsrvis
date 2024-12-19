@@ -178,6 +178,25 @@ data_weighted_ds_wide_collapse <- gen_data_weighted_ds_cumdiff(data_weighted,
                                                                configname = "default")
 #> [1] "Loading the config file..."
 #> [1] "Processing the data..."
+#>  [1] "time"                            "simID"                          
+#>  [3] "totalcase_ihd_baseline"          "totalcase_ihd_intervention"     
+#>  [5] "totalcase_diabetes_baseline"     "totalcase_diabetes_intervention"
+#>  [7] "totalcase_stroke_baseline"       "totalcase_stroke_intervention"  
+#>  [9] "totalcase_asthma_baseline"       "totalcase_asthma_intervention"  
+#> [11] "totalcase_ckd_baseline"          "totalcase_ckd_intervention"     
+#> [13] "diff_inc_ihd"                    "diff_inc_db"                    
+#> [15] "diff_inc_stroke"                 "diff_inc_asthma"                
+#> [17] "diff_inc_ckd"                    "cumdiff_inc_ihd"                
+#> [19] "cumdiff_inc_db"                  "cumdiff_inc_stroke"             
+#> [21] "cumdiff_inc_asthma"              "cumdiff_inc_ckd"                
+#> [23] "cumdiff_inc_ihd_mean"            "cumdiff_inc_db_mean"            
+#> [25] "cumdiff_inc_stroke_mean"         "cumdiff_inc_asthma_mean"        
+#> [27] "cumdiff_inc_ckd_mean"            "cumdiff_inc_ihd_ci_low"         
+#> [29] "cumdiff_inc_db_ci_low"           "cumdiff_inc_stroke_ci_low"      
+#> [31] "cumdiff_inc_asthma_ci_low"       "cumdiff_inc_ckd_ci_low"         
+#> [33] "cumdiff_inc_ihd_ci_high"         "cumdiff_inc_db_ci_high"         
+#> [35] "cumdiff_inc_stroke_ci_high"      "cumdiff_inc_asthma_ci_high"     
+#> [37] "cumdiff_inc_ckd_ci_high"        
 #> [1] "Data processing complete."
 inc_cum("diabetes",
     data_weighted_ds_wide_collapse,
@@ -185,10 +204,6 @@ inc_cum("diabetes",
     scale_y_continuous_breaks = c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0),
     scale_y_continuous_labels = scales::comma(c(-4424000, -4084000, -3743000, -3403000, -3063000, -2722000, -2382000, -2042000, -1701000, -1361000, -1021000, -681000, -340000, 0))
   )
-#> Warning: Use of `data_weighted_ds_wide_collapse$time` is discouraged.
-#> ℹ Use `time` instead.
-#> Use of `data_weighted_ds_wide_collapse$time` is discouraged.
-#> ℹ Use `time` instead.
 ```
 
 <img src="man/figures/README-inc_cum_plot-1.png" width="100%" />
