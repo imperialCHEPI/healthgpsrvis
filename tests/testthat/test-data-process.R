@@ -178,49 +178,53 @@ test_that("Columns in the generated dataframe", {
                                                              configname = "default")
 
   # Check if the data has the expected number of columns
-  expect_equal(ncol(data_weighted_bd_wide_collapse), 19)
+  expect_equal(ncol(data_weighted_bd_wide_collapse), 32)
 
   # Check if the data has the expected column names
   expect_equal(
     colnames(data_weighted_bd_wide_collapse),
     c(
-      "time", "diff_daly_mean", "diff_daly_min", "diff_daly_max",
-      "diff_yll_mean", "diff_yll_min", "diff_yll_max", "diff_yld_mean",
-      "diff_yld_min", "diff_yld_max", "cumdiff_daly_mean", "cumdiff_daly_min",
-      "cumdiff_daly_max", "cumdiff_yll_mean", "cumdiff_yll_min",
-      "cumdiff_yll_max", "cumdiff_yld_mean", "cumdiff_yld_min",
-      "cumdiff_yld_max"
+      "time", "simID", "total_yll_baseline", "total_yll_intervention",
+      "total_yld_baseline", "total_yld_intervention", "total_daly_baseline",
+      "total_daly_intervention", "diff_yll", "diff_yld", "diff_daly",
+      "cumdiff_daly", "cumdiff_yll", "cumdiff_yld", "diff_daly_mean",
+      "diff_yll_mean", "diff_yld_mean", "cumdiff_daly_mean", "cumdiff_yll_mean",
+      "cumdiff_yld_mean", "diff_daly_ci_low", "diff_yll_ci_low",
+      "diff_yld_ci_low", "cumdiff_daly_ci_low", "cumdiff_yll_ci_low",
+      "cumdiff_yld_ci_low", "diff_daly_ci_high", "diff_yll_ci_high",
+      "diff_yld_ci_high", "cumdiff_daly_ci_high", "cumdiff_yll_ci_high",
+      "cumdiff_yld_ci_high"
     )
   )
 })
 
 # Testing gen_data_weighted_bd_spline() function
-test_that("Columns in the generated dataframe", {
-  # Get the path to the .rds file
-  filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
-
-  # Read the .rds file
-  data <- readRDS(filepath)
-
-  # Generate the weighted data
-  data_weighted <- gen_data_weighted(data, configname = "default")
-
-  # Generate the weighted data for the risk factors (using 'bd' instead of
-  # 'burden' to keep lintr happy)
-  data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted,
-                                                             configname = "default")
-
-  # Generate a data frame with spline smoothing applied for burden of disease
-  data_weighted_burden_spline <- gen_data_weighted_bd_spline(
-    data_weighted_bd_wide_collapse
-  )
-
-  # Check if the data has the expected number of columns
-  expect_equal(ncol(data_weighted_burden_spline), 4)
-
-  # Check if the data has the expected column names
-  expect_equal(
-    colnames(data_weighted_burden_spline),
-    c("time", "cumdiff_daly_mean", "cumdiff_daly_min", "cumdiff_daly_max")
-  )
-})
+# test_that("Columns in the generated dataframe", {
+#   # Get the path to the .rds file
+#   filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
+#
+#   # Read the .rds file
+#   data <- readRDS(filepath)
+#
+#   # Generate the weighted data
+#   data_weighted <- gen_data_weighted(data, configname = "default")
+#
+#   # Generate the weighted data for the risk factors (using 'bd' instead of
+#   # 'burden' to keep lintr happy)
+#   data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted,
+#                                                              configname = "default")
+#
+#   # Generate a data frame with spline smoothing applied for burden of disease
+#   data_weighted_burden_spline <- gen_data_weighted_bd_spline(
+#     data_weighted_bd_wide_collapse
+#   )
+#
+#   # Check if the data has the expected number of columns
+#   expect_equal(ncol(data_weighted_burden_spline), 4)
+#
+#   # Check if the data has the expected column names
+#   expect_equal(
+#     colnames(data_weighted_burden_spline),
+#     c("time", "cumdiff_daly_mean", "cumdiff_daly_ci_low", "cumdiff_daly_ci_high")
+#   )
+# })

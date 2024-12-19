@@ -303,7 +303,6 @@ gen_data_weighted_ds_cumdiff <- function(data_weighted, configname = "default") 
     dplyr::mutate(dplyr::across(dplyr::all_of(config$summary_columns_ds_cum),
                                 ~ t.test(.x)$conf.int[2],
                                 .names = "{.col}_ci_high"))
-  print(colnames(data_weighted_ds_wide_collapse))
   print("Data processing complete.")
   return(data_weighted_ds_wide_collapse)
 }
@@ -366,23 +365,16 @@ gen_data_weighted_burden <- function(data_weighted, configname = "default") {
     )
 
   data_weighted_bd_wide_collapse <- data_weighted_burden_wide |>
-    dplyr::group_by(
-      dplyr::across(
-        dplyr::all_of(config$group)
-      )
-    ) |>
-    dplyr::summarise(
-      dplyr::across(
-        dplyr::all_of(config$summary_columns_burden_cum),
-        list(
-          mean = ~ mean(.x, na.rm = TRUE),
-          min = ~ min(.x, na.rm = TRUE),
-          max = ~ max(.x, na.rm = TRUE)
-        ),
-        .names = "{.col}_{.fn}"
-      ),
-      .groups = "drop"
-    )
+    dplyr::group_by(dplyr::across(dplyr::all_of(config$group))) |>
+    dplyr::mutate(dplyr::across(dplyr::all_of(config$summary_columns_burden_cum),
+                                ~ mean(.x, na.rm = TRUE),
+                                .names = "{.col}_mean")) |>
+    dplyr::mutate(dplyr::across(dplyr::all_of(config$summary_columns_burden_cum),
+                                ~ t.test(.x)$conf.int[1],
+                                .names = "{.col}_ci_low")) |>
+    dplyr::mutate(dplyr::across(dplyr::all_of(config$summary_columns_burden_cum),
+                                ~ t.test(.x)$conf.int[2],
+                                .names = "{.col}_ci_high"))
   print("Data processing complete.")
   return(data_weighted_bd_wide_collapse)
 }
@@ -424,13 +416,13 @@ gen_data_weighted_bd_spline <- function(data_weighted_bd_wide_collapse, configna
     dplyr::filter(!!rlang::sym(burden_spline[[1]]$burden_mean) <= 0)
 
   data_weighted_burden_min <- data_weighted_bd_wide_collapse |>
-    dplyr::filter(!!rlang::sym(burden_spline[[2]]$burden_min) <= 0)
+    dplyr::filter(!!rlang::sym(burden_spline[[2]]$burden_ci_low) <= 0)
 
   ## Notes for India project: Delete years 29, 31 for ps2-high; Delete 37-38 for
   ## ps3-low; Delete 33-34 for ps4-middle; Delete 36-38 for ps4-low
 
   data_weighted_burden_max <- data_weighted_bd_wide_collapse |>
-    dplyr::filter(!!rlang::sym(burden_spline[[3]]$burden_max) <= 0)
+    dplyr::filter(!!rlang::sym(burden_spline[[3]]$burden_ci_high) <= 0)
 
   ## New data frame
   data_weighted_burden_spline <- data.frame(time = seq(
@@ -450,22 +442,22 @@ gen_data_weighted_bd_spline <- function(data_weighted_bd_wide_collapse, configna
     as.numeric(unlist(data_weighted_burden_spline[config$group]))
   )$y
 
-  spline_fit_min <- splines::interpSpline(
+  spline_fit_ci_low <- splines::interpSpline(
     as.numeric(unlist(data_weighted_burden_min[config$group])),
-    as.numeric(unlist(data_weighted_burden_min[burden_spline[[2]]$burden_min]))
+    as.numeric(unlist(data_weighted_burden_min[burden_spline[[2]]$burden_ci_low]))
   )
-  data_weighted_burden_spline[burden_spline[[2]]$burden_min] <- stats::predict(
-    spline_fit_min,
+  data_weighted_burden_spline[burden_spline[[2]]$burden_ci_low] <- stats::predict(
+    spline_fit_ci_low,
     as.numeric(unlist(data_weighted_burden_spline[config$group]))
   )$y
 
   ## Use smooth.spline for ps4-low
-  spline_fit_max <- splines::interpSpline(
+  spline_fit_ci_high <- splines::interpSpline(
     as.numeric(unlist(data_weighted_burden_max[config$group])),
-    as.numeric(unlist(data_weighted_burden_max[burden_spline[[3]]$burden_max]))
+    as.numeric(unlist(data_weighted_burden_max[burden_spline[[3]]$burden_ci_high]))
   )
-  data_weighted_burden_spline[burden_spline[[3]]$burden_max] <- stats::predict(
-    spline_fit_max,
+  data_weighted_burden_spline[burden_spline[[3]]$burden_ci_high] <- stats::predict(
+    spline_fit_ci_high,
     as.numeric(unlist(data_weighted_burden_spline[config$group]))
   )$y
 
@@ -480,6 +472,7 @@ gen_data_weighted_bd_spline <- function(data_weighted_bd_wide_collapse, configna
       data_weighted_burden_spline[[burden_sp]]
     )
   }
+  print(colnames(data_weighted_burden_spline))
   print("Data processing complete.")
   return(data_weighted_burden_spline)
 }

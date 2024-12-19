@@ -354,18 +354,18 @@ burden_disease <- function(burden,
     yll = "diff_yll_mean"
   )
 
-  y_min <- switch(burden,
-    daly = "diff_daly_min",
-    dalycum = "cumdiff_daly_min",
-    yld = "diff_yld_min",
-    yll = "diff_yll_min"
+  y_ci_low <- switch(burden,
+    daly = "diff_daly_ci_low",
+    dalycum = "cumdiff_daly_ci_low",
+    yld = "diff_yld_ci_low",
+    yll = "diff_yll_ci_low"
   )
 
-  y_max <- switch(burden,
-    daly = "diff_daly_max",
-    dalycum = "cumdiff_daly_max",
-    yld = "diff_yld_max",
-    yll = "diff_yll_max"
+  y_ci_high <- switch(burden,
+    daly = "diff_daly_ci_high",
+    dalycum = "cumdiff_daly_ci_high",
+    yld = "diff_yld_ci_high",
+    yll = "diff_yll_ci_high"
   )
 
   plot_title <- switch(burden,
@@ -385,8 +385,8 @@ burden_disease <- function(burden,
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = get(y_min),
-        ymax = get(y_max)
+        ymin = get(y_ci_low),
+        ymax = get(y_ci_high)
       ),
       alpha = 0.2
     ) +
