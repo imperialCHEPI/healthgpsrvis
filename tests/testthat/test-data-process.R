@@ -19,7 +19,7 @@ test_that("Columns in the generated dataframe", {
   data <- readRDS(filepath)
 
   # Generate the weighted data
-  data_weighted <- gen_data_weighted(data)
+  data_weighted <- gen_data_weighted(data, configname = "default")
 
   # Check if the data has the expected number of columns
   expect_equal(ncol(data_weighted), 37)
@@ -62,10 +62,11 @@ test_that("Columns in the generated dataframe", {
   data <- readRDS(filepath)
 
   # Generate the weighted data
-  data_weighted <- gen_data_weighted(data)
+  data_weighted <- gen_data_weighted(data, configname = "default")
 
   # Generate the weighted data for the risk factors
-  data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
+  data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted,
+                                                         configname = "default")
 
   # Check if the data has the expected number of columns
   expect_equal(ncol(data_weighted_rf_wide_collapse), 13)
@@ -91,10 +92,11 @@ test_that("Columns in the generated dataframe", {
   data <- readRDS(filepath)
 
   # Generate the weighted data
-  data_weighted <- gen_data_weighted(data)
+  data_weighted <- gen_data_weighted(data, configname = "default")
 
   # Generate the weighted data for the risk factors
-  data_weighted_ds_wide_diff <- gen_data_weighted_ds_diff(data_weighted)
+  data_weighted_ds_wide_diff <- gen_data_weighted_ds_diff(data_weighted,
+                                                          configname = "default")
 
   # Check if the data has the expected number of columns
   expect_equal(ncol(data_weighted_ds_wide_diff), 17)
@@ -122,10 +124,11 @@ test_that("Columns in the generated dataframe", {
   data <- readRDS(filepath)
 
   # Generate the weighted data
-  data_weighted <- gen_data_weighted(data)
+  data_weighted <- gen_data_weighted(data, configname = "default")
 
   # Generate the weighted data for the risk factors
-  data_weighted_ds_wide_collapse <- gen_data_weighted_ds_cumdiff(data_weighted)
+  data_weighted_ds_wide_collapse <- gen_data_weighted_ds_cumdiff(data_weighted,
+                                                                 configname = "default")
 
   # Check if the data has the expected number of columns
   expect_equal(ncol(data_weighted_ds_wide_collapse), 16)
@@ -137,9 +140,9 @@ test_that("Columns in the generated dataframe", {
       "time", "cumdiff_inc_ihd_mean", "cumdiff_inc_ihd_min",
       "cumdiff_inc_ihd_max", "cumdiff_inc_db_mean", "cumdiff_inc_db_min",
       "cumdiff_inc_db_max", "cumdiff_inc_stroke_mean", "cumdiff_inc_stroke_min",
-      "cumdiff_inc_stroke_max", "cumdiff_inc_asthma_mean", "cumdiff_inc_asthma_min",
-      "cumdiff_inc_asthma_max", "cumdiff_inc_ckd_mean", "cumdiff_inc_ckd_min",
-      "cumdiff_inc_ckd_max"
+      "cumdiff_inc_stroke_max", "cumdiff_inc_asthma_mean",
+      "cumdiff_inc_asthma_min", "cumdiff_inc_asthma_max",
+      "cumdiff_inc_ckd_mean", "cumdiff_inc_ckd_min", "cumdiff_inc_ckd_max"
     )
   )
 })
@@ -153,11 +156,12 @@ test_that("Columns in the generated dataframe", {
   data <- readRDS(filepath)
 
   # Generate the weighted data
-  data_weighted <- gen_data_weighted(data)
+  data_weighted <- gen_data_weighted(data, configname = "default")
 
   # Generate the weighted data for the risk factors (using 'bd' instead of
   # 'burden' to keep lintr happy)
-  data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+  data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted,
+                                                             configname = "default")
 
   # Check if the data has the expected number of columns
   expect_equal(ncol(data_weighted_bd_wide_collapse), 19)
@@ -176,7 +180,7 @@ test_that("Columns in the generated dataframe", {
   )
 })
 
-# Testing gen_data_weighted_burden_spline() function
+# Testing gen_data_weighted_bd_spline() function
 test_that("Columns in the generated dataframe", {
   # Get the path to the .rds file
   filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
@@ -185,14 +189,15 @@ test_that("Columns in the generated dataframe", {
   data <- readRDS(filepath)
 
   # Generate the weighted data
-  data_weighted <- gen_data_weighted(data)
+  data_weighted <- gen_data_weighted(data, configname = "default")
 
   # Generate the weighted data for the risk factors (using 'bd' instead of
   # 'burden' to keep lintr happy)
-  data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+  data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted,
+                                                             configname = "default")
 
   # Generate a data frame with spline smoothing applied for burden of disease
-  data_weighted_burden_spline <- gen_data_weighted_burden_spline(
+  data_weighted_burden_spline <- gen_data_weighted_bd_spline(
     data_weighted_bd_wide_collapse
   )
 

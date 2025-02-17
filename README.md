@@ -38,20 +38,24 @@ library(healthgpsrvis)
 
 # Get the path to the .rds file included in the testdata folder
 filepath <- testthat::test_path("testdata", "data_ps3_reformulation")
-#filepath <- "path/to/data.rds" # Get the path to the .rds file included in any other local folder
+#filepath <- "path/to/data.rds" # Get the path to the .rds file included in any 
+#other local folder
 
 
 # Read the .rds file
 data <- readRDS(filepath)
 
 # Generate the weighted data
-data_weighted <- gen_data_weighted(data)
+data_weighted <- gen_data_weighted(data, configname = "default")
 #> [1] "Loading the config file..."
 #> [1] "Processing the data..."
 #> [1] "Data processing complete."
 
+# If you want to use a customised configuration, you will have to change the configname to "production". Then make sure you are editing to use the values (under the `production` field) that you need in the `config.yml` file which is located in the `inst/config` folder.
+
 # Generate the weighted data for the risk factors
-data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
+data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted, 
+                                                       configname = "default")
 #> [1] "Loading the config file..."
 #> [1] "Processing the data..."
 #> [1] "Data processing complete."
@@ -106,7 +110,8 @@ To plot the incidence difference for, say, “stroke”, you can use the
 following code:
 
 ``` r
-data_weighted_ds_wide_diff <- gen_data_weighted_ds_diff(data_weighted)
+data_weighted_ds_wide_diff <- gen_data_weighted_ds_diff(data_weighted, 
+                                                        configname = "default")
 #> [1] "Loading the config file..."
 #> [1] "Processing the data..."
 #> [1] "Data processing complete."
@@ -121,7 +126,8 @@ To plot the cumulative incidence difference for, say, “diabetes”, you
 can use the following code:
 
 ``` r
-data_weighted_ds_wide_collapse <- gen_data_weighted_ds_cumdiff(data_weighted)
+data_weighted_ds_wide_collapse <- gen_data_weighted_ds_cumdiff(data_weighted,
+                                                               configname = "default")
 #> [1] "Loading the config file..."
 #> [1] "Processing the data..."
 #> [1] "Data processing complete."
@@ -143,7 +149,8 @@ To plot burden of disease for, say, “yld”, you can use the following
 code:
 
 ``` r
-data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted,
+                                                           configname = "default")
 #> [1] "Loading the config file..."
 #> [1] "Processing the data..."
 #> [1] "Data processing complete."

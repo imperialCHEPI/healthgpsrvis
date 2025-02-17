@@ -8,13 +8,15 @@ inc_diff(inc, data_weighted_ds_wide_diff)
 }
 \arguments{
 \item{inc}{A character string specifying the incidence to plot.
-Options are: "asthma", "ckd", "diabetes", "ischemia", "stroke".}
+Options: "asthma", "ckd", "diabetes", "ischemia", "stroke".}
 
-\item{data_weighted_ds_wide_diff}{A data frame containing the weighted mean values of differences of incidences.}
+\item{data_weighted_ds_wide_diff}{A data frame containing the weighted mean
+values of differences of incidences.}
 }
 \value{
 A ggplot object representing the specified plot.
 }
 \description{
-Creates a line plot showing the reduction in a specified incidence number over time.
+Creates a line plot showing the reduction in a specified incidence number
+over time.
 }

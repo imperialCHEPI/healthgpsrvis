@@ -14,19 +14,24 @@ burden_disease(
 }
 \arguments{
 \item{burden}{A character string specifying the burden of disease to plot.
-Options are: "daly", "dalycum", "yld", "yll".}
+Options: "daly", "dalycum", "yld", "yll".}
 
-\item{data_weighted_bd_wide_collapse}{A data frame with differences between intervention and baseline values for burden of disease.}
+\item{data_weighted_bd_wide_collapse}{A data frame with differences between
+intervention and baseline values for burden of disease.}
 
-\item{scale_y_continuous_limits}{A numeric vector specifying the limits of the scales for continuous y aesthetics.}
+\item{scale_y_continuous_limits}{A numeric vector specifying the limits of
+the scales for continuous y aesthetics.}
 
-\item{scale_y_continuous_breaks}{A numeric vector specifying the breaks of the scales for continuous y aesthetics.}
+\item{scale_y_continuous_breaks}{A numeric vector specifying the breaks of
+the scales for continuous y aesthetics.}
 
-\item{scale_y_continuous_labels}{A numeric vector specifying the labels of the scales for continuous y aesthetics.}
+\item{scale_y_continuous_labels}{A numeric vector specifying the labels of
+the scales for continuous y aesthetics.}
 }
 \value{
 A ggplot object representing the specified plot.
 }
 \description{
-Creates a line plot showing the reduction in a specified burden of disease over time.
+Creates a line plot showing the reduction in a specified burden of disease
+over time.
 }

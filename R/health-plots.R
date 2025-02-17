@@ -1,9 +1,9 @@
 #' Plot Risk Factors Over Time
 #'
-#' Generates a line plot of a specified risk factor over time, grouped by source.
+#' Generates line plot of a specified risk factor over time, grouped by source.
 #'
 #' @param riskft A character string specifying the risk factor to plot.
-#'        Options are: "bmi", "energyintake", "fat", "obesity", "protein", "sodium".
+#'        Options: "bmi", "energyintake", "fat", "obesity", "protein", "sodium".
 #' @param data_weighted A data frame with weighted values for various metrics.
 #' @return A ggplot object representing the specified plot.
 #' @export
@@ -45,22 +45,31 @@ riskfactors <- function(riskft, data_weighted) {
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
     ggplot2::labs(fill = "Source") +
-    ggplot2::scale_x_continuous(limits = c(2020, 2055), breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
-    ggplot2::scale_y_continuous(labels = scaleFUN) +
-    ggplot2::labs(alt = "A line plot of a specified risk factor over time, grouped by source") +
+    ggplot2::scale_x_continuous(limits = c(2020, 2055),
+                                breaks = c(2020, 2025, 2030, 2035,
+                                           2040, 2045, 2050, 2055)) +
+    ggplot2::scale_y_continuous(labels = scale_fun) +
+    ggplot2::labs(alt = "A line plot of a specified risk factor over time,
+                  grouped by source") +
     hgps_theme()
 }
 
 #' Plot of Difference in Risk Factor
 #'
-#' Creates a line plot showing the reduction in a specified risk factor under intervention over time.
+#' Creates a line plot showing the reduction in a specified risk factor under
+#' intervention over time.
 #'
-#' @param riskft_diff A character string specifying the difference in risk factor to plot.
-#'        Options are: "bmi", "ei", "obesity", "sodium".
-#' @param data_weighted_rf_wide_collapse A data frame with differences between intervention and baseline values for risk factors.
-#' @param scale_y_continuous_limits A numeric vector specifying the limits of the scales for continuous y aesthetics.
-#' @param scale_y_continuous_breaks A numeric vector specifying the breaks of the scales for continuous y aesthetics.
-#' @param scale_y_continuous_labels A numeric vector specifying the labels of the scales for continuous y aesthetics.
+#' @param riskft_diff A character string specifying the difference in risk
+#' factor to plot.
+#'        Options: "bmi", "ei", "obesity", "sodium".
+#' @param data_weighted_rf_wide_collapse A data frame with differences between
+#' intervention and baseline values for risk factors.
+#' @param scale_y_continuous_limits A numeric vector specifying the limits of
+#' the scales for continuous y aesthetics.
+#' @param scale_y_continuous_breaks A numeric vector specifying the breaks of
+#' the scales for continuous y aesthetics.
+#' @param scale_y_continuous_labels A numeric vector specifying the labels of
+#' the scales for continuous y aesthetics.
 #' @return A ggplot object representing the specified plot.
 #' @export
 riskfactors_diff <- function(riskft_diff,
@@ -127,24 +136,28 @@ riskfactors_diff <- function(riskft_diff,
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
-    ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040,
+                                           2045, 2050, 2055)) +
     ggplot2::scale_y_continuous(
       limits = scale_y_continuous_limits,
       breaks = scale_y_continuous_breaks,
       labels = scale_y_continuous_labels
     ) +
-    ggplot2::labs(alt = "A line plot showing the reduction in a specified risk factor under intervention over time") +
+    ggplot2::labs(alt = "A line plot showing the reduction in a specified risk
+                  factor under intervention over time") +
     hgps_theme() +
     ggplot2::theme(legend.position.inside = c(0.85, 0.22))
 }
 
 #' Plot of Incidence Difference
 #'
-#' Creates a line plot showing the reduction in a specified incidence number over time.
+#' Creates a line plot showing the reduction in a specified incidence number
+#' over time.
 #'
 #' @param inc A character string specifying the incidence to plot.
-#'        Options are: "asthma", "ckd", "diabetes", "ischemia", "stroke".
-#' @param data_weighted_ds_wide_diff A data frame containing the weighted mean values of differences of incidences.
+#'        Options: "asthma", "ckd", "diabetes", "ischemia", "stroke".
+#' @param data_weighted_ds_wide_diff A data frame containing the weighted mean
+#' values of differences of incidences.
 #' @return A ggplot object representing the specified plot.
 #' @export
 inc_diff <- function(inc,
@@ -195,20 +208,26 @@ inc_diff <- function(inc,
       breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
       labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)
     ) +
-    ggplot2::labs(alt = "A line plot showing the reduction in a specified incidence number over time") +
+    ggplot2::labs(alt = "A line plot showing the reduction in a specified
+                  incidence number over time") +
     hgps_theme()
 }
 
 #' Plot of Cumulative Incidence Difference
 #'
-#' Creates a line plot showing the cumulative reduction in a specified incidence number over time.
+#' Creates a line plot showing the cumulative reduction in a specified incidence
+#' number over time.
 #'
 #' @param inc A character string specifying the incidence to plot.
-#'        Options are: "asthma", "ckd", "diabetes", "ischemia", "stroke".
-#' @param data_weighted_ds_wide_collapse A data frame with differences between intervention and baseline values for incidences.
-#' @param scale_y_continuous_limits A numeric vector specifying the limits of the scales for continuous y aesthetics.
-#' @param scale_y_continuous_breaks A numeric vector specifying the breaks of the scales for continuous y aesthetics.
-#' @param scale_y_continuous_labels A numeric vector specifying the labels of the scales for continuous y aesthetics.
+#'        Options: "asthma", "ckd", "diabetes", "ischemia", "stroke".
+#' @param data_weighted_ds_wide_collapse A data frame with differences between
+#' intervention and baseline values for incidences.
+#' @param scale_y_continuous_limits A numeric vector specifying the limits of
+#' the scales for continuous y aesthetics.
+#' @param scale_y_continuous_breaks A numeric vector specifying the breaks of
+#' the scales for continuous y aesthetics.
+#' @param scale_y_continuous_labels A numeric vector specifying the labels of
+#' the scales for continuous y aesthetics.
 #' @return A ggplot object representing the specified plot.
 #' @export
 inc_cum <- function(inc,
@@ -279,13 +298,15 @@ inc_cum <- function(inc,
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
-    ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045,
+                                           2050, 2055)) +
     ggplot2::scale_y_continuous(
       limits = scale_y_continuous_limits,
       breaks = scale_y_continuous_breaks,
       labels = scale_y_continuous_labels
     ) +
-    ggplot2::labs(alt = "A line plot showing the cumulative reduction in a specified incidence number over time") +
+    ggplot2::labs(alt = "A line plot showing the cumulative reduction in a
+                  specified incidence number over time") +
     hgps_theme() +
     ggplot2::theme(plot.title = ggplot2::element_text(size = 10)) +
     ggplot2::theme(legend.position.inside = c(0.2, 0.2))
@@ -293,14 +314,19 @@ inc_cum <- function(inc,
 
 #' Plot of Burden of Disease
 #'
-#' Creates a line plot showing the reduction in a specified burden of disease over time.
+#' Creates a line plot showing the reduction in a specified burden of disease
+#' over time.
 #'
 #' @param burden A character string specifying the burden of disease to plot.
-#'        Options are: "daly", "dalycum", "yld", "yll".
-#' @param data_weighted_bd_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
-#' @param scale_y_continuous_limits A numeric vector specifying the limits of the scales for continuous y aesthetics.
-#' @param scale_y_continuous_breaks A numeric vector specifying the breaks of the scales for continuous y aesthetics.
-#' @param scale_y_continuous_labels A numeric vector specifying the labels of the scales for continuous y aesthetics.
+#'        Options: "daly", "dalycum", "yld", "yll".
+#' @param data_weighted_bd_wide_collapse A data frame with differences between
+#' intervention and baseline values for burden of disease.
+#' @param scale_y_continuous_limits A numeric vector specifying the limits of
+#' the scales for continuous y aesthetics.
+#' @param scale_y_continuous_breaks A numeric vector specifying the breaks of
+#' the scales for continuous y aesthetics.
+#' @param scale_y_continuous_labels A numeric vector specifying the labels of
+#' the scales for continuous y aesthetics.
 #' @return A ggplot object representing the specified plot.
 #' @export
 burden_disease <- function(burden,
@@ -367,20 +393,23 @@ burden_disease <- function(burden,
     ggplot2::ggtitle(plot_title) +
     ggplot2::xlab("Year") +
     ggplot2::ylab(y_label) +
-    ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)) +
+    ggplot2::scale_x_continuous(breaks = c(2020, 2025, 2030, 2035, 2040, 2045,
+                                           2050, 2055)) +
     ggplot2::scale_y_continuous(
       limits = scale_y_continuous_limits,
       breaks = scale_y_continuous_breaks,
       labels = scale_y_continuous_labels
     ) +
-    ggplot2::labs(alt = "A line plot showing the reduction in a specified burden of disease over time") +
+    ggplot2::labs(alt = "A line plot showing the reduction in a specified
+                  burden of disease over time") +
     hgps_theme() +
     ggplot2::theme(legend.position.inside = c(0.85, 0.2))
 }
 
 #' Plot of Life Expectancy under Intervention
 #'
-#' Creates a line plot showing the increase in life expectancy under intervention over time.
+#' Creates a line plot showing the increase in life expectancy under
+#' intervention over time.
 #'
 #' @param diff A character string specifying the life expectancy to plot.
 #' @param data_ple_wide A data frame containing the life expectancy.
@@ -401,7 +430,8 @@ life_exp <- function(diff, data_ple_wide) {
       breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
       labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)
     ) +
-    ggplot2::labs(alt = "A line plot showing the increase in life expectancy under intervention over time") +
+    ggplot2::labs(alt = "A line plot showing the increase in life expectancy
+                  under intervention over time") +
     hgps_theme()
 }
 
@@ -411,9 +441,12 @@ life_exp <- function(diff, data_ple_wide) {
 #'
 #' @param metrics A list specifying the metrics to plot.
 #' @param data_weighted A data frame with weighted values for various metrics.
-#' @param data_mean_weighted_rf_wide A data frame containing the weighted mean values of risk factors.
-#' @param data_mean_weighted_inc_wide A data frame containing the weighted mean values of incidences.
-#' @param data_weighted_bd_wide_collapse A data frame with differences between intervention and baseline values for burden of disease.
+#' @param data_mean_weighted_rf_wide A data frame containing the weighted mean
+#' values of risk factors.
+#' @param data_mean_weighted_inc_wide A data frame containing the weighted mean
+#' values of incidences.
+#' @param data_weighted_bd_wide_collapse A data frame with differences between
+#' intervention and baseline values for burden of disease.
 #' @param data_ple_wide A data frame containing the life expectancy.
 #' @param output_file Name of the output PDF as a string
 #' @return A combined ggplot object arranged in a grid.
@@ -433,9 +466,11 @@ combine_plots <- function(metrics,
     }
   }
 
-  if (!is.null(metrics$risk_factors_diff) && !is.null(data_mean_weighted_rf_wide)) {
+  if (!is.null(metrics$risk_factors_diff) &&
+        !is.null(data_mean_weighted_rf_wide)) {
     for (riskft_diff in metrics$risk_factors_diff) {
-      plots <- c(plots, list(riskfactors_diff(riskft_diff, data_mean_weighted_rf_wide)))
+      plots <- c(plots, list(riskfactors_diff(riskft_diff,
+                                              data_mean_weighted_rf_wide)))
     }
   }
 
@@ -451,9 +486,11 @@ combine_plots <- function(metrics,
     }
   }
 
-  if (!is.null(metrics$burden_disease) && !is.null(data_weighted_bd_wide_collapse)) {
+  if (!is.null(metrics$burden_disease) &&
+        !is.null(data_weighted_bd_wide_collapse)) {
     for (burden in metrics$burden_disease) {
-      plots <- c(plots, list(burden_disease(burden, data_weighted_bd_wide_collapse)))
+      plots <- c(plots, list(burden_disease(burden,
+                                            data_weighted_bd_wide_collapse)))
     }
   }
 
@@ -467,7 +504,8 @@ combine_plots <- function(metrics,
   grDevices::pdf(output_file, width = 11, height = 8.5)
 
   for (i in seq(1, length(plots), by = 4)) {
-    gridExtra::grid.arrange(grobs = plots[i:min(i + 3, length(plots))], ncol = 2)
+    gridExtra::grid.arrange(grobs = plots[i:min(i + 3, length(plots))],
+                            ncol = 2)
   }
 
   grDevices::dev.off()

@@ -4,14 +4,19 @@
 \alias{gen_data_weighted_ds_diff}
 \title{Calculate Differences for Incidences}
 \usage{
-gen_data_weighted_ds_diff(data_weighted)
+gen_data_weighted_ds_diff(data_weighted, configname = "default")
 }
 \arguments{
-\item{data_weighted}{A data frame containing weighted mean values for various metrics.}
+\item{data_weighted}{A data frame containing weighted mean values for various
+metrics.}
+
+\item{configname}{The name of the configuration file to use (e.g., "default", "development", "production", "testing").}
 }
 \value{
-A data frame with differences between intervention and baseline values for incidences.
+A data frame with differences between intervention and baseline
+values for incidences.
 }
 \description{
-This function calculates the differences between intervention and baseline values for incidences.
+This function calculates the differences between intervention and baseline
+values for incidences.
 }

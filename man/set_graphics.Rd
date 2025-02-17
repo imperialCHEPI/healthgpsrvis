@@ -7,17 +7,21 @@
 set_graphics(width, height)
 }
 \arguments{
-\item{width}{Numeric value specifying the width of the new plotting device in centimeters.}
+\item{width}{Numeric value specifying the width of the new plotting device in
+centimeters.}
 
-\item{height}{Numeric value specifying the height of the new plotting device in centimeters.}
+\item{height}{Numeric value specifying the height of the new plotting device
+in centimeters.}
 }
 \description{
 This function closes all existing graphical devices and opens a new one
 with specified width and height dimensions.
 }
 \details{
-The \code{set_graphics} function first closes all open graphical devices using \code{graphics.off()}.
-It then opens a new graphical device with the given dimensions using \code{dev.new()}.
+The \code{set_graphics} function first closes all open graphical devices using
+\code{graphics.off()}.
+It then opens a new graphical device with the given dimensions using
+\code{dev.new()}.
 The \code{unit} parameter is set to "cm" to use centimeters for the dimensions,
 and \code{noRStudioGD} is set to \code{TRUE} to avoid using RStudio's graphical device.
 }

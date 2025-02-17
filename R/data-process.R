@@ -1,23 +1,36 @@
 #' Data Processing
 #'
-#' This file contains a set of functions designed to work together for processing the data.
-#' Below is a description of how to use these functions in sequence.
+#' This file contains a set of functions designed to work together for
+#' processing the data. Below is a description of how to use these functions
+#' in sequence.
 #'
 #' ## Step-by-Step Usage:
 #'
-#' 1. **Read the data**: This function reads the data from the location specified `data <-  readRDS("data.rds")`.
+#' 1. **Read the data**: This function reads the data from the location
+#' specified `data <-  readRDS("data.rds")`.
 #'
-#' 1. **`gen_data_weighted`**: Calculates weighted mean values for various metrics over years `data_weighted <- gen_data_weighted(data)`.
+#' 1. **`gen_data_weighted`**: Calculates weighted mean values for various
+#' metrics over years `data_weighted <- gen_data_weighted(data)`.
 #'
-#' 1. **`gen_data_weighted_rf`**: Calculates the differences between intervention and baseline values for risk factors `data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)`.
+#' 1. **`gen_data_weighted_rf`**: Calculates the differences between
+#' intervention and baseline values for risk factors
+#' `data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)`.
 #'
-#' 1. **`gen_data_weighted_ds`**: Calculates the differences between intervention and baseline values for incidences `data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)`.
+#' 1. **`gen_data_weighted_ds`**: Calculates the differences between
+#' intervention and baseline values for incidences
+#' `data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)`.
 #'
-#' 1. **`gen_data_weighted_burden`**: Calculates the differences between intervention and baseline values for burden of disease `data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)`.
+#' 1. **`gen_data_weighted_burden`**: Calculates the differences between
+#' intervention and baseline values for burden of disease
+#' `data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)`.
 #'
-#' 1. **`gen_data_weighted_burden_spline`**: Performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease `data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)`.
+#' 1. **`gen_data_weighted_bd_spline`**: Performs data smoothing for burden
+#' of disease, when necessary. For instance, with only a few simulations, there
+#' can be positive values in difference in burden of disease
+#' `data_weighted_burden_spline <- gen_data_weighted_bd_spline(data_weighted_bd_wide_collapse)`.
 #'
-#' 1. **`gen_data_le`**: Calculates life expectancy for various age and groups `data_ple_wide <- gen_data_le(data_weighted)`.
+#' 1. **`gen_data_le`**: Calculates life expectancy for various age and groups
+#' `data_ple_wide <- gen_data_le(data_weighted)`.
 #'
 #' ## Examples
 #' ```r
@@ -26,8 +39,9 @@
 #' data_weighted <- gen_data_weighted(data)
 #' data_weighted_rf_wide_collapse <- gen_data_weighted_rf(data_weighted)
 #' data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
-#' data_weighted_burden_wide_collapse <- gen_data_weighted_burden(data_weighted)
-#' data_weighted_burden_spline <- gen_data_weighted_burden_spline(data_weighted_burden_wide_collapse)
+#' data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
+#' data_weighted_burden_spline <- gen_data_weighted_bd_spline(
+#' sdata_weighted_bd_wide_collapse)
 #' data_ple_wide <- gen_data_le(data_weighted)
 #' ```
 #'
@@ -39,13 +53,16 @@ NULL
 #' This function calculates weighted mean values for various metrics over years.
 #'
 #' @param data A data frame containing values for various metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
 #' @return A data frame with weighted values for various metrics over years.
 #' @export
-gen_data_weighted <- function(data) {
+gen_data_weighted <- function(data, configname = "default") {
+
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
-  colnames(data) <- gsub("^mean_", "", colnames(data)) # Clean the column names by removing 'mean_'
+  colnames(data) <- gsub("^mean_", "", colnames(data)) # Clean the column names
+  ## by removing 'mean_'
   weight_column <- rlang::sym(config$weight)
   data_weighted <- data |>
     dplyr::group_by(dplyr::across(dplyr::all_of(config$grouping_vars))) |>
@@ -103,14 +120,18 @@ gen_data_weighted <- function(data) {
 
 #' Calculate Differences for Risk Factors
 #'
-#' This function calculates the differences between intervention and baseline values for risk factors.
+#' This function calculates the differences between intervention and baseline
+#' values for risk factors.
 #'
-#' @param data_weighted A data frame containing weighted mean values for various metrics.
-#' @return A data frame with differences between intervention and baseline values for risk factors.
+#' @param data_weighted A data frame containing weighted mean values for various
+#'  metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
+#' @return A data frame with differences between intervention and baseline
+#' values for risk factors.
 #' @export
-gen_data_weighted_rf <- function(data_weighted) {
+gen_data_weighted_rf <- function(data_weighted, configname = "default") {
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
   data_weighted_rf <- dplyr::select(
     data_weighted,
@@ -129,7 +150,8 @@ gen_data_weighted_rf <- function(data_weighted) {
     dplyr::mutate(
       !!!stats::setNames(
         lapply(config$rf, function(rf) {
-          data_weighted_rf_wide[[paste0("weighted_", rf, "_intervention")]] - data_weighted_rf_wide[[paste0("weighted_", rf, "_baseline")]]
+          data_weighted_rf_wide[[paste0("weighted_", rf, "_intervention")]] -
+            data_weighted_rf_wide[[paste0("weighted_", rf, "_baseline")]]
         }),
         paste0("diff_", config$rf)
       )
@@ -162,14 +184,18 @@ gen_data_weighted_rf <- function(data_weighted) {
 
 #' Calculate Differences for Incidences
 #'
-#' This function calculates the differences between intervention and baseline values for incidences.
+#' This function calculates the differences between intervention and baseline
+#' values for incidences.
 #'
-#' @param data_weighted A data frame containing weighted mean values for various metrics.
-#' @return A data frame with differences between intervention and baseline values for incidences.
+#' @param data_weighted A data frame containing weighted mean values for various
+#'  metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
+#' @return A data frame with differences between intervention and baseline
+#' values for incidences.
 #' @export
-gen_data_weighted_ds_diff <- function(data_weighted) {
+gen_data_weighted_ds_diff <- function(data_weighted, configname = "default") {
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
   data_weighted_ds <- dplyr::select(
     data_weighted,
@@ -188,7 +214,12 @@ gen_data_weighted_ds_diff <- function(data_weighted) {
     dplyr::mutate(
       !!!stats::setNames(
         lapply(config$disease, function(ds) {
-          100 * (data_weighted_ds_wide[[paste0("totalcase_", ds, "_intervention")]] - data_weighted_ds_wide[[paste0("totalcase_", ds, "_baseline")]])
+          100 * (data_weighted_ds_wide[[paste0("totalcase_",
+                                               ds,
+                                               "_intervention")]] -
+                   data_weighted_ds_wide[[paste0("totalcase_",
+                                                 ds,
+                                                 "_baseline")]])
         }),
         paste0("diff_inc_", config$disease)
       )
@@ -204,14 +235,18 @@ gen_data_weighted_ds_diff <- function(data_weighted) {
 
 #' Calculate Cumulative Differences for Incidences
 #'
-#' This function calculates the cumulative differences between intervention and baseline values for incidences.
+#' This function calculates the cumulative differences between intervention and
+#' baseline values for incidences.
 #'
-#' @param data_weighted A data frame containing weighted mean values for various metrics.
-#' @return A data frame with differences between intervention and baseline values for incidences.
+#' @param data_weighted A data frame containing weighted mean values for various
+#'  metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
+#' @return A data frame with differences between intervention and baseline
+#' values for incidences.
 #' @export
-gen_data_weighted_ds_cumdiff <- function(data_weighted) {
+gen_data_weighted_ds_cumdiff <- function(data_weighted, configname = "default") {
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
   data_weighted_ds <- dplyr::select(
     data_weighted,
@@ -230,7 +265,12 @@ gen_data_weighted_ds_cumdiff <- function(data_weighted) {
     dplyr::mutate(
       !!!stats::setNames(
         lapply(config$disease, function(ds) {
-          100 * (data_weighted_ds_wide[[paste0("totalcase_", ds, "_intervention")]] - data_weighted_ds_wide[[paste0("totalcase_", ds, "_baseline")]])
+          100 * (data_weighted_ds_wide[[paste0("totalcase_",
+                                               ds,
+                                               "_intervention")]] -
+                   data_weighted_ds_wide[[paste0("totalcase_",
+                                                 ds,
+                                                 "_baseline")]])
         }),
         paste0("diff_inc_", config$disease)
       )
@@ -279,14 +319,18 @@ gen_data_weighted_ds_cumdiff <- function(data_weighted) {
 
 #' Calculate Differences for Burden of Disease
 #'
-#' This function calculates the differences between intervention and baseline values for burden of disease.
+#' This function calculates the differences between intervention and baseline
+#' values for burden of disease.
 #'
-#' @param data_weighted A data frame containing weighted mean values for various metrics.
-#' @return A data frame with differences between intervention and baseline values for burden of disease.
+#' @param data_weighted A data frame containing weighted mean values for various
+#'  metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
+#' @return A data frame with differences between intervention and baseline
+#' values for burden of disease.
 #' @export
-gen_data_weighted_burden <- function(data_weighted) {
+gen_data_weighted_burden <- function(data_weighted, configname = "default") {
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
   data_weighted_burden <- dplyr::select(
     data_weighted,
@@ -305,7 +349,12 @@ gen_data_weighted_burden <- function(data_weighted) {
     dplyr::mutate(
       !!!stats::setNames(
         lapply(config$burden, function(value) {
-          (data_weighted_burden_wide[[paste0("total_", value, "_intervention")]] - data_weighted_burden_wide[[paste0("total_", value, "_baseline")]]) / 1000
+          (data_weighted_burden_wide[[paste0("total_",
+                                             value,
+                                             "_intervention")]] -
+             data_weighted_burden_wide[[paste0("total_",
+                                               value,
+                                               "_baseline")]]) / 1000
         }),
         paste0("diff_", config$burden)
       )
@@ -349,16 +398,22 @@ gen_data_weighted_burden <- function(data_weighted) {
 
 #' Perform data smoothing
 #'
-#' This function performs data smoothing for burden of disease, when necessary. For instance, with only a few simulations, there can be positive values in difference in burden of disease.
+#' This function performs data smoothing for burden of disease, when necessary.
+#' For instance, with only a few simulations, there can be positive values in
+#' difference in burden of disease.
 #'
-#' @param data_weighted_burden_wide_collapse A data frame containing weighted values for burden of disease.
+#' @param data_weighted_bd_wide_collapse A data frame containing weighted
+#' values for burden of disease.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
 #' @return A data frame with spline smoothing applied for burden of disease.
 #' @export
-gen_data_weighted_burden_spline <- function(data_weighted_burden_wide_collapse) {
+gen_data_weighted_bd_spline <- function(data_weighted_bd_wide_collapse, configname = "default") {
   print("Loading the config file...")
-  config <- load_config("default")
+  config <- load_config(configname)
   print("Processing the data...")
-  config_file_path <- system.file("config", "config.yml", package = "healthgpsrvis")
+  config_file_path <- system.file("config",
+                                  "config.yml",
+                                  package = "healthgpsrvis")
   burden_spline <- config::get(
     value = "burden_spline",
     file = config_file_path,
@@ -366,34 +421,38 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden_wide_collapse) 
   )
 
   ## This function is data smoothing
-  ## It is applied manually now in India project due to abnormal positive values in diff_daly or cumdiff_daly
+  ## It is applied manually now in India project due to abnormal positive values
+  ## in diff_daly or cumdiff_daly
 
   ## Only keep those 0 or negative values
 
-  ## Notes for India project: Delete years 27,30,32-33 for ps3-low; Delete years 2028 for ps4-low
+  ## Notes for India project: Delete years 27,30,32-33 for ps3-low; Delete years
+  ## 2028 for ps4-low
 
-  data_weighted_burden_mean <- data_weighted_burden_wide_collapse |>
+  data_weighted_burden_mean <- data_weighted_bd_wide_collapse |>
     dplyr::filter(!!rlang::sym(burden_spline[[1]]$burden_mean) <= 0)
 
-  data_weighted_burden_min <- data_weighted_burden_wide_collapse |>
+  data_weighted_burden_min <- data_weighted_bd_wide_collapse |>
     dplyr::filter(!!rlang::sym(burden_spline[[2]]$burden_min) <= 0)
 
-  ## Notes for India project: Delete years 29, 31 for ps2-high; Delete 37-38 for ps3-low; Delete 33-34 for ps4-middle; Delete 36-38 for ps4-low
+  ## Notes for India project: Delete years 29, 31 for ps2-high; Delete 37-38 for
+  ## ps3-low; Delete 33-34 for ps4-middle; Delete 36-38 for ps4-low
 
-  data_weighted_burden_max <- data_weighted_burden_wide_collapse |>
+  data_weighted_burden_max <- data_weighted_bd_wide_collapse |>
     dplyr::filter(!!rlang::sym(burden_spline[[3]]$burden_max) <= 0)
 
   ## New data frame
   data_weighted_burden_spline <- data.frame(time = seq(
-    min(data_weighted_burden_wide_collapse[config$group]),
-    max(data_weighted_burden_wide_collapse[config$group]),
+    min(data_weighted_bd_wide_collapse[config$group]),
+    max(data_weighted_bd_wide_collapse[config$group]),
     length.out = 34
   ))
 
   ## Fit spline and predict
   spline_fit_mean <- splines::interpSpline(
     as.numeric(unlist(data_weighted_burden_mean[config$group])),
-    as.numeric(unlist(data_weighted_burden_mean[burden_spline[[1]]$burden_mean]))
+    as.numeric(unlist(data_weighted_burden_mean[burden_spline[[1]]$burden_mean])
+    )
   )
   data_weighted_burden_spline[burden_spline[[1]]$burden_mean] <- stats::predict(
     spline_fit_mean,
@@ -439,6 +498,7 @@ gen_data_weighted_burden_spline <- function(data_weighted_burden_wide_collapse) 
 #' This function calculates life expectancy for various age and groups.
 #'
 #' @param data_mean A data frame containing mean values for various metrics.
+#' @param configname The name of the configuration file to use (e.g., "default", "development", "production", "testing").
 #' @return A data frame with life expectancy.
 #' @export
 gen_data_le <- function(data_mean) {
@@ -471,7 +531,8 @@ gen_data_le <- function(data_mean) {
       tx = cumsum(data_le$count),
       px = data_le$tx / data_le$count
     )
-  ## calculate period life expectancy as weighted sum of life expectancy at each age ##
+  ## calculate period life expectancy as weighted sum of life expectancy at each
+  ## age
   data_ple <- data_le |>
     dplyr::group_by(
       data_le$source,

@@ -4,14 +4,19 @@
 \alias{gen_data_weighted_burden}
 \title{Calculate Differences for Burden of Disease}
 \usage{
-gen_data_weighted_burden(data_weighted)
+gen_data_weighted_burden(data_weighted, configname = "default")
 }
 \arguments{
-\item{data_weighted}{A data frame containing weighted mean values for various metrics.}
+\item{data_weighted}{A data frame containing weighted mean values for various
+metrics.}
+
+\item{configname}{The name of the configuration file to use (e.g., "default", "development", "production", "testing").}
 }
 \value{
-A data frame with differences between intervention and baseline values for burden of disease.
+A data frame with differences between intervention and baseline
+values for burden of disease.
 }
 \description{
-This function calculates the differences between intervention and baseline values for burden of disease.
+This function calculates the differences between intervention and baseline
+values for burden of disease.
 }
