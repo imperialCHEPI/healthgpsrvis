@@ -108,8 +108,8 @@ default:
   # For the gen_data_weighted_burden_spline() function
   burden_spline:
     - burden_mean: cumdiff_daly_mean
-    - burden_min: cumdiff_daly_min
-    - burden_max: cumdiff_daly_max
+    - burden_ci_low: cumdiff_daly_ci_low
+    - burden_ci_high: cumdiff_daly_ci_high
   stroke:
     - intracerebralhemorrhage
     - ischemicstroke
@@ -223,11 +223,11 @@ production:
     - cumdiff_daly
     - cumdiff_yll
     - cumdiff_yld
-  # For the gen_data_weighted_burden_spline() function
+  # For the gen_data_weighted_bd_spline() function
   burden_spline:
     - burden_mean: cumdiff_daly_mean
-    - burden_min: cumdiff_daly_min
-    - burden_max: cumdiff_daly_max
+    - burden_ci_low: cumdiff_daly_ci_low
+    - burden_ci_high: cumdiff_daly_ci_high
   stroke:
     - intracerebralhemorrhage
     - ischemicstroke

@@ -97,18 +97,18 @@ riskfactors_diff <- function(riskft_diff,
     sodium = "diff_sodium_mean"
   )
 
-  y_min <- switch(riskft_diff,
-    bmi = "diff_bmi_min",
-    ei = "diff_ei_min",
-    obesity = "diff_obesity_min",
-    sodium = "diff_sodium_min"
+  y_ci_low <- switch(riskft_diff,
+    bmi = "diff_bmi_ci_low",
+    ei = "diff_ei_ci_low",
+    obesity = "diff_obesity_ci_low",
+    sodium = "diff_sodium_ci_low"
   )
 
-  y_max <- switch(riskft_diff,
-    bmi = "diff_bmi_max",
-    ei = "diff_ei_max",
-    obesity = "diff_obesity_max",
-    sodium = "diff_sodium_max"
+  y_ci_high <- switch(riskft_diff,
+    bmi = "diff_bmi_ci_high",
+    ei = "diff_ei_ci_high",
+    obesity = "diff_obesity_ci_high",
+    sodium = "diff_sodium_ci_high"
   )
 
   plot_title <- switch(riskft_diff,
@@ -128,8 +128,8 @@ riskfactors_diff <- function(riskft_diff,
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = get(y_min),
-        ymax = get(y_max)
+        ymin = get(y_ci_low),
+        ymax = get(y_ci_high)
       ),
       alpha = 0.2
     ) +
@@ -257,20 +257,20 @@ inc_cum <- function(inc,
     stroke = "cumdiff_inc_stroke_mean"
   )
 
-  y_min <- switch(inc,
-    asthma = "cumdiff_inc_asthma_min",
-    ckd = "cumdiff_inc_ckd_min",
-    diabetes = "cumdiff_inc_db_min",
-    ischemia = "cumdiff_inc_ihd_min",
-    stroke = "cumdiff_inc_stroke_min"
+  y_ci_low <- switch(inc,
+    asthma = "cumdiff_inc_asthma_ci_low",
+    ckd = "cumdiff_inc_ckd_ci_low",
+    diabetes = "cumdiff_inc_db_ci_low",
+    ischemia = "cumdiff_inc_ihd_ci_low",
+    stroke = "cumdiff_inc_stroke_ci_low"
   )
 
-  y_max <- switch(inc,
-    asthma = "cumdiff_inc_asthma_max",
-    ckd = "cumdiff_inc_ckd_max",
-    diabetes = "cumdiff_inc_db_max",
-    ischemia = "cumdiff_inc_ihd_max",
-    stroke = "cumdiff_inc_stroke_max"
+  y_ci_high <- switch(inc,
+    asthma = "cumdiff_inc_asthma_ci_high",
+    ckd = "cumdiff_inc_ckd_ci_high",
+    diabetes = "cumdiff_inc_db_ci_high",
+    ischemia = "cumdiff_inc_ihd_ci_high",
+    stroke = "cumdiff_inc_stroke_ci_high"
   )
 
   plot_title <- switch(inc,
@@ -290,8 +290,8 @@ inc_cum <- function(inc,
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = get(y_min),
-        ymax = get(y_max)
+        ymin = get(y_ci_low),
+        ymax = get(y_ci_high)
       ),
       alpha = 0.2
     ) +
@@ -354,18 +354,18 @@ burden_disease <- function(burden,
     yll = "diff_yll_mean"
   )
 
-  y_min <- switch(burden,
-    daly = "diff_daly_min",
-    dalycum = "cumdiff_daly_min",
-    yld = "diff_yld_min",
-    yll = "diff_yll_min"
+  y_ci_low <- switch(burden,
+    daly = "diff_daly_ci_low",
+    dalycum = "cumdiff_daly_ci_low",
+    yld = "diff_yld_ci_low",
+    yll = "diff_yll_ci_low"
   )
 
-  y_max <- switch(burden,
-    daly = "diff_daly_max",
-    dalycum = "cumdiff_daly_max",
-    yld = "diff_yld_max",
-    yll = "diff_yll_max"
+  y_ci_high <- switch(burden,
+    daly = "diff_daly_ci_high",
+    dalycum = "cumdiff_daly_ci_high",
+    yld = "diff_yld_ci_high",
+    yll = "diff_yll_ci_high"
   )
 
   plot_title <- switch(burden,
@@ -385,8 +385,8 @@ burden_disease <- function(burden,
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
-        ymin = get(y_min),
-        ymax = get(y_max)
+        ymin = get(y_ci_low),
+        ymax = get(y_ci_high)
       ),
       alpha = 0.2
     ) +
