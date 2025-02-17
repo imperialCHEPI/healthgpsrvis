@@ -207,7 +207,7 @@ test_that("Columns in the generated dataframe", {
   # Check if the data has the expected column names
   expect_equal(
     colnames(data_weighted_burden_spline),
-    c("time", "cumdiff_daly_mean", "cumdiff_daly_min", "cumdiff_daly_max")
+    c("time", "cumdiff_daly_mean", "cumdiff_daly_ci_low", "cumdiff_daly_ci_high")
   )
 })
 
