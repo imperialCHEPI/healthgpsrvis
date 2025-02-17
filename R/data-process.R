@@ -415,13 +415,13 @@ gen_data_weighted_bd_spline <- function(data_weighted_bd_wide_collapse, configna
   data_weighted_burden_mean <- data_weighted_bd_wide_collapse |>
     dplyr::filter(!!rlang::sym(burden_spline[[1]]$burden_mean) <= 0)
 
-  data_weighted_burden_min <- data_weighted_bd_wide_collapse |>
+  data_weighted_burden_ci_low <- data_weighted_bd_wide_collapse |>
     dplyr::filter(!!rlang::sym(burden_spline[[2]]$burden_ci_low) <= 0)
 
   ## Notes for India project: Delete years 29, 31 for ps2-high; Delete 37-38 for
   ## ps3-low; Delete 33-34 for ps4-middle; Delete 36-38 for ps4-low
 
-  data_weighted_burden_max <- data_weighted_bd_wide_collapse |>
+  data_weighted_burden_ci_high <- data_weighted_bd_wide_collapse |>
     dplyr::filter(!!rlang::sym(burden_spline[[3]]$burden_ci_high) <= 0)
 
   ## New data frame
@@ -443,8 +443,8 @@ gen_data_weighted_bd_spline <- function(data_weighted_bd_wide_collapse, configna
   )$y
 
   spline_fit_ci_low <- splines::interpSpline(
-    as.numeric(unlist(data_weighted_burden_min[config$group])),
-    as.numeric(unlist(data_weighted_burden_min[burden_spline[[2]]$burden_ci_low]))
+    as.numeric(unlist(data_weighted_burden_ci_low[config$group])),
+    as.numeric(unlist(data_weighted_burden_ci_low[burden_spline[[2]]$burden_ci_low]))
   )
   data_weighted_burden_spline[burden_spline[[2]]$burden_ci_low] <- stats::predict(
     spline_fit_ci_low,
