@@ -453,8 +453,8 @@ gen_data_weighted_bd_spline <- function(data_weighted_bd_wide_collapse, configna
 
   ## Use smooth.spline for ps4-low
   spline_fit_ci_high <- splines::interpSpline(
-    as.numeric(unlist(data_weighted_burden_max[config$group])),
-    as.numeric(unlist(data_weighted_burden_max[burden_spline[[3]]$burden_ci_high]))
+    as.numeric(unlist(data_weighted_burden_ci_high[config$group])),
+    as.numeric(unlist(data_weighted_burden_ci_high[burden_spline[[3]]$burden_ci_high]))
   )
   data_weighted_burden_spline[burden_spline[[3]]$burden_ci_high] <- stats::predict(
     spline_fit_ci_high,
