@@ -28,8 +28,6 @@ intervention and baseline values for burden of disease
 of disease, when necessary. For instance, with only a few simulations, there
 can be positive values in difference in burden of disease
 \code{data_weighted_burden_spline <- gen_data_weighted_bd_spline(data_weighted_bd_wide_collapse)}.
-\item \strong{\code{gen_data_le}}: Calculates life expectancy for various age and groups
-\code{data_ple_wide <- gen_data_le(data_weighted)}.
 }
 }
 
@@ -43,7 +41,6 @@ data_weighted_ds_wide_collapse <- gen_data_weighted_ds(data_weighted)
 data_weighted_bd_wide_collapse <- gen_data_weighted_burden(data_weighted)
 data_weighted_burden_spline <- gen_data_weighted_bd_spline(
 sdata_weighted_bd_wide_collapse)
-data_ple_wide <- gen_data_le(data_weighted)
 }\if{html}{\out{</div>}}
 }
 }

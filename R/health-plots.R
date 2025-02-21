@@ -406,35 +406,6 @@ burden_disease <- function(burden,
     ggplot2::theme(legend.position.inside = c(0.85, 0.2))
 }
 
-#' Plot of Life Expectancy under Intervention
-#'
-#' Creates a line plot showing the increase in life expectancy under
-#' intervention over time.
-#'
-#' @param diff A character string specifying the life expectancy to plot.
-#' @param data_ple_wide A data frame containing the life expectancy.
-#' @return A ggplot object representing the specified plot.
-#' @export
-life_exp <- function(diff, data_ple_wide) {
-  ggplot2::ggplot(
-    data = data_ple_wide,
-    ggplot2::aes(x = data_ple_wide$timediff, y = diff)
-  ) +
-    ggplot2::geom_line(color = "purple", linewidth = 1) +
-    ggplot2::ggtitle("Increase in life expectancy under intervention") +
-    ggplot2::xlab("Year") +
-    ggplot2::ylab("Life expectancy (years)") +
-    ggplot2::scale_y_continuous(labels = scales::comma) +
-    ggplot2::scale_x_continuous(
-      limits = c(-3, 32),
-      breaks = c(-3, 2, 7, 12, 17, 22, 27, 32),
-      labels = c(2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055)
-    ) +
-    ggplot2::labs(alt = "A line plot showing the increase in life expectancy
-                  under intervention over time") +
-    hgps_theme()
-}
-
 #' Combined Plot of several metrics
 #'
 #' Creates a combined plot of several metrics.
@@ -447,7 +418,6 @@ life_exp <- function(diff, data_ple_wide) {
 #' values of incidences.
 #' @param data_weighted_bd_wide_collapse A data frame with differences between
 #' intervention and baseline values for burden of disease.
-#' @param data_ple_wide A data frame containing the life expectancy.
 #' @param output_file Name of the output PDF as a string
 #' @return A combined ggplot object arranged in a grid.
 #' @export
@@ -456,7 +426,6 @@ combine_plots <- function(metrics,
                           data_mean_weighted_rf_wide = NULL,
                           data_mean_weighted_inc_wide = NULL,
                           data_weighted_bd_wide_collapse = NULL,
-                          data_ple_wide = NULL,
                           output_file) {
   plots <- list()
 
@@ -491,12 +460,6 @@ combine_plots <- function(metrics,
     for (burden in metrics$burden_disease) {
       plots <- c(plots, list(burden_disease(burden,
                                             data_weighted_bd_wide_collapse)))
-    }
-  }
-
-  if (!is.null(metrics$life_exp) && !is.null(data_ple_wide)) {
-    for (diff in metrics$life_exp) {
-      plots <- c(plots, list(life_exp(diff, data_ple_wide)))
     }
   }
 
