@@ -105,7 +105,7 @@ default:
     - cumdiff_daly
     - cumdiff_yll
     - cumdiff_yld
-  # For the gen_data_weighted_burden_spline() function
+  # For the gen_data_weighted_bd_spline() function
   burden_spline:
     - burden_mean: cumdiff_daly_mean
     - burden_ci_low: cumdiff_daly_ci_low
